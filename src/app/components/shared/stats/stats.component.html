@@ -1,0 +1,10 @@
+<div class="container-fluid">
+    <div class="col col-lg-12">
+        <ul class="list-group">
+            <li class="list-group-item"><img class="stats-image" [src]="libraryImage | sanitized" [title]="libraryImageTitle"> <span class="label label-default pull-right">{{mediaCount}}</span></li>
+            <li class="list-group-item"><img class="stats-image" [src]="kidsImage | sanitized" [title]="kidsImageTitle">  <span class="label label-primary pull-right">{{readersCount}}</span></li>
+            <li class="list-group-item"><img class="stats-image" [src]="booksImage | sanitized" [title]="booksImageTitle">  <span class="label label-info pull-right">{{borrowsCount}}</span></li>
+            <li class="list-group-item"><img class="stats-image" [src]="sandClockImage | sanitized" [title]="sandClockImageTitle">  <span class="label label-danger pull-right">{{overduesCount}}</span></li>
+        </ul>
+    </div>
+</div>

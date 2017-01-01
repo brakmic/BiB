@@ -1,0 +1,15 @@
+<div class="bib-wrapper">
+  <div class="container-fluid">
+    <div class="col col-lg-2 col-md-2 col-sm-1">
+      <bib-session-info [session]="sessionData"></bib-session-info>
+      <bib-sidebar-menu (menuSelected)="onMenuSelected($event)"></bib-sidebar-menu>
+    </div>
+    <div class="col col-lg-8 col-md-7 col-sm-10">
+      <router-outlet></router-outlet>
+    </div>
+    <div class="col col-lg-2 col-md-3 col-sm-1">
+      <bib-stats [media]="mediaCount" [readers]="readersCount"
+                 [borrows]="borrowsCount" [overdues]="overduesCount"></bib-stats>
+    </div>
+  </div>
+</div>

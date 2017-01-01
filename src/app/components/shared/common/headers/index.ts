@@ -1,0 +1,1 @@
+export { contentHeaders } from './headers';

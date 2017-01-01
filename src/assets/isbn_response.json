@@ -1,0 +1,216 @@
+[
+    {
+        "stat": "ok",
+        "list": [
+            {
+                "url": [
+                    "http://www.worldcat.org/oclc/213497053?referer=xid"
+                ],
+                "publisher": "Joma-Verl.",
+                "form": [
+                    "BA"
+                ],
+                "lang": "ger",
+                "city": "Altdorf",
+                "author": "Bilder von François Ruyer. Text von Marie-José Bardinat ...",
+                "year": "2005",
+                "isbn": [
+                    "9783937495866"
+                ],
+                "title": "Gute-Nacht-Geschichten",
+                "oclcnum": [
+                    "213497053"
+                ]
+            }
+        ]
+    },
+    {
+        "stat": "invalidId"
+    },
+    {
+        "stat": "unknownId"
+    },
+    {
+        "stat": "ok",
+        "list": [
+            {
+                "url": [
+                    "http://www.worldcat.org/oclc/851074386?referer=xid"
+                ],
+                "publisher": "Ravensburger Buchverl.",
+                "form": [
+                    "BA"
+                ],
+                "lang": "ger",
+                "city": "Ravensburg",
+                "author": "Doris Arend ... Mit Bildern von Sabine Kraushaar ...",
+                "ed": "[Sonderausg.]",
+                "year": "2013",
+                "isbn": [
+                    "9783473364190"
+                ],
+                "title": "Verrückte Schulgeschichten für Erstleser",
+                "oclcnum": [
+                    "851074386",
+                    "868198905"
+                ]
+            }
+        ]
+    },
+    {
+        "stat": "ok",
+        "list": [
+            {
+                "url": [
+                    "http://www.worldcat.org/oclc/767878490?referer=xid"
+                ],
+                "publisher": "Parragon",
+                "form": [
+                    "BA"
+                ],
+                "lang": "ger",
+                "city": "Bath",
+                "author": "[Übers.: Ronit Jariv ...]",
+                "originalLang": "eng",
+                "year": "2011",
+                "isbn": [
+                    "9781445446035"
+                ],
+                "title": "5-Minuten-Geschichten",
+                "oclcnum": [
+                    "767878490"
+                ]
+            }
+        ]
+    },
+    {
+        "stat": "ok",
+        "list": [
+            {
+                "url": [
+                    "http://www.worldcat.org/oclc/854920571?referer=xid"
+                ],
+                "publisher": "Ravensburger Buchverl.",
+                "form": [
+                    "BA"
+                ],
+                "lang": "ger",
+                "city": "Ravensburg",
+                "author": "[Text: Martina Gorgas ; Johanna Friedl]",
+                "year": "2013",
+                "isbn": [
+                    "9783473553631"
+                ],
+                "title": "Mein großes Buch für die Vorschule [über 250 Kinderfragen und Antworten]",
+                "oclcnum": [
+                    "854920571"
+                ]
+            }
+        ]
+    },
+    {
+        "stat": "unknownId"
+    },
+    {
+        "stat": "ok",
+        "list": [
+            {
+                "url": [
+                    "http://www.worldcat.org/oclc/864550744?referer=xid"
+                ],
+                "publisher": "Ravensburger Buchverlag",
+                "form": [
+                    "BA"
+                ],
+                "lang": "ger",
+                "city": "Ravensburg, Württ",
+                "author": "Angela Weinhold",
+                "ed": "1., Aufl.",
+                "year": "2013",
+                "isbn": [
+                    "9783473326006"
+                ],
+                "title": "Mein erstes Vorschulbuch Buchstaben und Zahlen",
+                "oclcnum": [
+                    "864550744",
+                    "865129433",
+                    "871780727"
+                ]
+            }
+        ]
+    },
+    {
+        "stat": "invalidId"
+    },
+    {
+        "stat": "ok",
+        "list": [
+            {
+                "url": [
+                    "http://www.worldcat.org/oclc/315798025?referer=xid"
+                ],
+                "publisher": "Ravensburger Buchverl. Maier",
+                "form": [
+                    "BA"
+                ],
+                "lang": "ger",
+                "city": "Ravensburg",
+                "author": "[Ill. und text, Angela Weinhold].",
+                "ed": "[Nachdr.].",
+                "year": "2007",
+                "isbn": [
+                    "9783473332755"
+                ],
+                "title": "Pass auf im Straßenverkehr",
+                "oclcnum": [
+                    "315798025",
+                    "611171805",
+                    "699013640",
+                    "699921715",
+                    "717364597",
+                    "745929919",
+                    "76005469",
+                    "770602456",
+                    "826436982",
+                    "844459772"
+                ]
+            }
+        ]
+    },
+    {
+        "stat": "invalidId"
+    },
+    {
+        "stat": "unknownId"
+    },
+    {
+        "stat": "ok",
+        "list": [
+            {
+                "url": [
+                    "http://www.worldcat.org/oclc/864551173?referer=xid"
+                ],
+                "publisher": "Ravensburger Buchverlag",
+                "form": [
+                    "BA"
+                ],
+                "lang": "ger",
+                "city": "Ravensburg, Württ",
+                "author": "Katja Reider",
+                "ed": "1., Aufl.",
+                "year": "2014",
+                "isbn": [
+                    "9783473364336"
+                ],
+                "title": "Erstlesegeschichten für Mädchen in der 1. Klasse",
+                "oclcnum": [
+                    "864551173",
+                    "871653913"
+                ]
+            }
+        ]
+    },
+    {
+        "stat": "unknownId"
+    }
+]

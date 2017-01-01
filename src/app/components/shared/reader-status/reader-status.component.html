@@ -1,0 +1,10 @@
+<div class="panel panel-primary noborder">
+    <div class="panel-body">
+        <div class="col col-lg-6 col-md-5 col-sm-2">
+            <bib-reader [standalone]="isReadersCmpStandalone" [readers]="readers" (readerSelected)="onReaderSelected($event)"></bib-reader>
+        </div>
+        <div class="col col-lg-6 col-md-3 col-sm-2">
+            <bib-borrow [standalone]="isBorrowsCmpStandalone" [borrows]="borrows" (borrowSelected)="onBorrowSelected($event)"></bib-borrow>
+        </div>
+    </div>
+</div>

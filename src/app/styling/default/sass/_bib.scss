@@ -1,0 +1,237 @@
+* {
+  margin: 0;
+}
+
+.row {
+  margin: 0!important;
+}
+
+.col {
+  margin: 0!important;
+}
+
+html {
+  min-height: 100%;
+  position:relative;
+
+}
+
+body{
+    height:100%; /* force the BODY element to match the height of the HTML element */
+}
+
+bib-app {
+    position:absolute;
+    top:0;
+    bottom:0;
+    left:0;
+    right:0;
+    overflow:hidden;
+    z-index:-1; /* Remove this line if it's not going to be a background! */
+}
+
+.panel.noborder {
+    border: none;
+    box-shadow: none;
+}
+.panel.noborder > .panel-heading {
+    border: 1px solid #dddddd;
+    border-radius: 0;
+}
+
+.default-background {
+  background: #2595EB;
+  background-color: #2595EB;
+}
+
+.Absolute-Center {
+  margin: auto;
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+}
+
+.Absolute-Center.is-Responsive {
+  width: 50%;
+  height: 50%;
+  min-width: 200px;
+  max-width: 400px;
+  max-height: 350px;
+  padding: 40px;
+}
+
+.logon-box {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width:400px;
+  height:400px;
+  -webkit-border-radius: 20px;
+  -moz-border-radius: 20px;
+  border-radius: 20px;
+  border:3px solid #FFFFFF;
+  background:rgba(37,149,235,0.8);
+}
+
+.logon-logo-container {
+  padding-bottom: 1em;
+  padding-left: 7em;
+}
+
+.logon-box-header {
+  padding-left: 3em;
+  color: white;
+}
+
+.mobile-view-return-button {
+  padding-top: 1em;
+}
+
+[class^="icon-custom-"],
+[class*=" icon-custom-"] {
+  background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAFZklEQVRIx42VaYheZxXHf89y32XeWZyR5E2CxiadTCc0ahyttRpDI9JKta0NFfFLEYtUTFXEoiiKDW7UhbRFkg9ilUL90IJGapHoB6FbMrWp8R3RaZY2W03M7DPvdu99znP8cGesZLE+cOAuPOf8z/mf8z+G/3GqVX1LlvGe4WHeft31bF69hj5rMDNTtI78hclGg0aScLjbNSev5MNc7mNPj66t1rjzS1/m1o99nOGhddRaOVkuBAUSh+tJKLem6B54ihN7fsRTs7M80emY028YwHvdftfd7Prat/hAxxPOt1jKBRFFFVQVNQZjwCQOW++ld0CpPPwAL+z7KXtDMH+8YgDn9NYH93LfLZ9g5Pgc051AyCMSIlEUjRFVgxrFOIuxYBOHLXvcpkFWHTrAqbvv4kER8/glAbzXbT/Yw+5bPsXIK7PMZkLoCpJHJBeiRKKAomAMWItxBluy2JLDlR1uw5sYOvQHznzhM3xnJRNXuNf67Z/kG5+9j7GT88x2hdARQicndEPx3BVCNyBdQbLCNEKMWpRNgWZKumUL9dYCa47+/f7xEHYvGoCeXr3nd4f4YlpF2jlZKyscdnLCul7CbJfs9BJWlIiCNeBMUZ6Kx1Ucrprgq56klpAMKpWd2/jZ7LTZ42o1rd/5ae4d+xD1ZkbWCQXqVk5oB/LbNrH+xrexdajCYuMCM4sZ2g3EfJkXVXSl1naZfF/GliwDE3++/6BNU971wY+ytpWT5RFJBekGJA2EdkZQUKCytc57v7udHTddRbWZ0VnMyJdS8lZGaAdCO1++F5FmRnb9zdTznDHbO8DI+hH6cyHmQswKk25AOgFZQQhQcgzdcQ03/eTDvHtkkNhMi0w7+TIvsWiKEIlDa6kMj3KtH30HV2MwosQQi27JIzEV4mJGFoR48aysqjL89fezYXKGI7/8K6+0BVsWbB5wwRODEoOiG0a52vYOMCiKRkVF0VyR47MsPnmMfz5yhLNpJKMo08VmR9/M2Pd38JEb11PqBCRAFEElFjNDmcQffpWF8dc41wmEiSnmnz/L/EJGWEErSgo0r6Q1WWTu+de48PCLzI8OUduymr639lFrC+FP/2DOL0wzt/s5Ji++aA0kHrv8qhf/VyU7cJLDn/s9x84uFagnpmlOTL8Oxi6SeaY5R8YApf+SDIspl3Blj7PmUr16eZbJrz7L38bPIRIp1apImhJzQeIKlAhc4Jy3wtF4hi1sLtAmHlNJ8JVSIQFq/5MFMynnf9xgYv8JMlGqPbWiIWxOtCXE5EgWkBiB00TT5qiv1XhpocEdvI9eZzHlBFdOcCWPK3usgEsjzcdO8vK+4zSD0FMaoBoVdZHoItEEIgHRjEgxqJEGzUqFF/3CgplzR3S8p83tcR3lUoJNPK7ksYnFffMY083AzEJO2fYwWCoIUYmoFdRGogqCEDUgmhMrM2RLh3im1TXnPYDkPKmPct1VP2RsKqKJw3qH9R53SrDeY3wJYwshJSo4RY0SjRCjEEWISU6s92HPPERDuvwGwC+r9nza0J93f8Wa0c9z7dmM4FaCOGxpWZr9MhtRIURUC4tOiF6I6/txU49ytH2QX4CZusxG023vvJevbNrF2ImcaCyULTZxmASss0X7SoRc0VzQVImq6MYEd+oRGi88wEPw+la7pAWTRMc23syu7d9mx+IqBv4ViMZAyWF8oZaIQh6LyV/tsYPzNJ/9Hk9P/pq9IZiDb7j0QQeTCrfdcA87t+5kc+0a1qUWFyhI8EBZkfZxzk/sZ/K5ffzWK/ubzaIs/0eA4vT361C7zVilj9GNN7C5v85qYzCLF5h6dZzJ9hyTlQovXc7xyvk3CB8MvXX39s0AAAAASUVORK5CYII=');
+  background-repeat: no-repeat;
+  display: inline-block;
+}
+
+.icon-custom-logo {
+  width: 24px;
+  height: 24px;
+}
+
+.iconrow {
+  margin-top: 5px;
+}
+
+.iconlabel {
+  display: inline;
+  position: relative;
+  top: 0px;
+  margin-left: -15px;
+}
+
+.selected-mainmenu-header {
+  height: 2.1em;
+  margin-bottom: 1em;
+  padding-left: 1em;
+  padding-top: .4em;
+  background-color: #25A0DA;
+  color: white;
+}
+
+.adv-top-navbar {
+  background-color: #0072C5;
+  color: white;
+}
+
+/*==========  Non-Mobile First Method  ==========*/
+
+/* Large Devices, Wide Screens */
+@media only screen and (max-width : 1200px) {
+
+
+}
+
+/* Medium Devices, Desktops */
+@media only screen and (max-width : 992px) {
+
+}
+
+/* Small Devices, Tablets */
+@media only screen and (max-width : 768px) {
+
+}
+
+/* Extra Small Devices, Phones */
+@media only screen and (max-width : 480px) {
+
+  
+}
+
+/* Custom, iPhone Retina */
+@media only screen and (max-width : 320px) {
+
+}
+
+/*==================================================
+=            Bootstrap 3 Media Queries             =
+==================================================*/
+
+/*==========  Mobile First Method  ==========*/
+
+/* Custom, iPhone Retina */
+@media only screen and (min-width : 320px) {
+
+}
+
+/* Extra Small Devices, Phones */
+@media only screen and (min-width : 480px) {
+
+}
+
+/* Small Devices, Tablets */
+@media only screen and (min-width : 768px) {
+
+  
+}
+
+/* Medium Devices, Desktops */
+@media only screen and (min-width : 992px) {
+  
+
+}
+
+/* Large Devices, Wide Screens */
+@media only screen and (min-width : 1200px) {
+ 
+}
+
+/* Large Devices, Wide Screens */
+@media only screen and (min-width : 2000px) {
+  
+}
+
+// menu headers for contextmenu plugin
+
+
+    /* menu header */
+    .css-title:before {
+        content: "some CSS title";
+        display: block;
+        position: absolute;
+        top: 0;
+        right: 0;
+        left: 0;
+        background: #DDD;
+        padding: 2px;
+
+        font-family: Verdana, Arial, Helvetica, sans-serif;
+        font-size: 11px;
+        font-weight: bold;
+    }
+    .css-title :first-child {
+        margin-top: 20px;
+    }
+
+    /* menu header via data attribute */
+    .data-title:before {
+        content: attr(data-menutitle);
+        display: block;
+        position: absolute;
+        top: 0;
+        right: 0;
+        left: 0;
+        background: #DDD;
+        padding: 2px;
+
+        font-family: Verdana, Arial, Helvetica, sans-serif;
+        font-size: 11px;
+        font-weight: bold;
+    }
+    .data-title :first-child {
+        margin-top: 20px;
+    }
+
+// menu headers END

@@ -1,0 +1,38 @@
+<div class="logon-box default-background Absolute-Center is-Responsive">
+  <div class="logon-logo-container">
+    <img class="logon-box-image" [src]="headerImage | sanitized">
+  </div>
+  <div class="col-sm-12 col-md-10 col-md-offset-1">
+    <form id="logonForm" [formGroup]="logonForm" (ngSubmit)="logon()">
+      <div class="form-group input-group">
+        <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+        <input class="form-control" type="text" formControlName="username"
+               placeholder="{{placeholderUserName | translate}}"
+               (keyup)="onInputChanged($event)">
+      </div>
+      <div class="form-group input-group">
+        <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
+        <input class="form-control" formControlName="password"
+               type="password" placeholder="{{placeholderPassword | translate}}"
+               (keyup)="onInputChanged($event)">
+      </div>
+      <div class="form-group">
+        <div class="iconrow">
+        <button type="submit" [disabled]="!logonForm.valid" class="btn btn-default btn-block">
+            <i class="icon-custom-logo pull-left"></i>
+            <div class="iconlabel">{{ 'Login' | translate }}</div>
+        </button>
+        </div>
+        <div class="pull-right language-selector">
+           <select id="select-language"
+                    (change)="onSelectChanged($event.target.value)">
+                <option *ngFor="let country of countries" [value]="country.id">
+                    {{country.isoAlpha2}}
+                </option>
+            </select>
+        </div>
+      </div>
+    </form>
+    <router-outlet></router-outlet>
+  </div>
+</div>

@@ -1,0 +1,29 @@
+<nav class="navbar navbar-default sidebar" role="navigation">
+    <div class="container-fluid">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-sidebar-navbar-collapse-1">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>      
+    </div>
+    <div id="main-nav" class="collapse navbar-collapse" id="bs-sidebar-navbar-collapse-1">
+      <ul class="nav navbar-nav">
+        <li><a [routerLink]="['/home']">{{ 'Home' | translate }}<span style="font-size:14px;" class="pull-right hidden-xs showopacity fa fa-home fa-3x"></span></a></li>         
+        <li><a [routerLink]="['/status']">{{ 'Status' | translate }} <span style="font-size:14px;" class="pull-right hidden-xs showopacity fa fa-thermometer-half fa-4x"></span></a></li>
+        <li><a [routerLink]="['/media']">{{ 'MediaList' | translate }} <span style="font-size:14px;" class="pull-right hidden-xs showopacity fa fa-video-camera fa-3x"></span></a></li>        
+        <li><a [routerLink]="['/borrows']">{{ 'Borrowed' | translate }} <span style="font-size:14px;" class="pull-right hidden-xs showopacity fa fa-book fa-3x"></span></a></li>
+        <li class="collapse nochange" id="settings-dropdown">
+					<a href="#settings-submenu" class="collapse-toggle" data-toggle="collapse" data-parent="#main-nav">{{ 'Management' | translate }} <span class="caret"></span><span style="font-size:14px;" class="pull-right hidden-xs showopacity fa fa-cogs fa-3x"></span></a>
+					<ul id="settings-submenu" class="collapse forAnimate" role="menu">
+						<li class="nochange submenu-entry"><a [routerLink]="['/users']">{{ 'Accounts' | translate }} <span style="font-size:14px;" class="pull-right hidden-xs showopacity fa fa-user-secret fa-3x"></span></a></li>
+            <li class="nochange submenu-entry"><a [routerLink]="['/readers']">{{ 'ReadersList' | translate }} <span style="font-size:14px;" class="pull-right hidden-xs showopacity fa fa-id-card-o fa-3x"></span></a></li>
+            <li class="nochange submenu-entry"><a [routerLink]="['/database']">{{ 'Database' | translate }} <span style="font-size:14px;" class="pull-right hidden-xs showopacity fa fa-database fa-3x"></span></a></li>            
+          </ul>
+				</li>
+        <li><a [routerLink]="['/logout']">{{ 'Logout' | translate }} <span style="font-size:14px;" class="pull-right hidden-xs showopacity fa fa-window-close-o fa-3x"></span></a></li>
+      </ul>
+    </div>
+  </div>
+</nav>

@@ -1,0 +1,14 @@
+<div class="row">
+  <div class="col-xs-6 col-md-4"></div>
+    <div class="col-xs-6 col-md-4">
+        <img [src]="warningLogo" class="adv-access-denied adv-warning">
+         <router-outlet></router-outlet>
+         <div class="col-xs-12 col-md-4 col-lg-4"></div>
+         <div class="col-xs-12 col-md-4 col-lg-4">
+         <a class="btn btn-success" (click)="goBack($event)"
+            href="#" role="button">{{ data?.Back | translate }}</a>
+         </div>
+         <div class="col-xs-12 col-md-4 col-lg-4"></div>
+        </div>
+    <div class="col-xs-6 col-md-4"></div>
+</div>

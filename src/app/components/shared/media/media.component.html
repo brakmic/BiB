@@ -1,0 +1,25 @@
+<div class="panel panel-primary noborder">
+    <div class="panel-heading">
+        {{ 'Media' | translate }}
+    </div>
+    <div class="panel-body">
+    <table id="media" class="table table-striped
+                            table-bordered table-hover 
+                            table-responsive" 
+                            cellspacing="0" width="100%">
+        <thead>
+            <tr>
+                <th>{{ Id }}</th>
+                <th>{{ 'MediumTitle' | translate }}</th>
+                <th>{{ 'Author' | translate }}</th>
+                <th>{{ 'Description' | translate }}</th>
+                <th>{{ 'Year' | translate }}</th>
+                <th>{{ 'ISBN' | translate }}</th>
+                <!--<th>{{ 'Picture' | translate }}</th>-->
+                <th>{{ 'Borrowed' | translate }}</th>
+            </tr>
+        </thead>
+    </table>
+    </div>
+</div>
+<bib-dynamic [dynamicComponent]="dynamicComponent" (dynamicEvent)="onDynamicEvent($event)"></bib-dynamic>

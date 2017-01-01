@@ -1,0 +1,21 @@
+<div class="panel panel-primary noborder">
+    <div class="panel-heading">
+        {{ title }}
+    </div>
+    <div class="panel-body">
+        <table id="reader" class="table table-striped
+                                table-bordered table-hover 
+                                table-responsive" cellspacing="0" width="100%">
+            <thead>
+                <tr>
+                    <th>{{ 'ID' }}</th>
+                    <th>{{ 'CardID' | translate }}</th>
+                    <th>{{ 'FirstName' | translate }}</th>
+                    <th>{{ 'LastName' | translate }}</th>
+                    <th>{{ 'Phone' | translate }}</th>
+                </tr>
+            </thead>
+        </table>
+    </div>
+</div>
+<bib-dynamic [dynamicComponent]="dynamicComponent" (dynamicEvent)="onDynamicEvent($event)"></bib-dynamic>

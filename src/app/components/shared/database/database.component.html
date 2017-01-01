@@ -1,0 +1,44 @@
+<div>
+    <div class="panel panel-default panel-primary noborder">
+        <div class="panel-heading">
+            {{ 'DatabaseManagement' | translate }}
+        </div>
+        <div class="panel-body">
+        <table id="upload" class="table table-striped
+                                table-bordered
+                                table-hover
+                                table-responsive" 
+                                cellspacing="0" width="100%">
+            <thead>
+                <tr>
+                    <th>{{ Id }}</th>
+                    <th>{{ 'MediumTitle' | translate }}</th>
+                    <th>{{ 'Author' | translate }}</th>
+                    <th>{{ 'Year' | translate }}</th>
+                    <th>{{ 'ISBN' | translate }}</th>
+                </tr>
+            </thead>
+        </table>
+        </div>
+    </div>
+    <div class="container-fluid">
+        <div class="col col-lg-4 col-md-6 col-sm-8">
+            <div class="row">
+                <div *ngIf="shouldUpload" class="form-group">
+                    <label for="file">{{'UploadIsbnList' | translate }}</label>
+                    <input type="file" (change)="onFileSelected($event)"
+                            name="file" id="file">                      
+                </div>
+                <div *ngIf="!shouldUpload">
+                    <div class="checkbox">
+                        <label><input type="checkbox" name="ignoreDuplicates" [(ngModel)]="ignoreDuplicates">{{ 'IgnoreDuplicates' | translate }}</label>
+                    </div>
+                    <div class="btn-toolbar control-buttons" role="group">
+                        <button class="btn btn-default btn-danger" type="button" (click)="onCancelClicked($event)">{{ 'Cancel' | translate }}</button>
+                        <button class="btn btn-default btn-success" type="button" (click)="onInsertIntoDbClicked($event)">{{ 'OK' | translate }}</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

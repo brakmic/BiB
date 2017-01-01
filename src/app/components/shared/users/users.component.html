@@ -1,0 +1,23 @@
+<div class="panel panel-primary noborder">
+    <div class="panel-heading">
+        {{ 'UserControl' | translate }}
+    </div>
+    <div class="panel-body">
+        <table id="user" class="table table-striped
+                                table-bordered table-hover
+                                table-responsive" cellspacing="0" width="100%">
+            <thead>
+                <tr>
+                    <th>{{ 'ID' }}</th>
+                    <th>{{ 'AccountName' | translate }}</th>
+                    <th>{{ 'FirstName' | translate }}</th>
+                    <th>{{ 'LastName' | translate }}</th>
+                    <th>{{ 'Password' | translate }}</th>
+                    <th>{{ 'IsActive' | translate }}</th>
+                    <th>{{ 'Group' | translate }}</th>
+                </tr>
+            </thead>
+        </table>
+    </div>
+</div>
+<bib-dynamic [dynamicComponent]="dynamicComponent" (dynamicEvent)="onDynamicEvent($event)"></bib-dynamic>
