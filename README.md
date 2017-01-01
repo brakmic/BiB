@@ -5,19 +5,17 @@
 
 ## Library Management Application for Elementary Schools
 
-**BiB** is OpenSource and independent from any OS because it runs completely in a browser. 
+**BiB** is [OpenSource](https://github.com/brakmic/BiB/blob/master/LICENSE) and OS-independent because it runs completely in a browser. 
 
 It comprises of these parts:
 
-* A client-side UI 
-* A backend based on HapiJS
-* An SQL-database (MariaDB by default, or similar databases)
-
-All of these parts are completely OpenSource Software and impose no restrictions regarding OS and usage.
+* A client-side UI based on [Angular 2](https://angular.io/)
+* A backend based on [HapiJS](https://hapijs.com/)
+* An SQL-database ([MariaDB](https://mariadb.com/) by default, or similar databases)
 
 The only real requirement is one of the modern browsers like Chrome, Firefox, IE11, or Edge.
 
-**BiB** supports retrieval of library content via WorldCat. 
+**BiB** supports retrieval of library content via [WorldCat](https://www.worldcat.org/). 
 
 *Technologies*
 
@@ -50,20 +48,28 @@ BiB is based on these fine projects, packages & languages:
 
 * Database
 
-    Before you can use this application you'll have to provide a properly defined database. 
-    The script for automatic database creation is located in the config-folder. 
+    First, you'll have to provide a properly defined database. 
+    The script for automatic database creation is located in the [config-folder](https://github.com/brakmic/BiB/blob/master/config/db-create.sql). 
 
 * NodeJS
     
-    Execute 
+    A working [NodeJS](https://nodejs.org/en/) 7.x environment is needed to compile the application. 
+    
+    Therefore, before you execute the following command make sure you have one. 
+    
+    Then use 
     
     `npm install` 
     
-    to download all needed packages. 
+    to install the packages for the app. 
     
-    *Notice*: If you're using a Windows machine you'll have to 
-    provide a complete Visual Studio Build Environment because the NodeJS installation procedure will try to 
-    build a Windows-compatible binary of the MariaDB package.
+    *Notice for Windows Users*:
+
+    If you're using a Windows machine you'll have to provide a complete *Visual Studio Build Environment* because the NodeJS installation 
+    procedure will try to build a Windows-compatible binary of the MariaDB package. If you experinece problems with building *node-gy*, 
+    please, consult [this](https://www.robertkehoe.com/2015/03/fix-node-gyp-rebuild-error-on-windows/) tutorial. 
+
+    For setting up NodeJS under Windows 10 I'd recommend [this](https://blog.risingstack.com/node-js-windows-10-tutorial/) blog post.
 
 ## Running
 
@@ -98,38 +104,38 @@ on a single machine without any internet connection. The only exception is the I
 
 The server provides an API for managing the following: 
 
-* Media 
-* Lending
-* Reader Management
-* User Management
-* Statistics 
-* Translations
-* Access Control
-* Library Data Retrieval via ISBN
+* [Media](https://github.com/brakmic/BiB/blob/master/src/server/api/controllers/media.controller.ts) 
+* [Lending](https://github.com/brakmic/BiB/blob/master/src/server/api/controllers/borrow.controller.ts)
+* [Readers](https://github.com/brakmic/BiB/blob/master/src/server/api/controllers/reader.controller.ts)
+* [Users](https://github.com/brakmic/BiB/blob/master/src/server/api/controllers/user.controller.ts)
+* [Statistics](https://github.com/brakmic/BiB/blob/master/src/server/api/controllers/stats.controller.ts) 
+* [Translations](https://github.com/brakmic/BiB/blob/master/src/server/api/controllers/translation.controller.ts)
+* [Access Control Lists](https://github.com/brakmic/BiB/blob/master/src/server/api/controllers/acl.controller.ts)
+* [Library Data Retrieval](https://github.com/brakmic/BiB/blob/master/src/server/api/controllers/isbn.controller.ts)
 
 The opposite of it is the *BibAPI* that's located in [app/apis/bib.api.ts](https://github.com/brakmic/BiB/blob/master/src/app/apis/bib.api.ts). 
 
-This is the client-side API and all future developments should follow its initial design. This API is quite big as it strives to abstract away all of the more low-level stuff like HTTP requests, JSON parsing etc. 
+BibAPI is the client-side API and all future developments should follow its initial design. This API is quite big as it strives to abstract away all of the more low-level stuff like HTTP requests, JSON parsing etc. 
 
-The complete list of all currently available API calls is located here.
+The complete list of all available API calls is located [here](https://github.com/brakmic/BiB/blob/master/docs/Client-API.md).
 
 ## User Management 
 
 <img src="https://i.imgsafe.org/95a3d23a72.png">
 
-**BiB** supports user- and group-based Access Control Lists. In current version only group-based ACLs are active but the technical capability to enforce more fine-grained access control is 
+**BiB** [supports](https://github.com/brakmic/BiB/blob/master/src/app/decorators/authorized.decorator.ts) user- and group-based Access Control Lists. In current version only group-based ACLs are active but the technical capability to enforce more fine-grained access control is 
 already available. Future versions will also include additional options for UI-based user rights management. Internally, **BiB** relies on Angular 2 Decorators to enforce restrictions on certain system tasks that can 
-manipulate database and other vital data. 
+manipulate database and other vital data. The current implementation is rather simple and based on a few interesting ineas from various blog posts. 
 
 ## System Configuration 
 
-Both the server and client use a file called config.json to (de)activate certain behaviors. This file is quite complex as it includes many different entries that deal with important aspects on both sides of the system.
+Both the server and client use a file called [config.json](https://github.com/brakmic/BiB/blob/master/src/config.json) to (de)activate certain behaviors. This file is quite complex as it includes many different entries that deal with important aspects on both sides of the system.
 For easier management and future development of **BiB** there exists a corresponding IConfig.ts interface that maps to all available properties from config.js.
 
 The most frequently used options are:
 
 | Option     | Type   | Description           | Example  |
-| -------------|:----: |:-------------:| -----:|
+| -------------|:---- |:-------------| -----:|
 | bib_server   | string  | DNS-entry of the backend | "localhost" |
 | bib_server_port | number | Port number of the backend  |   10000 |
 | bib_server_baseUrl | string | web app base path    |  "/bib" |
@@ -143,12 +149,17 @@ The most frequently used options are:
 
 **BiB** is completely i18n-capable via language files that are located in the assets/i18n folder. Currently there are language files for these languages although only German and English are complely translated and othes simply fall back to English. 
 
-    German
-    English
-    French
-    Italian
-    Russian
-    Turkish
+[German](https://github.com/brakmic/BiB/blob/master/src/assets/i18n/de-DE.json)
+
+[English](https://github.com/brakmic/BiB/blob/master/src/assets/i18n/en-GB.json)
+
+[French](https://github.com/brakmic/BiB/blob/master/src/assets/i18n/fr-FR.json)
+
+[Italian](https://github.com/brakmic/BiB/blob/master/src/assets/i18n/it-IT.json)
+
+[Russian](https://github.com/brakmic/BiB/blob/master/src/assets/i18n/ru-RU.json)
+
+[Turkish](https://github.com/brakmic/BiB/blob/master/src/assets/i18n/tr-TR.json)
 
 
 Any help regarding new languages or extending the existing ones is greatly appreciated.
@@ -158,6 +169,6 @@ Any help regarding new languages or extending the existing ones is greatly appre
 
 ## License 
 
-MIT
+[MIT](https://github.com/brakmic/BiB/blob/master/LICENSE)
 
 
