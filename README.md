@@ -1,6 +1,6 @@
 # BiB
 
-<img src="http://fs5.directupload.net/images/170101/gssoqe5p.jpg" width="500" height="400">
+<img src="https://i.imgsafe.org/95ab99dfdf.jpg" width="500" height="400">
 
 
 ## Library Management Application for Elementary Schools
@@ -115,7 +115,7 @@ The complete list of all currently available API calls is located here.
 
 ## User Management 
 
-<img src="http://fs5.directupload.net/images/170101/a65jbpc5.png">
+<img src="https://i.imgsafe.org/95a3d23a72.png">
 
 **BiB** supports user- and group-based Access Control Lists. In current version only group-based ACLs are active but the technical capability to enforce more fine-grained access control is 
 already available. Future versions will also include additional options for UI-based user rights management. Internally, **BiB** relies on Angular 2 Decorators to enforce restrictions on certain system tasks that can 
@@ -153,7 +153,7 @@ The most frequently used options are:
 
 Any help regarding new languages or extending the existing ones is greatly appreciated.
 
-<img src="http://fs5.directupload.net/images/170101/heyc7f25.png">
+<img src="https://i.imgsafe.org/95a1f41e3f.png">
 
 
 ## License 
