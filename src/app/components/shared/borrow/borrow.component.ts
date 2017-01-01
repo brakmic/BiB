@@ -112,7 +112,7 @@ export class BorrowComponent implements OnInit {
                   {
                     data: 'IsOverdue',
                     render: function (data, type, full, meta) {
-                        const text = data ? 'Ja' : 'Nein';
+                        const text = data ? self.translation.instant('Yes') : self.translation.instant('No');
                         if (data) {
                             return `<div class="text-center" 
                                          style="background-color: red; 
