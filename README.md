@@ -17,6 +17,8 @@ The only real requirement is one of the modern browsers like Chrome, Firefox, IE
 
 **BiB** supports retrieval of library content via [WorldCat](https://www.worldcat.org/). 
 
+For a visual representation of BiB's features check out [this](https://github.com/brakmic/BiB/blob/master/docs/BiB-UI.md) manual.
+
 *Technologies*
 
 BiB is based on these fine projects, packages & languages:
