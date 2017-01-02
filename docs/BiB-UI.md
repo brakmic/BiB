@@ -7,7 +7,7 @@
 
 Type in your account data and click **Login**.
 
-To change the language selecting an entry from the list below Login button.
+To change language use the list below Login button.
 
 
 *Main Screen*
