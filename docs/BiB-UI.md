@@ -14,7 +14,7 @@ To change the language selecting an entry from the list below Login button.
 
 <img src="https://i.imgsafe.org/962ab8eb97.png">
 
-After you have successfully logged in thi screen will appear. In general the UI comprises of three parts:
+After you have successfully logged in this screen will appear. In general the UI comprises of three parts:
 
 * **Sidebar Menu** on the left
 * **Activity** at the center
