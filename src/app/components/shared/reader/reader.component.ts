@@ -58,12 +58,6 @@ export class ReaderComponent implements OnInit {
         this.confirmDeletionText= this.translation.instant('ConfirmDeletionReader');
     }
     public ngOnChanges(changes: SimpleChanges) {
-        // const readers = changes['readers'];
-        // const dyncmp = changes['dynamicComponent'];
-        // if (!_.isEqual(readers.currentValue, readers.previousValue) ||
-        //     !_.isEqual(dyncmp.currentValue, dyncmp.previousValue)) {
-        //     this.updateTable();
-        // }
     }
     public ngOnDestroy() {
         $("#add-reader-dialog-form").remove();
