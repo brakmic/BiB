@@ -265,6 +265,9 @@ export class ReaderComponent implements OnInit {
                         this.store.dispatch({ type: STATS_CHANGED, payload: { data: $event.data } });
                     });
                 });
+            }).catch(err => {
+                this.logService.logJson(err, 'Reader');
+                this.cd.markForCheck();
             });
         }
     }
