@@ -233,6 +233,9 @@ export class UsersComponent implements OnInit {
                     this.users = _.slice(users);
                     this.updateTable();
                 });
+            }).catch(err => {
+                this.logService.logJson(err, 'User');
+                this.cd.markForCheck();
             });
         }
     }
