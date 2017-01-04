@@ -1,7 +1,8 @@
 // Default Angular Classes
 import { Component, Output,
          EventEmitter, OpaqueToken,
-         ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
+         ChangeDetectionStrategy, ChangeDetectorRef,
+         NgZone } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { LogonService, LogService,
          i18nService, ConfigService,
@@ -71,7 +72,8 @@ export class LogonComponent {
               private logService: LogService,
               private translate: i18nService,
               private config: ConfigService,
-              private toast: ToastService) {
+              private toast: ToastService,
+              private ngZone: NgZone) {
   }
 
   public ngOnInit() {
@@ -98,6 +100,11 @@ export class LogonComponent {
       userData => {
         if (!_.has(userData, 'error')) {
               this.persistSessionData(userData);
+              // bibApi.getAcl(userData.ACL_ID).then(acl => {
+              //   console.log(acl);
+                
+              // }).catch(err => console.log); 
+              
            } else {
              this.toast.show(this.translate.instant('AccessDenied'), this.translate.instant('Error'), ActionStatus.Failure);
              
@@ -116,18 +123,20 @@ export class LogonComponent {
   }
 
   private persistSessionData(userData: IDbUser) {
-    bibApi.getUserGroup(userData.Group_ID).then(group => {
+
       localStorage.setItem(this.appConfig.bib_localstorage, JSON.stringify(<ILocalData>{
-                user: userData.AccountName,
-                hash: userData.Password,
-                group: group,
-                created: new Date().toString(),
-                language: this.translate.getCurrentLang()
-              }));
+        user: userData.AccountName,
+        userID: userData.ID,
+        userAclID: userData.ACL_ID,
+        hash: userData.Password,
+        groupID: userData.Group_ID,
+        logonDate: new Date().toString(),
+        language: this.translate.getCurrentLang(),
+        isActive: userData.IsActive == 1 ? true : false
+      }));
       this.store.dispatch({ type: LOGON_AVAILABLE });
       this.store.dispatch({ type: LOGON_SUCCEEDED, payload: <ISession>{ User: userData } });
       this.router.navigate(['']);
-    }).catch(err => this.logService.logEx(err, 'Logon'));
   }
 
   private initSubscriptions() {

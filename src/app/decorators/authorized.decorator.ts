@@ -4,35 +4,52 @@ import { Bib } from 'app/helpers';
 import { IAppState, IUserGroup, IUserSettings,
          ISession, IConfig, IWindowEx,
          ICountry, ILocalData, IAcl } from 'app/interfaces';
-// RxJS
-import { Observable } from 'rxjs/Observable';
-import { Subscription } from 'rxjs/Subscription';
 import { bibApi } from 'app/apis';
 import * as fetchApi from 'app/apis/fetch';
 import * as _ from 'lodash';
-// State Management with Redux
-import '@ngrx/core/add/operator/select';
-import { Store } from '@ngrx/store';
+const json = require('circular-json');
 const config: IConfig = require('../../config.json');
 
-const getAcl = (): IAcl => {
-  const data: ILocalData = JSON.parse(localStorage.getItem(config.bib_localstorage));
-  if (data && data.group) {
-    return data.group.Acl;
+const getAcls = (): Promise<IAcl[]> => {
+  return bibApi.getAcls().then(acls => {
+    return acls;
+  });
+};
+
+const getGroups = (): Promise<IUserGroup[]> => {
+  return bibApi.getUserGroups().then(groups => {
+    return groups;
+  });
+};
+
+const getLocalData = (): ILocalData => {
+  return JSON.parse(localStorage.getItem(config.bib_localstorage));;
+};
+
+const getAcl = (acls: IAcl[], data: ILocalData): IAcl => {
+  // const data: ILocalData = JSON.parse(localStorage.getItem(config.bib_localstorage));
+  return _.find(acls, acl => {
+    return acl.ID == data.userAclID;
+  });
+};
+
+const getUserID = (data: ILocalData): number => {
+  // const data: ILocalData = JSON.parse(localStorage.getItem(config.bib_localstorage));
+  if (data && data.userID) {
+    return data.userID;
   }
   return undefined;
 };
 
-const getGroup = (): IUserGroup => {
-  const data: ILocalData = JSON.parse(localStorage.getItem(config.bib_localstorage));
-  if (data && data.group) {
-    return data.group;
-  }
-  return undefined;
+const getGroup = (groups: IUserGroup[], data: ILocalData): IUserGroup => {
+  // const data: ILocalData = JSON.parse(localStorage.getItem(config.bib_localstorage));
+  return _.find(groups, gr => {
+      return gr.ID == data.groupID;
+  });
 };
 
-const getLangCode = (): string => {
-  const data: ILocalData = JSON.parse(localStorage.getItem(config.bib_localstorage));
+const getLangCode = (data: ILocalData): string => {
+  // const data: ILocalData = JSON.parse(localStorage.getItem(config.bib_localstorage));
   if (data && data.language) {
     return data.language;
   }
@@ -52,60 +69,59 @@ const showWarning = (message: string, caption: string) => {
     toastr.error(message, caption);
 };
 
-const hasSufficientPermissions = (group: IUserGroup): boolean => {
+const hasSufficientPermissions = (group: IUserGroup, userAcl: IAcl = undefined): boolean => {
    return ((group.Name == 'Administrators') || 
             (group.Name == 'Librarian'));
 };
+/**
+ * authorized decorator 
+ * It returns a function that executes the decorated method
+ */
+export const authorized = function() {
+    let acls: IAcl[] = [];
+    let groups: IUserGroup[] = [];
+    getAcls().then(_acls => acls = _acls);
+    getGroups().then(_groups => groups = _groups);
 
-const authorized = function() {
-    return (target: any, key: string, descriptor: any) => {
-    let langFiles = {};
-    let langFile = undefined;
-    let acl = undefined;
-    let group = undefined;
-    let code = undefined;
-    const all = _.map(config.countries, country => {
-        return getLanguageFile(country.language).then(file => {
-          return {
-            code: country.language,
-            file: file
-          };
-        });
-    });
-
-    Promise.all(all).then(results => langFiles = results);
-    
-    // save a reference to the original method
-    // this way we keep the values currently in the 
-    // descriptor and don't overwrite what another 
-    // decorator might have done to the descriptor.
-    const originalMethod = descriptor.value; 
-    //editing the descriptor/value parameter
-    descriptor.value =  function (...args: any[]) {
-        let result = undefined;
-        acl = getAcl();
-        group = getGroup();
-        code = getLangCode();
-        langFile = _.find(langFiles, {code: code })['file'];
-        if (hasSufficientPermissions(group)) {
-          // const a = args.map(a => JSON.stringify(a)).join();
-          // note usage of originalMethod here
-          result = originalMethod.apply(this, args);
-          const r = JSON.stringify(result);
-        } else {
-          showWarning(langFile['WarnInsufficientRights'], langFile['Error']);
-        }
-        // console.log(`Call: ${key}(${a}) => ${r}`);
+    return (target: any, fn: string, descriptor: any) => {
+      let langFiles = {};
+      let langFile = undefined;    
+      // get all available languages for later displaying of messages
+      // in user's preferred language
+      const all = _.map(config.countries, country => {
+          return getLanguageFile(country.language).then(file => {
+            return {
+              code: country.language,
+              file: file
+            };
+          });
+      });
+      Promise.all(all).then(results => langFiles = results);
+      // save a reference to the original method
+      // this way we keep the values currently in the 
+      // descriptor and don't overwrite what another 
+      // decorator might have done to the descriptor.
+      const originalMethod = descriptor.value; 
+      //editing the descriptor/value parameter
+      descriptor.value =  function(...args: any[]) {
+          let result = undefined;
+          const data = getLocalData();
+          const code = getLangCode(data);
+          const group = getGroup(groups, data); //session.User;
+          const acl = getAcl(acls, data);
+      
+          langFile = _.find(langFiles, {code: code })['file'];
+          if (hasSufficientPermissions(group, acl)) {
+            // call function if access is granted
+            result = originalMethod.apply(this, args);
+          } else {
+            showWarning(langFile['WarnInsufficientRights'], langFile['Error']);
+          }
+          console.log(`Calling: ${fn}(${args}) => ${json.stringify(result)}`);
         return result;
-    }
-
-    // return edited descriptor as opposed to overwriting 
-    // the descriptor by returning a new descriptor
-    return descriptor;
+      }
+      // return edited descriptor 
+      return descriptor;
   };
 
 };
-
-export {
-  authorized
-}

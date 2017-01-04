@@ -363,7 +363,7 @@ const getUserGroupByName = (name: string): Promise<IUserGroup> => {
     });
 };
 
-const getAcls = (): Promise<IAcl> => {
+const getAcls = (): Promise<IAcl[]> => {
     return doFetch(`${aclsUrl}`);
 };
 

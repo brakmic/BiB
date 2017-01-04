@@ -91,8 +91,8 @@
   "db": {
     "host": "127.0.0.1",
     "user": "root",
-    "password": "password123",
-    "db": "bibliothek"
+    "password": "aab++112",
+    "db": "bib"
   },
   "bib_datetime_format": "DD.MM.YYYY",
   "bib_use_fake_isbn_server": false,
