@@ -155,93 +155,98 @@ export class MediaComponent implements OnInit {
         domready(() => {
                 $('#media').children('tbody').contextMenu({
                 selector: 'tr',
-                className: 'data-title',
-                autoHide: true,
-                callback: function(key, options) {            
-                    switch(key) {
-                    case 'borrowmedium':
-                    {
-                        let mediumID = -1;
-                        const data = $(this).children('td');
-                        const elem = _.find(data, el => {
-                            return $(el).hasClass('sorting_1');
-                        });
-                        if(!_.isNil(elem)){                           
-                            const mediumID = Number(elem.textContent);
-                            self.borrowMedium(mediumID);
-                        }
-                    }
-                    break;
-                    case 'addmedium':
-                    {
-                        self.addMedium();
-                    }
-                    break;
-                    case 'modifymedium':
-                    {
-                        let mediumID = -1;
-                        const data = $(this).children('td');
-                        const elem = _.find(data, el => {
-                            return $(el).hasClass('sorting_1');
-                        });
-                        if(!_.isNil(elem)){
-                            mediumID = Number(elem.textContent);
-                            self.modifyMedium(mediumID);
-                        }
-                    }
-                    break;
-                    case 'removemedium':
-                    {
-                        let mediumID = -1;
-                        let title = '';
-                        const data = $(this).children('td');
-                        const elem = _.find(data, el => {
-                            return $(el).hasClass('sorting_1');
-                        });
-                        if(!_.isNil(elem)){
-                            mediumID = Number(elem.textContent);
-                            title = elem.nextSibling.textContent;
-                        } else {
-                            return;
-                        }
-                        $.confirm({
-                            text: `${self.confirmDeletionText} : "${title}"`,
-                            title: self.translation.instant("MediaRemove"),
-                            confirm: () => {
-                                self.removeMedium(mediumID);
+                build: function($trigger, e) {
+                    // this callback is executed every time the menu is to be shown
+                    // its results are destroyed every time the menu is hidden
+                    // e is the original contextmenu event, containing e.pageX and e.pageY (amongst other data)
+                    return {
+                        className: 'data-title',
+                        autoHide: true,
+                        callback: function(key, options) {            
+                            switch(key) {
+                            case 'borrowmedium':
+                            {
+                                let mediumID = -1;
+                                const data = $(this).children('td');
+                                const elem = _.find(data, el => {
+                                    return $(el).hasClass('sorting_1');
+                                });
+                                if(!_.isNil(elem)){                           
+                                    const mediumID = Number(elem.textContent);
+                                    self.borrowMedium(mediumID);
+                                }
+                            }
+                            break;
+                            case 'addmedium':
+                            {
+                                self.addMedium();
+                            }
+                            break;
+                            case 'modifymedium':
+                            {
+                                let mediumID = -1;
+                                const data = $(this).children('td');
+                                const elem = _.find(data, el => {
+                                    return $(el).hasClass('sorting_1');
+                                });
+                                if(!_.isNil(elem)){
+                                    mediumID = Number(elem.textContent);
+                                    self.modifyMedium(mediumID);
+                                }
+                            }
+                            break;
+                            case 'removemedium':
+                            {
+                                let mediumID = -1;
+                                let title = '';
+                                const data = $(this).children('td');
+                                const elem = _.find(data, el => {
+                                    return $(el).hasClass('sorting_1');
+                                });
+                                if(!_.isNil(elem)){
+                                    mediumID = Number(elem.textContent);
+                                    title = elem.nextSibling.textContent;
+                                } else {
+                                    return;
+                                }
+                                $.confirm({
+                                    text: `${self.confirmDeletionText} : "${title}"`,
+                                    title: self.translation.instant("MediaRemove"),
+                                    confirm: () => {
+                                        self.removeMedium(mediumID);
+                                    },
+                                    cancel: () => {
+                                        
+                                    },
+                                });
+                            }
+                            break;
+                            default:
+                                break;
+                            }
+                        },
+                        items: {
+                            'borrowmedium': {
+                                name: self.translation.instant('MediaBorrow'),
+                                icon: 'fa-exchange',
                             },
-                            cancel: () => {
-                                
+                            'addmedium': {
+                                name: self.translation.instant('MediaAdd'),
+                                icon: 'fa-plus-circle',
                             },
-                        });
-                    }
-                    break;
-                    default:
-                        break;
-                    }
+                            'modifymedium': {
+                                name: self.translation.instant('MediaModify'),
+                                icon: 'fa-address-book',
+                            },
+                            'removemedium': {
+                                name: self.translation.instant('MediaRemove'),
+                                icon: 'fa-remove',
+                            }
+                        }
+                    };
                 },
-                items: {
-                    'borrowmedium': {
-                        name: this.translation.instant('MediaBorrow'),
-                        icon: 'fa-exchange',
-                    },
-                    'addmedium': {
-                        name: this.translation.instant('MediaAdd'),
-                        icon: 'fa-plus-circle',
-                    },
-                    'modifymedium': {
-                        name: this.translation.instant('MediaModify'),
-                        icon: 'fa-address-book',
-                    },
-                    'removemedium': {
-                        name: this.translation.instant('MediaRemove'),
-                        icon: 'fa-remove',
-                    }
-                }
             });
             self.cd.markForCheck();
-            // set title for context menu
-            $('.data-title').attr('data-menutitle', self.translation.instant('EntryEdit'));
         });
     }
     

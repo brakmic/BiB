@@ -808,6 +808,7 @@ export default class DbClient {
                                                                               WHERE ID = :id`);
         return new Promise((resolve, reject) => {
             this.client.query(prep({
+                id: id,
                 canaddmedia: acl.CanAddMedia ? 1 : 0,
                 canaddreaders: acl.CanAddReaders ? 1 : 0,
                 canaddusers: acl.CanAddUsers ? 1 : 0,
@@ -824,17 +825,17 @@ export default class DbClient {
             (err, result) => {
                 if (!_.isNil(err)) {
                     reject({
-                        msg: `Could not update user settings with id: ${id}, Reason: ${err}`,
+                        msg: `Could not update ACL with id: ${id}, Reason: ${err}`,
                         code: 500
                     });
                 } else if (result.info.affectedRows === '0') {
                     reject({
-                        msg: `There weren't any changes for user settings with id: ${id}`,
+                        msg: `There weren't any changes for ACL with id: ${id}`,
                         code: 404
                     });
                 } else {
                     resolve({
-                        msg: `Successfully updated user settings with id: ${id}`,
+                        msg: `Successfully updated ACL with id: ${id}`,
                         code: 200
                     });
                 }

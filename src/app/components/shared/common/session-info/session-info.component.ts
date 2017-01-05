@@ -43,23 +43,8 @@ const domready = require('domready');
 
 @Component({
     selector: 'bib-session-info',
-    styles: [
-        `
-        .info-box {
-                position: relative;
-			    width: calc(100% - 20px);
-			    float: left;
-            }
-        .username {
-            color: red;
-        }
-        `
-    ],
-    template: `
-    <div>
-        <div class="info-box well well-sm">{{'LoggedOn' | translate}}: <span class="username">{{session.User.AccountName}}</span></div>
-    </div>
-    `,
+    styleUrls: ['./session-info.component.scss'] ,
+    templateUrl: './session-info.component.html',
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SessionInfoComponent implements OnInit {
@@ -72,7 +57,7 @@ export class SessionInfoComponent implements OnInit {
     }
     public ngOnChanges(changes: SimpleChanges) {
         const sess = changes['session'];
-        if (_.isEqual(sess.previousValue,sess.currentValue)){
+        if (!_.isEqual(sess.previousValue,sess.currentValue)){
             this.session = sess.currentValue;
             this.cd.markForCheck();
         }

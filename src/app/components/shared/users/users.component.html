@@ -19,5 +19,13 @@
             </thead>
         </table>
     </div>
+    <div>
+        <div *ngIf="userAcl.length > 0" class="well">
+            <bib-acl [acl]="userAcl" [header]="aclTypeUser"></bib-acl>
+        </div>
+        <div  *ngIf="groupAcl.length > 0" class="well">
+            <bib-acl [acl]="groupAcl" [header]="aclTypeGroup"></bib-acl>
+        </div>
+    </div>
 </div>
 <bib-dynamic [dynamicComponent]="dynamicComponent" (dynamicEvent)="onDynamicEvent($event)"></bib-dynamic>

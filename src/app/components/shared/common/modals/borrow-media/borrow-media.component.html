@@ -1,0 +1,21 @@
+<div id="borrow-dialog-form" title="{{ 'BorrowTo' | translate }}">
+    <form novalidate (ngSubmit)="onSubmitNewBorrow(form)" [formGroup]="form">
+        <div class="form-group">
+            <label for="mediumtitle">{{ 'Title' | translate }}</label>
+            <input type="text" name="mediumtitle" [readonly]="true" id="mediumtitle" placeholder="" class="form-control" formControlName="mediumTitle"
+            />
+        </div>
+        <div class="form-group">
+            <select id="select-reader">
+                        <option value="-1"></option>
+                        <option *ngFor="let reader of readers" [value]="reader.ID">
+                            {{reader.FirstName}} {{reader.LastName}}
+                        </option>
+                    </select>
+        </div>
+        <div class="btn-toolbar control-buttons pull-right" role="group">
+            <button class="btn btn-default btn-danger" type="button" (click)="onCancelClicked($event)">{{ 'Cancel' | translate }}</button>
+            <button class="btn btn-default btn-success" type="submit" [disabled]="form.invalid">{{ 'OK' | translate }}</button>
+        </div>
+    </form>
+</div>

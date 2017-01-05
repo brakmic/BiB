@@ -14,7 +14,8 @@ import { AUTH_PROVIDERS, NoContent,
          HomeComponent, UsersComponent, BibDynamicComponent,
          ManageMediumComponent, BorrowMediaComponent,
          ManageReaderComponent, ManageUserComponent,
-         DatabaseComponent, SessionInfoComponent } from 'app/components/shared';
+         DatabaseComponent, SessionInfoComponent,
+         AclComponent } from 'app/components/shared';
 import { BIB_DIRECTIVES, APP_PROVIDERS } from 'app/base';
 import { LogService } from 'app/services';
 import { BibComponent } from './bib.component';
@@ -37,7 +38,8 @@ const CHILD_COMPONENTS = [
     ManageUserComponent,
     BibDynamicComponent,
     DatabaseComponent,
-    SessionInfoComponent
+    SessionInfoComponent,
+    AclComponent
 ];
 
 

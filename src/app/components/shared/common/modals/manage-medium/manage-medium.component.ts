@@ -16,68 +16,9 @@ const domready = require('domready');
 
 @Component({
     selector: 'bib-modal-add-media',
-    styles: [`
-        
-        .control-buttons {
-            margin-top: 1em;
-        }
-
-        #manage-medium-dialog-form {
-            display: none;
-        }
-
-    `],
-    template: `
-            <div id="manage-medium-dialog-form" [title]="title">
-            <form novalidate (ngSubmit)="onSubmitMedium(form)"
-                                            [formGroup]="form">
-                    <div class="form-group">
-                    <label for="mediumname">{{ 'MediumName' | translate }}</label>
-                    <input type="text" name="mediumname"
-                            id="mediumname"
-                            placeholder=""
-                            class="form-control"
-                            formControlName="mediumName"/>
-                    </div>
-                    <div class="form-group">
-                    <label for="mediumauthor">{{ 'Author' | translate }}</label>
-                    <input type="text" name="mediumauthor"
-                            id="mediumauthor" 
-                            placeholder=""
-                            class="form-control"
-                            formControlName="mediumAuthor"/>
-                    </div>
-                    <div class="form-group">
-                    <label for="mediumyear">{{ 'Year' | translate }}</label>
-                    <input type="text" name="mediumyear"
-                            id="mediumyear" 
-                            placeholder=""
-                            class="form-control"
-                            formControlName="mediumYear"/>
-                    </div>
-                    <div class="form-group">
-                    <label for="mediumdescription">{{ 'Description' | translate }}</label>
-                    <input type="text" name="mediumdescription"
-                        id="mediumdescription" 
-                        placeholder=""
-                        class="form-control"
-                        formControlName="mediumDescription"/>
-                    </div>
-                    <div class="form-group">
-                    <label for="mediumisbn">{{ 'ISBN' | translate }}</label>
-                    <input type="text" name="mediumisbn"
-                            id="mediumisbn" 
-                            placeholder=""
-                            class="form-control"
-                            formControlName="mediumISBN"/>
-                    </div>
-                    <div class="btn-toolbar control-buttons pull-right" role="group">
-                        <button class="btn btn-danger" type="button" (click)="onCancelClicked($event)">{{ 'Cancel' | translate }}</button>
-                        <button class="btn btn-success" type="submit" [disabled]="form.invalid">{{ 'OK' | translate }}</button>
-                    </div>
-            </form>
-        </div>`,
-        changeDetection: ChangeDetectionStrategy.OnPush
+    styleUrls: ['./manage-medium.component.scss'],
+    templateUrl: './manage-medium.component.html',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ManageMediumComponent implements OnInit {
     public _event: Subject<any> = new Subject<any>();
@@ -92,13 +33,12 @@ export class ManageMediumComponent implements OnInit {
                 private cd: ChangeDetectorRef,
                 private logService: LogService,
                 private translation: i18nService,
-                private injector: Injector) { 
-                    this.medium = this.injector.get('medium');
-                    this.mediumID = this.injector.get('mediumID');
-                    this.action = this.injector.get('action');
-    }
+                private injector: Injector) { }
 
     public ngOnInit() { 
+        this.medium = this.injector.get('medium');
+        this.mediumID = this.injector.get('mediumID');
+        this.action = this.injector.get('action');
         this.setTitle();
         this.initForm();
     }

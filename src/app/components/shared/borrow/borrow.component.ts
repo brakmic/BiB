@@ -135,30 +135,35 @@ export class BorrowComponent implements OnInit {
         domready(() => {
                 $('#borrow').children('tbody').contextMenu({
                     selector: 'tr',
-                    className: 'data-title',
-                    autoHide: true,
-                    callback: function(key, options) {
-                        let borrowID = -1;
-                        let readerID = -1;
-                        const data = $(this).children('td');
-                        const elem = _.find(data, el => {
-                            return $(el).hasClass('sorting_1');
-                        });
-                        if(!_.isNil(elem)){
-                            borrowID = Number(elem.textContent);
-                            readerID = Number(elem.nextSibling.textContent);
-                            self.unborrow(borrowID, readerID);
-                        }
+                    build: function($trigger, e) {
+                        // this callback is executed every time the menu is to be shown
+                        // its results are destroyed every time the menu is hidden
+                        // e is the original contextmenu event, containing e.pageX and e.pageY (amongst other data)
+                        return {
+                            className: 'data-title',
+                            autoHide: true,
+                            callback: function(key, options) {
+                                let borrowID = -1;
+                                let readerID = -1;
+                                const data = $(this).children('td');
+                                const elem = _.find(data, el => {
+                                    return $(el).hasClass('sorting_1');
+                                });
+                                if(!_.isNil(elem)){
+                                    borrowID = Number(elem.textContent);
+                                    readerID = Number(elem.nextSibling.textContent);
+                                    self.unborrow(borrowID, readerID);
+                                }
+                            },
+                            items: {
+                                'mediareturn': {
+                                    name: self.translation.instant('MediaReturned'),
+                                    icon: 'fa-exchange',
+                                }
+                            }
+                        };
                     },
-                    items: {
-                        'mediareturn': {
-                            name: this.translation.instant('MediaReturned'),
-                            icon: 'fa-exchange',
-                        }
-                    }
                 });
-                // set title for context menu
-                $('.data-title').attr('data-menutitle', self.translation.instant('EntryEdit'));
                 this.cd.markForCheck();
         });
     }

@@ -10,11 +10,13 @@ import { IUser, IUserDisplay,
          IUserGroup, IUserSettings,
          IAcl, IComponentData } from 'app/interfaces';
 import { ManageUserComponent } from 'app/components';
+import { AclComponent } from 'app/components/shared/common/partials';
 import { ActionType, ComponentType } from 'app/enums';
 import { authorized } from 'app/decorators';
 import { LogService, i18nService } from 'app/services';
 import * as _ from 'lodash';
 const domready = require('domready');
+const cuid = require('cuid');
 
 @Component({
     selector: 'bib-users',
@@ -28,6 +30,12 @@ export class UsersComponent implements OnInit {
     private userTable: DataTables.DataTable;
     private dynamicComponent: IComponentData = null;
     private confirmDeletionText: string;
+    private userAcl: any[] = [];
+    private groupAcl: any[] = [];
+    private aclTypeUser: string = undefined;
+    private aclTypeGroup: string = undefined;
+    private userAclColumns: any[] = [];
+    private groupAclColums: any[] = [];
 
     constructor(private cd: ChangeDetectorRef,
                 private formBuilder: FormBuilder,
@@ -45,13 +53,6 @@ export class UsersComponent implements OnInit {
         this.confirmDeletionText = this.translation.instant('ConfirmDeletionUser');
     }
     public ngOnChanges(changes: SimpleChanges) {
-        const users = changes['users'];
-        if (users.currentValue !== users.previousValue) {
-            if (!_.isNil(this.userTable)) {
-                this.userTable.data().clear().push(users.currentValue);
-                this.updateTable();
-            }
-        }
     }
     public ngOnDestroy() {
        $('bib-root').siblings().remove();
@@ -81,34 +82,47 @@ export class UsersComponent implements OnInit {
                 select: true,
                 language: this.translation.getDataTablesLangObject(),
                 columns:  [
-                    { 'data' : 'ID' },
-                    { 'data' : 'AccountName' },
-                    { 'data' : 'FirstName' },
-                    { 'data' : 'LastName' },
-                    { 'data' : 'Password' },
-                    { 'data' : 'IsActive' },
-                    { 'data' : 'Group' },
+                    { data : 'ID' },
+                    { data : 'AccountName' },
+                    { data : 'FirstName' },
+                    { data : 'LastName' },
+                    { data : 'Password' },
+                    { data : 'IsActive' },
+                    { data : 'Group' },
                 ],
                 columnDefs: [
                     {
-                    data: 'Group',
-                    render: function (data, type, full, meta) {
-                        return data ? data.Name : '';
-                    },
-                    targets: 6
+                        data: 'Group',
+                        render: function (data, type, full, meta) {
+                            return data ? data.Name : '';
+                        },
+                        targets: 6
                     },
                     {
                         render: function (data, type, full, meta ) {
                             return _.truncate(data,{
-                                'length': 10,
-                                'separator': ' ',
-                                'omission': ' [...]'
+                                length: 10,
+                                separator: ' ',
+                                omission: ' [...]'
                             });
                         },
-                        "targets": 4
-                    },
-                ]
-            });
+                        targets: 4
+                     },
+                    ]
+                });
+                this.userTable.on('select', (e: Event, dt: DataTables.DataTable,
+                                                type: string, indexes: number[]) => {
+                    let user: IUser = dt.rows(indexes[0]).data()['0'];
+                    self.ngZone.runOutsideAngular(() => {
+                        bibApi.getUsers().then(users => {
+                            self.ngZone.run(() => {
+                                self.users = _.slice(users);
+                                self.showAcls(user.ID);
+                            });
+                        });
+                        
+                    }); 
+                });
             this.cd.markForCheck();
         });
     }
@@ -117,90 +131,115 @@ export class UsersComponent implements OnInit {
         domready(() => {
                 $('#user').children('tbody').contextMenu({
                 selector: 'tr',
-                className: 'data-title',
-                autoHide: true,
-                callback: function(key, options) {            
-                    switch(key) {
-                    case 'adduser':
-                    {
-                        const data: IComponentData = {
-                            component: ManageUserComponent,
-                            inputs: {
-                                action: ActionType.AddUser,
-                                userID: -1
-                            },
-                            type: ComponentType.AddUser
-                        };
-                        self.dynamicComponent = data;
-                        self.cd.markForCheck();
-                        
-                    }
-                    break;
-                    case 'removeuser':
-                    {
-                        let userID;
-                        let userName;
-                        const data = $(this).children('td');
-                        const elem = _.find(data, d => { return $(d).hasClass('sorting_1'); });
-                        if(!_.isNil(elem)){
-                            userID = Number(elem.textContent);
-                            userName = elem.nextSibling.textContent;
-                        } else {
-                            return;
-                        }
-                        $.confirm({
-                            text: `${self.confirmDeletionText} : "${userName}"`,
-                            title: self.translation.instant("UserRemove"),
-                            confirm: () => {
-                                self.removeUser(userID);
-                            },
-                            cancel: () => {
+                build: function($trigger, e) {
+                    return {
+                        className: 'data-title',
+                        autoHide: true,
+                        callback: function(key, options) {            
+                            switch(key) {
+                            case 'adduser':
+                            {
+                                const data: IComponentData = {
+                                    component: ManageUserComponent,
+                                    inputs: {
+                                        action: ActionType.AddUser,
+                                        userID: -1
+                                    },
+                                    type: ComponentType.AddUser
+                                };
+                                self.dynamicComponent = data;
+                                self.cd.markForCheck();
                                 
+                            }
+                            break;
+                            case 'removeuser':
+                            {
+                                let userID;
+                                let userName;
+                                const data = $(this).children('td');
+                                const elem = _.find(data, d => { return $(d).hasClass('sorting_1'); });
+                                if(!_.isNil(elem)){
+                                    userID = Number(elem.textContent);
+                                    userName = elem.nextSibling.textContent;
+                                } else {
+                                    return;
+                                }
+                                $.confirm({
+                                    text: `${self.confirmDeletionText} : "${userName}"`,
+                                    title: self.translation.instant("UserRemove"),
+                                    confirm: () => {
+                                        self.removeUser(userID);
+                                    },
+                                    cancel: () => {
+                                        
+                                    },
+                                });
+                            }
+                            break;
+                            case 'modifyuser': {
+                                const data = $(this).children('td');
+                                const el = _.find(data, d => { return $(d).hasClass('sorting_1'); });
+                                if (!_.isNil(el)) {
+                                    const userID = Number(el.textContent);
+                                    const data: IComponentData = {
+                                        component: ManageUserComponent,
+                                        inputs: {
+                                            userID: userID,
+                                            action: ActionType.ModifyUser
+                                        },
+                                        type: ComponentType.ModifyUser
+                                    };
+                                    self.dynamicComponent = data;
+                                    self.cd.markForCheck();
+                                }
+                            }
+                            break;
+                            default:
+                                break;
+                            }
+                        },
+                        items: {
+                            'adduser': {
+                                name: self.translation.instant('UserAdd'),
+                                icon: 'fa-plus-circle',
                             },
-                        });
-                    }
-                    break;
-                    case 'modifyuser': {
-                        const data = $(this).children('td');
-                        const el = _.find(data, d => { return $(d).hasClass('sorting_1'); });
-                        if (!_.isNil(el)) {
-                            const userID = Number(el.textContent);
-                            const data: IComponentData = {
-                                component: ManageUserComponent,
-                                inputs: {
-                                    userID: userID,
-                                    action: ActionType.ModifyUser
-                                },
-                                type: ComponentType.ModifyUser
-                            };
-                            self.dynamicComponent = data;
-                            self.cd.markForCheck();
+                            'modifyuser': {
+                                name: self.translation.instant('UserModify'),
+                                icon: 'fa-user-md',
+                            },
+                            'removeuser': {
+                                name: self.translation.instant('UserRemove'),
+                                icon: 'fa-remove',
+                            }
                         }
-                    }
-                    break;
-                    default:
-                        break;
                     }
                 },
-                items: {
-                    'adduser': {
-                        name: this.translation.instant('UserAdd'),
-                        icon: 'fa-plus-circle',
-                    },
-                    'modifyuser': {
-                        name: this.translation.instant('UserModify'),
-                        icon: 'fa-user-md',
-                    },
-                    'removeuser': {
-                        name: this.translation.instant('UserRemove'),
-                        icon: 'fa-remove',
-                    }
-                }
+                
             });
             self.cd.markForCheck();
-            // set title for context menu
-            $('.data-title').attr('data-menutitle', self.translation.instant('EntryEdit'));
         });
+    }
+    private showAcls(userID: number) {
+        const user = _.find(this.users, user => {
+            return user.ID == userID;
+        });
+        this.userAcl = [];
+        this.groupAcl = [];
+        const _user: any[] = [];
+        const _group: any[] = [];
+        if (!_.isNil(user.Acl) &&
+            _.keys(user.Acl).length > 0){
+            const info_header_user = `${this.translation.instant('AclTypeUser')} - ${user.AccountName}`; 
+            this.aclTypeUser = info_header_user;            
+            this.userAcl.push({ ... _.clone(user.Acl) });
+        }
+        if (!_.isNil(user.Group) &&
+            _.keys(user.Group.Acl).length > 0) {
+            const info_header_group = `${this.translation.instant('AclTypeGroup')} - ${user.Group.Name}`;
+            this.aclTypeGroup = info_header_group;
+            this.groupAcl.push({ ..._.clone(user.Group.Acl) });
+        }
+        this.cd.markForCheck();
     }
     @authorized()
     private removeUser(userID: number) {

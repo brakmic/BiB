@@ -22,87 +22,10 @@ const domready = require('domready');
 
 @Component({
     selector: 'bib-modal-manage-user',
-    styles: [`
-
-        #id {
-            background-color: lightgray;
-            color: white;
-        }
-
-        #manage-user-dialog-form {
-            display: none;
-        }
-
-        .control-buttons {
-            margin-top: 1em;
-        }
-
-        .selector {
-            width: 150px;
-        }
-        
-    `],
-    template: `
-        <div id="manage-user-dialog-form" [title]="title">
-        <form novalidate (ngSubmit)="onSubmitUserData(form)" [formGroup]="form">
-                    <div class="form-group">
-                    <label *ngIf="action != 6" for="id">{{ 'ID' | translate }}</label>
-                    <input [readonly]="true" *ngIf="action != 6" 
-                            type="text" name="id"
-                            id="id" 
-                            placeholder=""
-                            class="form-control"
-                            formControlName="id"/>
-                    </div>
-                    <div class="form-group">
-                    <label for="username">{{ 'UserName' | translate }}</label>
-                    <input type="text" name="username"
-                            id="firstname" 
-                            placeholder=""
-                            class="form-control"
-                            formControlName="userName"/>
-                    </div>
-                    <div class="form-group">
-                    <label for="firstname">{{ 'FirstName' | translate }}</label>
-                    <input type="text" name="firstname"
-                            id="firstname" 
-                            placeholder=""
-                            class="form-control"
-                            formControlName="firstName"/>
-                    </div>
-                    <div class="form-group">
-                    <label for="lastname">{{ 'LastName' | translate }}</label>
-                    <input type="text" name="lastname"
-                            id="lastname" 
-                            placeholder=""
-                            class="form-control"
-                            formControlName="lastName"/>
-                    </div>        
-                    <div class="form-group">
-                    <label for="password">{{ 'Password' | translate }}</label>
-                    <input type="password" name="password"
-                        id="password" 
-                        placeholder=""
-                        class="form-control"
-                        formControlName="password"
-                        (focus)="onPasswordFocus($event)"
-                        (click)="onPasswordFocus($event)"/>   
-                    </div>
-                    <label for="select-group">{{ 'Group' | translate }}</label> 
-                    <select id="select-group"
-                            class="selector">
-                        <option *ngFor="let group of groups" [ngValue]="group.ID"
-                                [selected]="group.ID == user.Group.ID">
-                            {{group.Name}}
-                        </option>
-                    </select>
-                    <div class="btn-toolbar control-buttons" role="group">
-                         <button class="btn btn-default btn-danger" type="button" (click)="onCancelClicked($event)">{{ 'Cancel' | translate }}</button>
-                         <button class="btn btn-default btn-success" type="submit" [disabled]="form.invalid">{{ 'OK' | translate }}</button>
-                    </div>
-                </form>
-            </div>
-    `,
+    styleUrls: [
+        './manage-user.component.scss'
+        ],
+    templateUrl: './manage-user.component.html',
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ManageUserComponent implements OnInit {
@@ -124,17 +47,17 @@ export class ManageUserComponent implements OnInit {
                 private cd: ChangeDetectorRef,
                 private logService: LogService,
                 private translation: i18nService,
-                private injector: Injector) { 
-                    this.userID = this.injector.get('userID');
-                    this.action = this.injector.get('action');
-                }
+                private injector: Injector) { }
 
     public ngOnInit() { 
+        this.userID = this.injector.get('userID');
+        this.action = this.injector.get('action');
         this.initForm();
         this.initUser();
     }
     public ngOnDestroy() {
         this.pwdSub.unsubscribe();
+        this.select.off('change');
     }
     public ngAfterViewInit() {
         this.initDialog();

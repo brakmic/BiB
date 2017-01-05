@@ -1,0 +1,30 @@
+<div id="manage-medium-dialog-form" [title]="title">
+    <form novalidate (ngSubmit)="onSubmitMedium(form)" [formGroup]="form">
+        <div class="form-group">
+            <label for="mediumname">{{ 'MediumName' | translate }}</label>
+            <input type="text" name="mediumname" id="mediumname" placeholder="" class="form-control" formControlName="mediumName" />
+        </div>
+        <div class="form-group">
+            <label for="mediumauthor">{{ 'Author' | translate }}</label>
+            <input type="text" name="mediumauthor" id="mediumauthor" placeholder="" class="form-control" formControlName="mediumAuthor"
+            />
+        </div>
+        <div class="form-group">
+            <label for="mediumyear">{{ 'Year' | translate }}</label>
+            <input type="text" name="mediumyear" id="mediumyear" placeholder="" class="form-control" formControlName="mediumYear" />
+        </div>
+        <div class="form-group">
+            <label for="mediumdescription">{{ 'Description' | translate }}</label>
+            <input type="text" name="mediumdescription" id="mediumdescription" placeholder="" class="form-control" formControlName="mediumDescription"
+            />
+        </div>
+        <div class="form-group">
+            <label for="mediumisbn">{{ 'ISBN' | translate }}</label>
+            <input type="text" name="mediumisbn" id="mediumisbn" placeholder="" class="form-control" formControlName="mediumISBN" />
+        </div>
+        <div class="btn-toolbar control-buttons pull-right" role="group">
+            <button class="btn btn-danger" type="button" (click)="onCancelClicked($event)">{{ 'Cancel' | translate }}</button>
+            <button class="btn btn-success" type="submit" [disabled]="form.invalid">{{ 'OK' | translate }}</button>
+        </div>
+    </form>
+</div>

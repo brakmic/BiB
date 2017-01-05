@@ -82,70 +82,75 @@ export class ReaderComponent implements OnInit {
         domready(() => {
                 $('#reader').children('tbody').contextMenu({
                 selector: 'tr',
-                className: 'data-title',
-                autoHide: true,
-                callback: function(key, options) {            
-                    switch(key) {
-                    case 'addreader':
-                    {
-                        self.addReader();
-                    }
-                    break;
-                    case 'removereader':
-                    {
-                        let readerID;
-                        let readerName;
-                        const data = $(this).children('td');
-                        const elem = _.find(data, d => { return $(d).hasClass('sorting_1'); });
-                        if(!_.isNil(elem)){
-                            readerID = Number(elem.textContent);
-                            readerName = elem.nextSibling.textContent;
-                        } else {
-                            return;
-                        }
-                        $.confirm({
-                            text: `${self.confirmDeletionText} : "${readerName}"`,
-                            title: self.translation.instant("ReaderRemove"),
-                            confirm: () => {
-                                self.removeReader(readerID);
+                build: function($trigger, e) {
+                    // this callback is executed every time the menu is to be shown
+                    // its results are destroyed every time the menu is hidden
+                    // e is the original contextmenu event, containing e.pageX and e.pageY (amongst other data)
+                    return {
+                        className: 'data-title',
+                        autoHide: true,
+                        callback: function(key, options) {            
+                            switch(key) {
+                            case 'addreader':
+                            {
+                                self.addReader();
+                            }
+                            break;
+                            case 'removereader':
+                            {
+                                let readerID;
+                                let readerName;
+                                const data = $(this).children('td');
+                                const elem = _.find(data, d => { return $(d).hasClass('sorting_1'); });
+                                if(!_.isNil(elem)){
+                                    readerID = Number(elem.textContent);
+                                    readerName = elem.nextSibling.textContent;
+                                } else {
+                                    return;
+                                }
+                                $.confirm({
+                                    text: `${self.confirmDeletionText} : "${readerName}"`,
+                                    title: self.translation.instant("ReaderRemove"),
+                                    confirm: () => {
+                                        self.removeReader(readerID);
+                                    },
+                                    cancel: () => {
+                                        
+                                    },
+                                });
+                            }
+                            break;
+                            case 'modifyreader': {
+                                const data = $(this).children('td');
+                                const el = _.find(data, d => { return $(d).hasClass('sorting_1'); });
+                                if (!_.isNil(el)) {
+                                    const readerID = Number(el.textContent);
+                                    self.modifyReader(readerID);
+                                }
+                            }
+                            break;
+                            default:
+                                break;
+                            }
+                        },
+                        items: {
+                            'addreader': {
+                                name: self.translation.instant('ReaderAdd'),
+                                icon: 'fa-plus-circle',
                             },
-                            cancel: () => {
-                                
+                            'modifyreader': {
+                                name: self.translation.instant('ReaderModify'),
+                                icon: 'fa-user-md',
                             },
-                        });
-                    }
-                    break;
-                    case 'modifyreader': {
-                        const data = $(this).children('td');
-                        const el = _.find(data, d => { return $(d).hasClass('sorting_1'); });
-                        if (!_.isNil(el)) {
-                            const readerID = Number(el.textContent);
-                            self.modifyReader(readerID);
+                            'removereader': {
+                                name: self.translation.instant('ReaderRemove'),
+                                icon: 'fa-remove',
+                            }
                         }
-                    }
-                    break;
-                    default:
-                        break;
-                    }
+                    };
                 },
-                items: {
-                    'addreader': {
-                        name: this.translation.instant('ReaderAdd'),
-                        icon: 'fa-plus-circle',
-                    },
-                    'modifyreader': {
-                        name: this.translation.instant('ReaderModify'),
-                        icon: 'fa-user-md',
-                    },
-                    'removereader': {
-                        name: this.translation.instant('ReaderRemove'),
-                        icon: 'fa-remove',
-                    }
-                }
             });
             self.cd.markForCheck();
-            // set title for context menu
-            $('.data-title').attr('data-menutitle', self.translation.instant('EntryEdit'));
         });
     }
     private initWidgets() {

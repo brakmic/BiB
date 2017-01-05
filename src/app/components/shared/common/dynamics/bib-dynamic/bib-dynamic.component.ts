@@ -8,7 +8,7 @@ import {
 import { IComponentData, IAppState } from 'app/interfaces';
 import { LogService } from 'app/services';
 import { ManageMediumComponent, BorrowMediaComponent,
-         ManageReaderComponent, ManageUserComponent } from '../modals';
+         ManageReaderComponent, ManageUserComponent } from 'app/components/shared/common/modals';
 // State Management with Redux
 import '@ngrx/core/add/operator/select';
 import { Store } from '@ngrx/store';
@@ -18,9 +18,8 @@ const domready = require('domready');
 
 @Component({
     selector: 'bib-dynamic',
-    template: `
-        <div #container></div>
-    `,
+    styleUrls: ['./bib-dynamic.component.scss'],
+    templateUrl: './bib-dynamic.component.html',
     entryComponents: [ 
                        ManageMediumComponent, 
                        ManageReaderComponent,

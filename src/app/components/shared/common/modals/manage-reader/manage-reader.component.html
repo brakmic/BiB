@@ -1,0 +1,28 @@
+<div id="manage-reader-dialog-form" [title]="title">
+    <form novalidate (ngSubmit)="onSubmitReader(form)" [formGroup]="form">
+        <div class="form-group">
+            <label for="cardid">{{ 'CardID' | translate }}</label>
+            <input type="text" name="cardid" id="cardid" placeholder="" class="form-control" formControlName="cardID" />
+        </div>
+        <div class="form-group">
+            <label for="firstname">{{ 'FirstName' | translate }}</label>
+            <input type="text" name="firstname" id="firstname" placeholder="" class="form-control" formControlName="firstName" />
+        </div>
+        <div class="form-group">
+            <label for="lastname">{{ 'LastName' | translate }}</label>
+            <input type="text" name="lastname" id="lastname" placeholder="" class="form-control" formControlName="lastName" />
+        </div>
+        <div class="form-group">
+            <label for="phone">{{ 'Phone' | translate }}</label>
+            <input type="text" name="phone" id="phone" placeholder="" class="form-control" formControlName="phone" />
+        </div>
+        <div class="form-group">
+            <label for="address">{{ 'Address' | translate }}</label>
+            <input type="text" name="address" id="address" placeholder="" class="form-control" formControlName="address" />
+        </div>
+        <div class="btn-toolbar control-buttons" role="group">
+            <button class="btn btn-default btn-danger" type="button" (click)="onCancelClicked($event)">{{ 'Cancel' | translate }}</button>
+            <button class="btn btn-default btn-success" type="submit" [disabled]="form.invalid">{{ 'OK' | translate }}</button>
+        </div>
+    </form>
+</div>

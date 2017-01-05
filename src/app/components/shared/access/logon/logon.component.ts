@@ -100,11 +100,6 @@ export class LogonComponent {
       userData => {
         if (!_.has(userData, 'error')) {
               this.persistSessionData(userData);
-              // bibApi.getAcl(userData.ACL_ID).then(acl => {
-              //   console.log(acl);
-                
-              // }).catch(err => console.log); 
-              
            } else {
              this.toast.show(this.translate.instant('AccessDenied'), this.translate.instant('Error'), ActionStatus.Failure);
              

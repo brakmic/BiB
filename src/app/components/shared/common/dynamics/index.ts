@@ -1,1 +1,1 @@
-export { BibDynamicComponent } from './bib-dynamic.component';
+export * from './bib-dynamic';

@@ -320,11 +320,26 @@ const getBorrowsForDisplay = (): Promise<IBorrowDisplay[]> => {
 };
 
 const getUsers = (): Promise<IUser[]> => {
-    return doFetch(`${usersUrl}`);
+    return doFetch(`${usersUrl}`).then(users => {
+        return _.map(users, (user: IUser) => {
+            return _mapUser(user);
+        });
+    });
 }
 
 const getUser = (id: number): Promise<IUser> => {
-    return doFetch(`${usersUrl}/${id}`);
+    return doFetch(`${usersUrl}/${id}`).then(user => {
+        return _mapUser(user);
+    });
+};
+
+const _mapUser = (user: IUser): IUser => {
+    const _user: IUser = <IUser>_.omit(user, 'Acl');
+    _user.Acl = _mapAcl(user.Acl);
+    if (_user.Group) {
+        _user.Group.Acl = _mapAcl(_user.Group.Acl);
+    };
+    return _user;
 };
 
 const getUserByName = (name: string): Promise<any> => {
@@ -348,27 +363,74 @@ const insertUser = (user: IUser): Promise<any> => {
 };
 
 const getUserGroups = (): Promise<IUserGroup[]> => {
-    return doFetch(`${groupsUrl}`);
-};
-
-const getUserGroup = (id: number): Promise<IUserGroup> => {
-    return doFetch(`${groupsUrl}/${id}`);
-};
-
-const getUserGroupByName = (name: string): Promise<IUserGroup> => {
     return doFetch(`${groupsUrl}`).then(groups => {
-        return _.find(groups, (group: IUserGroup) => {
-            return group.Name == name;
+        return _.map(groups, group => {
+            return _mapUserGroup(group);
         });
     });
 };
 
+const getUserGroup = (id: number): Promise<IUserGroup> => {
+    return doFetch(`${groupsUrl}/${id}`).then(group => {
+        return _mapUserGroup(group);
+    });
+};
+
+const _mapUserGroup = (group: any): IUserGroup => {
+    const _group = <IUserGroup>_.omit(group, 'Acl');
+    const acl = _mapAcl(group.Acl);
+    _group['Acl'] = acl;
+    return _group;
+};
+
+const getUserGroupByName = (name: string): Promise<IUserGroup> => {
+    return doFetch(`${groupsUrl}`).then(groups => {
+        const grp = _.find(groups, (group: IUserGroup) => {
+            return group.Name == name;
+        });
+        return _mapUserGroup(grp);
+    });
+};
+
 const getAcls = (): Promise<IAcl[]> => {
-    return doFetch(`${aclsUrl}`);
+    return doFetch(`${aclsUrl}`).then((acls: any) => {
+        return _.map(acls, acl => {
+            return _mapAcl(acl);
+        });
+    })
 };
 
 const getAcl = (id: number): Promise<IAcl> => {
-    return doFetch(`${aclsUrl}/${id}`);
+    return doFetch(`${aclsUrl}/${id}`).then((acl: any) => {
+        return _mapAcl(acl);
+    });
+};
+
+const _mapAcl = (acl: any): IAcl => {
+    if (!acl) return undefined;
+    return <IAcl>{
+            ID: acl.ID,
+            CanAddMedia: acl.CanAddMedia == 1 ? true : false,
+            CanAddReaders: acl.CanAddReaders == 1 ? true : false,
+            CanAddUsers: acl.CanAddUsers == 1 ? true : false,
+            CanAddUserGroups: acl.CanAddUserGroups == 1 ? true : false,
+            CanRemoveMedia: acl.CanRemoveMedia == 1 ? true : false,
+            CanRemoveReaders: acl.CanRemoveReaders == 1 ? true : false,
+            CanRemoveUsers: acl.CanRemoveUsers == 1 ? true : false,
+            CanRemoveUserGroups: acl.CanRemoveUserGroups == 1 ? true : false,
+            CanModifyMedia: acl.CanModifyMedia == 1 ? true : false,
+            CanModifyReaders: acl.CanModifyReaders == 1 ? true : false,
+            CanModifyUsers: acl.CanModifyUsers == 1 ? true : false,
+            CanModifyUserGroups: acl.CanModifyUserGroups == 1 ? true : false
+        };
+};
+
+const updateAcl = (acl: IAcl): Promise<any> => {
+    return doPut(`${aclsUrl}/${acl.ID}`, acl);
+};
+
+const deleteAcl = (id: number): Promise<any> => {
+    return doDelete(`${aclsUrl}`,id);
 };
 
 const getWorldCatEntry = (isbn: string): Promise<IWorldCatEntry> => {
@@ -420,6 +482,8 @@ export {
     insertUser,
     getAcl,
     getAcls,
+    updateAcl,
+    deleteAcl,
     getUserGroups,
     getUserGroup,
     getUserGroupByName,

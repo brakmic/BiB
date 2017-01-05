@@ -22,48 +22,8 @@ const domready = require('domready');
 
 @Component({
     selector: 'bib-modal-borrow',
-    styles: [`
-
-        .control-buttons {
-            margin-top: 1em;
-        }
-      
-        #borrow-dialog-form {
-            display: none;
-        }
-
-        #select-reader {
-            width: 300px;
-        }
-        
-    `],
-    template: `
-        <div id="borrow-dialog-form" title="{{ 'BorrowTo' | translate }}">
-            <form novalidate (ngSubmit)="onSubmitNewBorrow(form)" [formGroup]="form">
-                <div class="form-group">
-                <label for="mediumtitle">{{ 'Title' | translate }}</label>
-                <input type="text" name="mediumtitle"
-                        [readonly]="true"
-                        id="mediumtitle" 
-                        placeholder=""
-                        class="form-control"
-                        formControlName="mediumTitle"/>
-                </div>
-                <div class="form-group">
-                    <select id="select-reader">
-                        <option value="-1"></option>
-                        <option *ngFor="let reader of readers" [value]="reader.ID">
-                            {{reader.FirstName}} {{reader.LastName}}
-                        </option>
-                    </select>
-                </div>
-                <div class="btn-toolbar control-buttons pull-right" role="group">
-                    <button class="btn btn-default btn-danger" type="button" (click)="onCancelClicked($event)">{{ 'Cancel' | translate }}</button>
-                    <button class="btn btn-default btn-success" type="submit" [disabled]="form.invalid">{{ 'OK' | translate }}</button>
-                </div>
-            </form>
-        </div>
-    `,
+    styleUrls: ['./borrow-media.component.scss'],
+    templateUrl: './borrow-media.component.html',
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class BorrowMediaComponent implements OnInit {
@@ -84,13 +44,12 @@ export class BorrowMediaComponent implements OnInit {
                 private injector: Injector,
                 private ngZone: NgZone,
                 private store: Store<IAppState>,
-                private toast: ToastService) {
-                    this.mediumID = this.injector.get('mediumID');
-                    this.readers = this.injector.get('readers');
-                    this.medium = this.injector.get('medium');
-    }
+                private toast: ToastService) { }
 
     public ngOnInit() { 
+        this.mediumID = this.injector.get('mediumID');
+        this.readers = this.injector.get('readers');
+        this.medium = this.injector.get('medium');
         this.initForm();
     }
     public ngOnChanges(changes: SimpleChanges) {
