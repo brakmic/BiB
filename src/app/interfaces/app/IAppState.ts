@@ -3,6 +3,7 @@ interface IAppState {
   i18n: any;
   session: any;
   stats: any;
+  acl: acl;
 }
 
 export {

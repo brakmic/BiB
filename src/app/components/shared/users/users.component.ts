@@ -8,12 +8,20 @@ import { ActivatedRoute, Route,
 import { bibApi } from 'app/apis';
 import { IUser, IUserDisplay,
          IUserGroup, IUserSettings,
-         IAcl, IComponentData } from 'app/interfaces';
+         IAcl, IComponentData,
+         IAppState } from 'app/interfaces';
 import { ManageUserComponent } from 'app/components';
 import { AclComponent } from 'app/components/shared/common/partials';
 import { ActionType, ComponentType } from 'app/enums';
 import { authorized } from 'app/decorators';
 import { LogService, i18nService } from 'app/services';
+// State Management with Redux
+import { Observable } from 'rxjs/Observable';
+import { Observer } from 'rxjs/Observer';
+import { Subscription } from 'rxjs/Subscription';
+import '@ngrx/core/add/operator/select';
+import { Store } from '@ngrx/store';
+import { ACL_UPDATED, ACL_CHANGED } from 'app/reducers';
 import * as _ from 'lodash';
 const domready = require('domready');
 const cuid = require('cuid');
@@ -36,6 +44,9 @@ export class UsersComponent implements OnInit {
     private aclTypeGroup: string = undefined;
     private userAclColumns: any[] = [];
     private groupAclColums: any[] = [];
+    private aclObservable: Observable<IAcl>;
+    private aclSubscription: Subscription;
+    private selectedUser: IUser = undefined;
 
     constructor(private cd: ChangeDetectorRef,
                 private formBuilder: FormBuilder,
@@ -43,7 +54,8 @@ export class UsersComponent implements OnInit {
                 private router: Router,
                 private route: ActivatedRoute,
                 private translation: i18nService,
-                private ngZone: NgZone) { }
+                private ngZone: NgZone,
+                private store: Store<IAppState>) { }
 
     public ngOnInit() {
         this.route.data.forEach((data: { users: IUser[] }) => {
@@ -51,17 +63,32 @@ export class UsersComponent implements OnInit {
             this.updateTable();
         });
         this.confirmDeletionText = this.translation.instant('ConfirmDeletionUser');
+        this.initSubscriptions();
     }
     public ngOnChanges(changes: SimpleChanges) {
     }
     public ngOnDestroy() {
        $('bib-root').siblings().remove();
        $('#select-group').remove();
+       this.destroySubscriptions();
     }
     public ngAfterViewInit() {
         this.initWidgets();
         this.initContextMenu();
         this.cd.markForCheck();
+    }
+    private initSubscriptions() {
+       this.aclObservable = this.store.select(store => store.acl);
+       this.aclSubscription = this.aclObservable.subscribe(acl => {
+           if (this.selectedUser) {
+               this.refreshUserAcls(this.selectedUser.ID);
+           }
+       });
+    }
+    private destroySubscriptions() {
+        if (this.aclSubscription) {
+            this.aclSubscription.unsubscribe();
+        }
     }
     private updateTable() {
         if (!_.isNil(this.userTable)) {
@@ -112,18 +139,20 @@ export class UsersComponent implements OnInit {
                 });
                 this.userTable.on('select', (e: Event, dt: DataTables.DataTable,
                                                 type: string, indexes: number[]) => {
-                    let user: IUser = dt.rows(indexes[0]).data()['0'];
-                    self.ngZone.runOutsideAngular(() => {
-                        bibApi.getUsers().then(users => {
-                            self.ngZone.run(() => {
-                                self.users = _.slice(users);
-                                self.showAcls(user.ID);
-                            });
-                        });
-                        
-                    }); 
+                    self.selectedUser = dt.rows(indexes[0]).data()['0'];
+                    self.refreshUserAcls(self.selectedUser.ID); 
                 });
             this.cd.markForCheck();
+        });
+    }
+    private refreshUserAcls(id: number) {
+        this.ngZone.runOutsideAngular(() => {
+            bibApi.getUsers().then(users => {
+                this.ngZone.run(() => {
+                    this.users = _.slice(users);
+                    this.showAcls(id);
+                });
+            });
         });
     }
     private initContextMenu() {

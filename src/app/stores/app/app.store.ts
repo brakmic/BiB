@@ -4,20 +4,23 @@ import * as _ from 'lodash';
 
 // Reducers
 import { appReducer, i18nReducer,
-         sessionReducer, statsReducer } from 'app/reducers';
+         sessionReducer, statsReducer,
+         aclReducer } from 'app/reducers';
 
 // Define App-Store
 const appStore = provideStore({
                     app: appReducer,
                     i18n: i18nReducer,
                     session: sessionReducer,
-                    stats: statsReducer
+                    stats: statsReducer,
+                    acl: aclReducer
                   },
                   {
                     app: undefined,
                     i18n: undefined,
                     session: undefined,
-                    stats: undefined
+                    stats: undefined,
+                    acl: undefined
                   });
 
 export {
