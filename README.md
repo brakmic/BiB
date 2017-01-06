@@ -175,4 +175,14 @@ Any help regarding new languages or extending the existing ones is greatly appre
 
 [MIT](https://github.com/brakmic/BiB/blob/master/LICENSE)
 
+### Copyright notice regarding images
 
+All images are from [Pixabay](http://www.pixabay.com) and [CC0 Public Domain](https://creativecommons.org/publicdomain/zero/1.0/deed.en) licensed. 
+
+Original links:
+
+* [Penguin](https://pixabay.com/de/tux-tier-vogel-buch-b%C3%BCcher-161406/)
+* [Owl](https://pixabay.com/de/eule-vogel-buch-wise-natur-47526/)
+* [Kids](https://pixabay.com/de/asiatische-cartoon-kinder-1294104/)
+* [Books](https://pixabay.com/de/b%C3%BCcher-bibliothek-bildung-literatur-42701/)
+* [Shelf](https://pixabay.com/de/regal-b%C3%BCcher-bibliothek-lesung-159852/)
