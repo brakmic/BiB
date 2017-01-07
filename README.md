@@ -55,6 +55,8 @@ BiB is based on these fine projects, packages & languages:
     First, you'll have to provide a properly defined database. 
     The script for automatic database creation is located in the [config-folder](https://github.com/brakmic/BiB/blob/master/config/db-create.sql). 
 
+    To setup a valid administrative account use [this](https://github.com/brakmic/BiB/blob/master/config/db-insert-admin.sql) sql script.
+
 * NodeJS
     
     A working [NodeJS](https://nodejs.org/en/) 7.x environment is needed to compile the application. 
