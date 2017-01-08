@@ -1,6 +1,5 @@
 // Helpers
 import { Bib } from 'app/helpers';
-// IUserData
 import { IAppState, IUserGroup, IUserSettings,
          ISession, IConfig, IWindowEx,
          ICountry, ILocalData, IAcl } from 'app/interfaces';
@@ -27,14 +26,12 @@ const getLocalData = (): ILocalData => {
 };
 
 const getAcl = (acls: IAcl[], data: ILocalData): IAcl => {
-  // const data: ILocalData = JSON.parse(localStorage.getItem(config.bib_localstorage));
   return _.find(acls, acl => {
     return acl.ID == data.userAclID;
   });
 };
 
 const getUserID = (data: ILocalData): number => {
-  // const data: ILocalData = JSON.parse(localStorage.getItem(config.bib_localstorage));
   if (data && data.userID) {
     return data.userID;
   }
@@ -42,14 +39,12 @@ const getUserID = (data: ILocalData): number => {
 };
 
 const getGroup = (groups: IUserGroup[], data: ILocalData): IUserGroup => {
-  // const data: ILocalData = JSON.parse(localStorage.getItem(config.bib_localstorage));
   return _.find(groups, gr => {
       return gr.ID == data.groupID;
   });
 };
 
 const getLangCode = (data: ILocalData): string => {
-  // const data: ILocalData = JSON.parse(localStorage.getItem(config.bib_localstorage));
   if (data && data.language) {
     return data.language;
   }
