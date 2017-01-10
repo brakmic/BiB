@@ -77,11 +77,9 @@ module.exports = function(options) {
         test: /\.ts$/,
         loader: 'tslint-loader',
         exclude: [helpers.root('node_modules'),
-                  helpers.root('src/app/apis/definitions/images.ts'),
-                  helpers.root('src/app/apis/definitions/logons.ts'),
-                  helpers.root('src/app/apis/definitions/menus.ts'),
-                  helpers.root('src/app/apis/definitions/retail.ts'),
-                  helpers.root('src/app/services/module/gridconfig_demo.ts')]
+                  helpers.root('src/app/apis/images.api.ts'),
+                  helpers.root('src/app/apis/logon.api.ts'),
+                  helpers.root('src/app/apis/fetch.ts')]
       },
 
       /**
