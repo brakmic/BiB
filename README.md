@@ -170,7 +170,7 @@ The most frequently used options are:
 
 Any help regarding new languages or extending the existing ones is greatly appreciated.
 
-<img src="https://i.imgsafe.org/95a1f41e3f.png">
+<img src="http://i.giphy.com/l0JLVEUhJEAkiSKXe.gif">
 
 
 ## License 
