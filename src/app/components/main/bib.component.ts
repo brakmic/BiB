@@ -102,7 +102,7 @@ export class BibComponent {
   public ngAfterViewInit() {
     const msg = this.translate.instant('Welcome');
     const user = this.sessionData.User;
-    this.toast.show(`${msg} ${user.AccountName}`,'Bib', ActionStatus.Success);
+    this.toast.show(`${msg} ${user.AccountName}`,'BiB', ActionStatus.Success);
   }
 
   public ngOnChanges(changes: any) {
@@ -141,7 +141,7 @@ export class BibComponent {
    */
   private onMenuSelected($event: any) {
     this.collectStatistics();
-    this.logService.logJson($event.name, 'Bib');
+    this.logService.logJson($event.name, 'BiB');
   }
 
   /**
@@ -158,7 +158,7 @@ export class BibComponent {
           this.borrowsCount = stats.borrowsCount;
           this.overduesCount = stats.overduesCount;
           this.mediaCount = stats.mediaCount;
-          this.logService.logEx(`Statistics collected`, 'Bib');
+          this.logService.logEx(`Statistics collected`, 'BiB');
           this.cd.markForCheck();
         });
      });

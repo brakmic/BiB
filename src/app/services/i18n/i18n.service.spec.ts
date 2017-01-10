@@ -42,13 +42,13 @@ describe('Service: i18n', () => {
                     {
                       'server'       : 'localhost',
                       'baseUrl'      : 'localhost',
-                      'logonUrlPath' : 'retaildbapi/api/Logon',
+                      'logonUrlPath' : 'logon/api',
                       'protocol'     : 'https',
                       'debug'        : true,
                       'language'     : 'de-DE',
                       'logon': {
-                          'username': '99999',
-                          'password': '13xlk3hui..ad'
+                          'username': 'user',
+                          'password': 'pwd'
                       },
                       'translations': 'assets/i18n',
                       'insertLogonData': true,
