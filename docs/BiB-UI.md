@@ -30,7 +30,7 @@ The Sidebar Menu contains links to different functionalities that'll get shown i
 
 <img src="http://i.giphy.com/3oz8xSN7WNKYEAk1uo.gif">
 
-**BiB** offeres different views to certain aspects of the system, like Media lists, Lending, or User management. All of them follow the same tabulal display pattern.
+**BiB** offeres different views to certain aspects of the system, like Media lists, Lending, or User management. All of them follow the same tabular display pattern.
 
 <img src="http://i.giphy.com/l3vR0BWVbaBpFZe00.gif">
 
