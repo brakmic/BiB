@@ -34,7 +34,7 @@ The Sidebar Menu contains links to different functionalities that'll get shown i
 
 <img src="http://i.giphy.com/l3vR0BWVbaBpFZe00.gif">
 
-The manangement of these entries is done via context menus that get activated by clicking on the right mouse button, just like with typical desktop apps.
+The management of these entries is done via context menus that get activated by clicking on the right mouse button, just like with typical desktop apps.
 
 *Statistics*
 
