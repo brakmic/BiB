@@ -8,7 +8,7 @@ import { ActionStatus } from 'app/enums';
 @Injectable()
 export class ToastService {
     
-    constructor(/*private translate: i18nService*/) { }
+    constructor(private translate: i18nService) { }
 
     public show(message: string, caption: string, status: ActionStatus, 
                      progress: boolean = false, timeout: number = 2000,
@@ -25,7 +25,7 @@ export class ToastService {
             case ActionStatus.Failure:
             case ActionStatus.Canceled:
                 {
-                    // toastr.warning(message, this.translate.instant('Warning'));
+                    toastr.warning(message, this.translate.instant('Warning'));
                 }
                 break;
             default:
