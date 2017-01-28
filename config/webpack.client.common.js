@@ -9,10 +9,11 @@ const path = require('path');
  */
 const AssetsPlugin = require('assets-webpack-plugin');
 const ContextReplacementPlugin = require('webpack/lib/ContextReplacementPlugin');
+const NormalModuleReplacementPlugin = require('webpack/lib/NormalModuleReplacementPlugin');
 const ProvidePlugin = require('webpack/lib/ProvidePlugin');
 const CommonsChunkPlugin = require('webpack/lib/optimize/CommonsChunkPlugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
-// const CheckerPlugin = require('awesome-typescript-loader').CheckerPlugin;
+const CheckerPlugin = require('awesome-typescript-loader').CheckerPlugin;
 const HtmlElementsPlugin = require('./html-elements-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const LoaderOptionsPlugin = require('webpack/lib/LoaderOptionsPlugin');
@@ -20,6 +21,8 @@ const ScriptExtHtmlWebpackPlugin = require('script-ext-html-webpack-plugin');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const DashboardPlugin = require('webpack-dashboard/plugin');
 const resolveNgRoute = require('@angularclass/resolve-angular-routes');
+
+const AOT = helpers.hasNpmFlag('aot');
 
 /*
  * Webpack Constants
@@ -105,16 +108,35 @@ module.exports = function(options) {
     rules: [
 
       {
-        enforce: 'pre',
-        test: /\.ts$/,
-        loader: 'string-replace-loader',
-        query: {
-          search: '(System|SystemJS)(.*[\\n\\r]\\s*\\.|\\.)import\\((.+)\\)',
-          replace: '$1.import($3).then(mod => mod.__esModule ? mod.default : mod)',
-          flags: 'g'
+          test: /\.ts$/,
+          use: [
+            {
+              loader: '@angularclass/hmr-loader',
+              options: {
+                pretty: !isProd,
+                prod: isProd
+              }
+            },
+            { // MAKE SURE TO CHAIN VANILLA JS CODE, I.E. TS COMPILATION OUTPUT.
+              loader: 'ng-router-loader',
+              options: {
+                loader: 'async-import',
+                genDir: 'compiled',
+                aot: AOT
+              }
+            },
+            {
+              loader: 'awesome-typescript-loader',
+              options: {
+                configFileName: 'tsconfig.webpack.json'
+              }
+            },
+            {
+              loader: 'angular2-template-loader'
+            }
+          ],
+          exclude: [/\.(spec|e2e)\.ts$/]
         },
-        include: [helpers.root('src')]
-      },
       /*
       * Native addons
       */
@@ -122,23 +144,9 @@ module.exports = function(options) {
         test: /\.node$/, 
         loader: 'node-loader' 
       },
-      /*
-       * Typescript loader support for .ts and Angular 2 async routes via .async.ts
-       *
-       * See: https://github.com/s-panferov/awesome-typescript-loader
-       */
-      {
-        test: /\.ts$/,
-        loaders: [
-          '@angularclass/hmr-loader?pretty=' + !isProd + '&prod=' + isProd,
-            'awesome-typescript-loader',
-            'angular2-template-loader'
-        ],
-        exclude: [/\.(spec|e2e)\.ts$/]
-      },
       {
           test: /datatables\.net.*/,
-          loader: 'imports?define=>false'
+          loader: 'imports-loader?define=>false'
       },
       /*
        * Json loader support for *.json files.
@@ -200,18 +208,7 @@ module.exports = function(options) {
       */
       {
         test: /\.(jpg|png|gif)$/,
-        loader: 'file'
-      },
-
-      {
-         enforce: 'post',
-         test: /\.js$/,
-         loader: 'string-replace-loader',
-         query: {
-           search: 'var sourceMappingUrl = extractSourceMappingUrl\\(cssText\\);',
-           replace: 'var sourceMappingUrl = "";',
-           flags: 'g'
-         }
+        loader: 'file-loader'
       }
 
     ]
@@ -231,6 +228,14 @@ module.exports = function(options) {
         jQuery: "jquery",
         "window.jQuery": "jquery"
     }),
+
+    /*
+     * Plugin: ForkCheckerPlugin
+     * Description: Do type checking in a separate process, so webpack don't need to wait.
+     *
+     * See: https://github.com/s-panferov/awesome-typescript-loader#forkchecker-boolean-defaultfalse
+     */
+    new CheckerPlugin(),
 
     /**
      * Plugin LoaderOptionsPlugin (experimental)
@@ -390,6 +395,28 @@ module.exports = function(options) {
     new HtmlElementsPlugin({
       headTags: require('./head-config.common')
     }),
+
+     // Fix Angular 2
+      new NormalModuleReplacementPlugin(
+        /facade(\\|\/)async/,
+        helpers.root('node_modules/@angular/core/src/facade/async.js')
+      ),
+      new NormalModuleReplacementPlugin(
+        /facade(\\|\/)collection/,
+        helpers.root('node_modules/@angular/core/src/facade/collection.js')
+      ),
+      new NormalModuleReplacementPlugin(
+        /facade(\\|\/)errors/,
+        helpers.root('node_modules/@angular/core/src/facade/errors.js')
+      ),
+      new NormalModuleReplacementPlugin(
+        /facade(\\|\/)lang/,
+        helpers.root('node_modules/@angular/core/src/facade/lang.js')
+      ),
+      new NormalModuleReplacementPlugin(
+        /facade(\\|\/)math/,
+        helpers.root('node_modules/@angular/core/src/facade/math.js')
+      ),
 
   ],
 

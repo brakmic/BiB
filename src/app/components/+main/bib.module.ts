@@ -65,7 +65,7 @@ export const routes: Routes = BIB_ROUTES;
     ...AUTH_PROVIDERS
   ]
 })
-export default class BibModule {
+export class BibModule {
   public static routes = routes;
   constructor(private logService: LogService) {
   }

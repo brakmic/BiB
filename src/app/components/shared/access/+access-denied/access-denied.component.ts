@@ -9,7 +9,7 @@ import { ActivatedRoute } from '@angular/router';
     styleUrls: ['./access-denied.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class AccessDenied {
+export class AccessDeniedComponent {
     private warningLogo: string;
     private data: any;
 

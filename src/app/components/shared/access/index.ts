@@ -1,4 +1,4 @@
-export * from './access-denied';
+export { AccessDeniedModule } from './+access-denied';
 export * from './guards';
-export * from './logon';
+export { LogonModule } from './+logon';
 export * from './signup';

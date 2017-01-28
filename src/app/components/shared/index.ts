@@ -8,4 +8,5 @@ export * from './media';
 export * from './menus';
 export * from './home';
 export * from './users';
+export * from './stats';
 export * from './database';

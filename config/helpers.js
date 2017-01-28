@@ -3,10 +3,16 @@ var path = require('path');
 // Helper functions
 var _root = path.resolve(__dirname, '..');
 
+const EVENT = process.env.npm_lifecycle_event || '';
+
 console.log('root directory:', root());
 
 function hasProcessFlag(flag) {
   return process.argv.join('').indexOf(flag) > -1;
+}
+
+function hasNpmFlag(flag) {
+  return EVENT.includes(flag);
 }
 
 function root(args) {
@@ -74,6 +80,7 @@ function isWebpackDevServer() {
 
 exports.reverse = reverse;
 exports.hasProcessFlag = hasProcessFlag;
+exports.hasNpmFlag = hasNpmFlag;
 exports.root = root;
 exports.rootNode = rootNode;
 exports.prependExt = prependExt;

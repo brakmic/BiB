@@ -1,3 +1,3 @@
-export * from './app.module';
 export * from './shared';
-export * from './app';
+export { AppModule } from './app';
+export { BibModule } from './+main';

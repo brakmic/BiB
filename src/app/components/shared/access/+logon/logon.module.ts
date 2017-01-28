@@ -32,6 +32,6 @@ const routes: Routes = [
     PipesModule
   ]
 })
-export default class LogonModule {
+export class LogonModule {
   public static routes = routes;
 }

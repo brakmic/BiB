@@ -121,7 +121,7 @@ const ENV_MODULES = [
                               useHash: config.useHashRouting,
                               enableTracing: config.traceRoutes,
                               // errorHandler: error => console.log(`[ROUTER ERROR] : ${error}`),
-                              preloadingStrategy: PreloadSelectedModulesStrategy
+                              preloadingStrategy: PreloadAllModules
                             })
 ];
 

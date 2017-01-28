@@ -1,4 +1,4 @@
-import { AccessDenied } from './access-denied.component';
+import { AccessDeniedComponent } from './access-denied.component';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgModule } from '@angular/core';
@@ -9,16 +9,17 @@ import { DataResolver } from 'app/resolvers';
 // WebpackAsyncRoute expects a route for this module to load  the Logon-Component
 const routes: Routes = [
   {
-    path: '', component: AccessDenied,
+    path: '', component: AccessDeniedComponent,
     resolve: {
       data: DataResolver
     },
-    pathMatch: 'full' }
+    pathMatch: 'full' 
+  }
 ];
 
 @NgModule({
   declarations: [
-    AccessDenied
+    AccessDeniedComponent
   ],
   imports: [
     CommonModule,
@@ -28,6 +29,6 @@ const routes: Routes = [
     RouterModule.forChild(routes),
   ]
 })
-export default class AccessDeniedModule {
+export class AccessDeniedModule {
   public static routes = routes;
 }

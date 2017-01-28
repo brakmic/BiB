@@ -26,6 +26,11 @@ require('hammerjs');
 
 // RxJS
 require('rxjs/Rx');
+require('../src/platform/helpers/bows-alt');
+
+
+window.Globalize.load(likelySubtags);
+window.Globalize.locale('en-US');
 
 var testing = require('@angular/core/testing');
 var browser = require('@angular/platform-browser-dynamic/testing');

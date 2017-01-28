@@ -67,45 +67,36 @@ module.exports = function(options) {
      */
     rules: [
 
-      /**
-       * Tslint loader support for *.ts files
-       *
-       * See: https://github.com/wbuchwalter/tslint-loader
-       */
+      
       {
-        enforce: 'pre',
-        test: /\.ts$/,
-        loader: 'tslint-loader',
-        exclude: [helpers.root('node_modules'),
-                  helpers.root('src/app/apis/images.api.ts'),
-                  helpers.root('src/app/apis/logon.api.ts'),
-                  helpers.root('src/app/apis/fetch.ts')]
-      },
-
-      /**
-       * Source map loader support for *.js files
-       * Extracts SourceMaps for source files that as added as sourceMappingURL comment.
-       *
-       * See: https://github.com/webpack/source-map-loader
-      */
-      {
-          enforce: 'pre',
-          test: /\.js$/,
-          loader: 'source-map-loader',
-          exclude: [
-          // these packages have problems with their sourcemaps
-          helpers.root('node_modules/rxjs'),
-          helpers.root('node_modules/@angular'),
-          helpers.root('src/platform/helpers/bows-alt'),
-        ]
-      },
-      {
-         test: /\.ts$/,
-         loaders: [
-            'awesome-typescript-loader?sourceMap=false,inlineSourceMap=true,compilerOptions{}=removeComments:true',
-            'angular2-template-loader'
-         ],
-         exclude: [/\.e2e\.ts$/]
+          test: /\.ts$/,
+          use: [
+            {
+              loader: '@angularclass/hmr-loader',
+              options: {
+                pretty: !isProd,
+                prod: isProd
+              }
+            },
+            { // MAKE SURE TO CHAIN VANILLA JS CODE, I.E. TS COMPILATION OUTPUT.
+              loader: 'ng-router-loader',
+              options: {
+                loader: 'async-import',
+                genDir: 'compiled',
+                aot: AOT
+              }
+            },
+            {
+              loader: 'awesome-typescript-loader',
+              options: {
+                configFileName: 'tsconfig.webpack.json'
+              }
+            },
+            {
+              loader: 'angular2-template-loader'
+            }
+          ],
+          exclude: [/\.(spec|e2e)\.ts$/]
       },
       {
          test: /\.(html|css)$/,
@@ -131,26 +122,6 @@ module.exports = function(options) {
         loaders: ['to-string-loader','raw-loader', 'sass-loader'],
         exclude: [helpers.root('src/index.html')]
       },
-
-      /**
-       * Instruments JS files with Istanbul for subsequent code coverage reporting.
-       * Instrument only testing sources.
-       *
-       * See: https://github.com/deepsweet/istanbul-instrumenter-loader
-       */
-      {
-        enforce: 'post',
-        test: /\.(js|ts)$/, 
-        loader: 'istanbul-instrumenter-loader',
-        include: helpers.root('src'),
-        exclude: [
-          /\.(e2e|spec)\.ts$/,
-          /node_modules/,
-          /vendor/,
-          /bows-alt/
-        ]
-      }
-
     ]
   },
 
@@ -208,17 +179,15 @@ module.exports = function(options) {
       }
     }),
 
-    /**
-     * Plugin: ContextReplacementPlugin
-     * Description: Provides context to Angular's use of System.import
-     *
-     * See: https://webpack.github.io/docs/list-of-plugins.html#contextreplacementplugin
-     * See: https://github.com/angular/angular/issues/11580
-     */
+ 
     new ContextReplacementPlugin(
       // The (\\|\/) piece accounts for path separators in *nix and Windows
       /angular(\\|\/)core(\\|\/)(esm(\\|\/)src|src)(\\|\/)linker/,
-      helpers.root('src') // location of your src
+      helpers.root('src'),
+      {
+        
+      }
+      // resolveNgRoute(helpers.root('src'))
     ),
 
   ],

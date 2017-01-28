@@ -4,9 +4,6 @@ import { Routes, RouterModule,
 import { Observable } from 'rxjs/Observable';
 import * as _ from 'lodash';
 
-const logon  = () => System.import('app/components/shared/access/logon');
-const accessDenied = () => System.import('app/components/shared/access/access-denied');
-const main = () => System.import('app/components/main');
 import * as bows from 'platform/helpers/bows-alt';
 const logger = bows('Preload');
 
@@ -31,18 +28,18 @@ export class PreloadSelectedModulesStrategy implements PreloadingStrategy {
 export const APP_ROUTES: Routes = [
   {
     path: 'access-denied',
-    loadChildren: accessDenied,
+    loadChildren: 'app/components#AccessDeniedModule',
     data: {
       preload: true
     }
   },
   {
     path: 'logon',
-    loadChildren: logon
+    loadChildren: 'app/components#LogonModule'
   },
   {
     path: '',
-    loadChildren: main,
+    loadChildren: 'app/components#BibModule',
     data: {
       preload: true
     }

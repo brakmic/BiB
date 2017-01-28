@@ -51,8 +51,8 @@ import { IConfig, IAppState,
 import { Observable } from 'rxjs/Observable';
 import { Signup, NoContent,
          AuthGuard } from 'app/components/shared';
-import { BibComponent } from 'app/components/main/bib.component';
-import { App } from 'app/components/app';
+import { BibComponent } from 'app/components/+main/bib.component';
+import { AppComponent } from 'app/components/app/app.component';
 const config: IConfig = require('config.json');
 
 const SERVICES = [
@@ -87,7 +87,7 @@ class ComponentMock implements Component {
     }
 }
 
-class AppComponentMock extends App {
+class AppComponentMock extends AppComponent {
      constructor(private _router: Router,
                  private _route: ActivatedRoute,
                  private _log: LogService,

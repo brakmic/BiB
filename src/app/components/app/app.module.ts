@@ -7,7 +7,9 @@ import { removeNgStyles, createNewHosts } from '@angularclass/hmr';
 import { AppState, LogService } from 'app/services';
 import { StoreType } from 'app/types';
 
-import { App, ENV_MODULES,
+import { AppComponent } from './app.component';
+
+import { ENV_MODULES,
          VENDOR_MODULES, APP_DECLARATIONS,
          ENV_PROVIDERS, APP_PROVIDERS,
          APP_PIPES, PreloadSelectedModulesStrategy } from 'app/base';
@@ -16,7 +18,7 @@ import { App, ENV_MODULES,
  * `AppModule` is the main entry point into Angular2's bootstraping process
  */
 @NgModule({
-  bootstrap: [ App ], // declare Main component
+  bootstrap: [ AppComponent ], // declare Main component
   providers: [      // provide Services to Angular's Dependency Injection mechanism
     ...ENV_PROVIDERS,
     ...APP_PROVIDERS
@@ -26,7 +28,7 @@ import { App, ENV_MODULES,
     ...VENDOR_MODULES,
   ],
   declarations: [     // load all available components & directives
-    App
+    AppComponent
   ]
 })
 export class AppModule {

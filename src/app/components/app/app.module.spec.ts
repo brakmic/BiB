@@ -4,7 +4,7 @@ import {
 } from '@angular/core/testing';
 
 // Load the implementations that should be tested
-import { App } from './app/app.component';
+import { AppComponent } from './app.component';
 import { AppState, LogService } from '../services';
 import { NgModule, ApplicationRef } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
@@ -19,10 +19,10 @@ describe('Module : App', () => {
       { provide: ActivatedRoute, useValue: {} },
       { provide: Router, useValue: {} },
       ApplicationRef,
-      App
+      AppComponent
     ]}));
 
-  it('should be initialized', inject([ App ], (app: App) => {
+  it('should be initialized', inject([ AppComponent ], (app: AppComponent) => {
     expect(app).toBeTruthy();
   }));
 

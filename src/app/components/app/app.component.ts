@@ -19,7 +19,7 @@ const style = './app.component.scss';
   styleUrls: [normalize, style],
   encapsulation: ViewEncapsulation.Emulated
 })
-export class App {
+export class AppComponent {
   private sessionSubscription: Subscription;
   /**
    * App constructor
