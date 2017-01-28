@@ -129,7 +129,7 @@ The complete list of all available API calls is located [here](https://github.co
 
 <img src="https://i.imgsafe.org/95a3d23a72.png">
 
-**BiB** [supports](https://github.com/brakmic/BiB/blob/master/src/app/decorators/authorized.decorator.ts) user- and group-based Access Control Lists. In current version only group-based ACLs are active but the technical capability to enforce more fine-grained access control is 
+**BiB** [supports](https://github.com/brakmic/BiB/blob/master/src/app/decorators/authorized.decorator.ts) user- and group-based Access Control Lists. Currenty, only group-based ACLs are active but the technical capability to enforce more fine-grained access control is 
 already available. Future versions will also include additional options for UI-based user rights management. Internally, **BiB** relies on Angular 2 Decorators to enforce restrictions on certain system tasks that can 
 manipulate database and other vital data. The current implementation is rather simple and based on a few interesting ideas from various blog posts. 
 
@@ -153,7 +153,7 @@ The most frequently used options are:
 
 ## Internationalization
 
-**BiB** is completely i18n-capable via language files that are located in the assets/i18n folder. Currently there are language files for these languages although only German and English are complely translated and othes simply fall back to English. 
+**BiB** is i18n-capable via language files that are located in the **assets/i18n** folder.
 
 [German](https://github.com/brakmic/BiB/blob/master/src/assets/i18n/de-DE.json)
 
