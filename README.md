@@ -94,7 +94,7 @@ To run it as a complete web app use
 
 to create a new productive build in **dist** folder. Afterwards, copy the contents to your preferred web server.
 
-In either case your application will need a proper backend that has to be run with:
+In either case your application will need a proper backend:
 
 `npm run start:server`
 
