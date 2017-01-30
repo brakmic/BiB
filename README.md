@@ -80,7 +80,7 @@ BiB is based on these fine projects, packages & languages:
 ## Running
 
 This application can either be run in a development mode directly from console or as a complete web application that
-resides in a www-directory of one of the available web-servers. 
+resides in a *www*-directory of some of the available web servers. 
 
 If you're planning to develop this app then you should use 
 
