@@ -98,7 +98,7 @@ In either case your application will need a proper backend:
 
 `npm run start:server`
 
-Because the server-side scripts are written in TypeScript too you'll need a Node version called *ts-node* that understands this JavaScript dialect.
+Because the server-side scripts are written in TypeScript too you'll need a Node version called [ts-node](https://www.npmjs.com/package/ts-node) that understands this JavaScript dialect.
 The installation of ts-node is usually done with the initial install from above but if you experience any problems with compiling TypeScript files,
 please, check if you maybe have different versions of your globa/local packages. The same applies to your TypeScript and WebPack versions.
 
