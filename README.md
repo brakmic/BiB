@@ -72,7 +72,7 @@ BiB is based on these fine projects, packages & languages:
     *Notice for Windows Users*:
 
     If you're using a Windows machine you'll have to provide a complete *Visual Studio Build Environment* because the NodeJS installation 
-    procedure will try to build a Windows-compatible binary of the MariaDB package. If you experinece problems with building *node-gyp*, 
+    procedure will try to build a Windows-compatible binary of the MariaDB package. If you experience problems with building *node-gyp*, 
     please, consult [this](https://www.robertkehoe.com/2015/03/fix-node-gyp-rebuild-error-on-windows/) tutorial. 
 
     For setting up NodeJS under Windows 10 I'd recommend [this](https://blog.risingstack.com/node-js-windows-10-tutorial/) blog post.
