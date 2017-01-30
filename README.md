@@ -80,7 +80,7 @@ BiB is based on these fine projects, packages & languages:
 ## Running
 
 This application can either be run in a development mode directly from console or as a complete web application that
-resides in a *www*-directory of some of the available web servers. 
+resides in **document root** of some of the available web servers. 
 
 If you're planning to develop this app then you should use 
 
@@ -92,8 +92,7 @@ To run it as a complete web app use
 
 `npm run build:prod`
 
-to create a new productive build under the dist folder. Afterwards, copy the contents of this folder to a directory inside 
-the root of your preferred web server.
+to create a new productive build in **dist** folder. Afterwards, copy the contents to your preferred web server.
 
 In either case your application will need a proper backend that has to be run with:
 
