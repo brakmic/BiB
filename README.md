@@ -96,9 +96,7 @@ to create a new productive build in **dist** folder. Afterwards, copy the conten
 
 You can also create an [AOT](https://angular.io/docs/ts/latest/cookbook/aot-compiler.html)-build that's much smaller in size than standard Angular apps.
 
-```
-npm run build:AOT
-```
+`npm run build:AOT`
 
 In either case your application will need a proper backend:
 
