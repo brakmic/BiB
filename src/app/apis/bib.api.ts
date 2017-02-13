@@ -266,20 +266,20 @@ const isOverdue = (borrowDate: any): boolean => {
     return Math.abs(borrow.diff(now, 'days')) > maxDays;
 };
 
-const isMediumBorrowed = (id: number): Promise<boolean> => {
-   return getActiveBorrows().then(borrows => {
-       return _.filter(borrows, borrow => {
-           return borrow.ReaderID == id;
-       }).length > 0;
-   });
-};
-
 const getActiveBorrows = (): Promise<IBorrow[]> => {
     return getBorrows().then(borrows => {
         return _.filter(borrows, borrow => {
             return _.isNil(borrow.ReturnDate);
         });
     });
+};
+
+const isMediumBorrowed = (id: number): Promise<boolean> => {
+   return getActiveBorrows().then(borrows => {
+       return _.filter(borrows, borrow => {
+           return borrow.ReaderID == id;
+       }).length > 0;
+   });
 };
 
 const prepareBorrowForDisplay = (borrow: IBorrow): Promise<IBorrowDisplay> => {
@@ -319,6 +319,34 @@ const getBorrowsForDisplay = (): Promise<IBorrowDisplay[]> => {
     });
 };
 
+const _mapAcl = (acl: any): IAcl => {
+    if (!acl) return undefined;
+    return <IAcl>{
+            ID: acl.ID,
+            CanAddMedia: acl.CanAddMedia == 1 ? true : false,
+            CanAddReaders: acl.CanAddReaders == 1 ? true : false,
+            CanAddUsers: acl.CanAddUsers == 1 ? true : false,
+            CanAddUserGroups: acl.CanAddUserGroups == 1 ? true : false,
+            CanRemoveMedia: acl.CanRemoveMedia == 1 ? true : false,
+            CanRemoveReaders: acl.CanRemoveReaders == 1 ? true : false,
+            CanRemoveUsers: acl.CanRemoveUsers == 1 ? true : false,
+            CanRemoveUserGroups: acl.CanRemoveUserGroups == 1 ? true : false,
+            CanModifyMedia: acl.CanModifyMedia == 1 ? true : false,
+            CanModifyReaders: acl.CanModifyReaders == 1 ? true : false,
+            CanModifyUsers: acl.CanModifyUsers == 1 ? true : false,
+            CanModifyUserGroups: acl.CanModifyUserGroups == 1 ? true : false
+        };
+};
+
+const _mapUser = (user: IUser): IUser => {
+    const _user: IUser = <IUser>_.omit(user, 'Acl');
+    _user.Acl = _mapAcl(user.Acl);
+    if (_user.Group) {
+        _user.Group.Acl = _mapAcl(_user.Group.Acl);
+    };
+    return _user;
+};
+
 const getUsers = (): Promise<IUser[]> => {
     return doFetch(`${usersUrl}`).then(users => {
         return _.map(users, (user: IUser) => {
@@ -331,15 +359,6 @@ const getUser = (id: number): Promise<IUser> => {
     return doFetch(`${usersUrl}/${id}`).then(user => {
         return _mapUser(user);
     });
-};
-
-const _mapUser = (user: IUser): IUser => {
-    const _user: IUser = <IUser>_.omit(user, 'Acl');
-    _user.Acl = _mapAcl(user.Acl);
-    if (_user.Group) {
-        _user.Group.Acl = _mapAcl(_user.Group.Acl);
-    };
-    return _user;
 };
 
 const getUserByName = (name: string): Promise<any> => {
@@ -362,6 +381,13 @@ const insertUser = (user: IUser): Promise<any> => {
     return doPost(`${usersUrl}`, user);
 };
 
+const _mapUserGroup = (group: any): IUserGroup => {
+    const _group = <IUserGroup>_.omit(group, 'Acl');
+    const acl = _mapAcl(group.Acl);
+    _group['Acl'] = acl;
+    return _group;
+};
+
 const getUserGroups = (): Promise<IUserGroup[]> => {
     return doFetch(`${groupsUrl}`).then(groups => {
         return _.map(groups, group => {
@@ -374,13 +400,6 @@ const getUserGroup = (id: number): Promise<IUserGroup> => {
     return doFetch(`${groupsUrl}/${id}`).then(group => {
         return _mapUserGroup(group);
     });
-};
-
-const _mapUserGroup = (group: any): IUserGroup => {
-    const _group = <IUserGroup>_.omit(group, 'Acl');
-    const acl = _mapAcl(group.Acl);
-    _group['Acl'] = acl;
-    return _group;
 };
 
 const getUserGroupByName = (name: string): Promise<IUserGroup> => {
@@ -404,25 +423,6 @@ const getAcl = (id: number): Promise<IAcl> => {
     return doFetch(`${aclsUrl}/${id}`).then((acl: any) => {
         return _mapAcl(acl);
     });
-};
-
-const _mapAcl = (acl: any): IAcl => {
-    if (!acl) return undefined;
-    return <IAcl>{
-            ID: acl.ID,
-            CanAddMedia: acl.CanAddMedia == 1 ? true : false,
-            CanAddReaders: acl.CanAddReaders == 1 ? true : false,
-            CanAddUsers: acl.CanAddUsers == 1 ? true : false,
-            CanAddUserGroups: acl.CanAddUserGroups == 1 ? true : false,
-            CanRemoveMedia: acl.CanRemoveMedia == 1 ? true : false,
-            CanRemoveReaders: acl.CanRemoveReaders == 1 ? true : false,
-            CanRemoveUsers: acl.CanRemoveUsers == 1 ? true : false,
-            CanRemoveUserGroups: acl.CanRemoveUserGroups == 1 ? true : false,
-            CanModifyMedia: acl.CanModifyMedia == 1 ? true : false,
-            CanModifyReaders: acl.CanModifyReaders == 1 ? true : false,
-            CanModifyUsers: acl.CanModifyUsers == 1 ? true : false,
-            CanModifyUserGroups: acl.CanModifyUserGroups == 1 ? true : false
-        };
 };
 
 const updateAcl = (acl: IAcl): Promise<any> => {
