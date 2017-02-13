@@ -4,7 +4,7 @@ import { imagesApi } from 'app/apis';
 
 @Component({
     selector: 'bib-home',
-    styleUrls: ['./home.component.scss'],
+    // styleUrls: ['./home.component.scss'],
     templateUrl: './home.component.html',
     changeDetection: ChangeDetectionStrategy.OnPush
 })
