@@ -12,7 +12,7 @@ import { Store, provideStore,
          combineReducers, StoreModule } from '@ngrx/store';
 import { IConfig, IAppState } from '../../interfaces';
 import { i18nService } from './i18n.service';
-import { WindowService } from '../window';
+// import { WindowService } from '../window';
 import { ConfigService } from '../config';
 import { LogService } from '../log';
 
@@ -73,7 +73,7 @@ describe('Service: i18n', () => {
 
     TestBed.configureTestingModule({
       providers: [
-        { provide: WindowService, useValue: window },
+        // { provide: WindowService, useValue: window },
         i18nService,
         provideStore(rootReducer, undefined),
         { provide: LogService, useClass: LogServiceMock },

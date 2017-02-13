@@ -6,13 +6,12 @@ import { RouterModule } from '@angular/router';
 import { removeNgStyles, createNewHosts } from '@angularclass/hmr';
 import { AppState, LogService } from 'app/services';
 import { StoreType } from 'app/types';
-
 import { AppComponent } from './app.component';
 
 import { ENV_MODULES,
          VENDOR_MODULES, APP_DECLARATIONS,
          ENV_PROVIDERS, APP_PROVIDERS,
-         APP_PIPES, PreloadSelectedModulesStrategy } from 'app/base';
+         PreloadSelectedModulesStrategy } from 'app/base';
 
 /**
  * `AppModule` is the main entry point into Angular2's bootstraping process

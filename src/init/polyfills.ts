@@ -30,10 +30,6 @@ import 'zone.js/dist/zone';
 import requestFrame from '../platform/polyfills/request-frame-alt';
 requestFrame('native');
 
-// Typescript emit helpers polyfill
-import 'ts-helpers';
-
-
 if ('production' === ENV) {
   // Production
 

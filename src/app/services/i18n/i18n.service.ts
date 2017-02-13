@@ -3,8 +3,6 @@ import { Injectable } from '@angular/core';
 import * as _ from 'lodash';
 import { TranslateService } from 'ng2-translate/ng2-translate';
 import 'rxjs/add/operator/take';
-// Browser window object
-import { WindowService } from '../window';
 // Configuration
 import { ConfigService } from '../config';
 // Logging
@@ -48,7 +46,6 @@ export class i18nService {
   ];
 
   constructor(private translate: TranslateService,
-              private windowService: WindowService,
               private store: Store<IAppState>,
               private config: ConfigService,
               private logService: LogService) {
@@ -95,8 +92,8 @@ export class i18nService {
     this.translate.setDefaultLang(defaultLang);
 
     // use browser language info
-    let userLang = this.windowService.navigator.language.split('-')[0];
-    let userLangCode = this.windowService.navigator.language;
+    let userLang = window.navigator.language.split('-')[0];
+    let userLangCode = window.navigator.language;
     // subscribe to language-change stream
     this.store.select(store => store.i18n).subscribe((state: ILanguageState) => {
       if (_.isNil(state))return;

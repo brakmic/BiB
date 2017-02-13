@@ -14,6 +14,7 @@ const IgnorePlugin = require('webpack/lib/IgnorePlugin');
 const DedupePlugin = require('webpack/lib/optimize/DedupePlugin');
 const UglifyJsPlugin = require('webpack/lib/optimize/UglifyJsPlugin');
 const WebpackMd5Hash = require('webpack-md5-hash');
+const V8LazyParseWebpackPlugin = require('v8-lazy-parse-webpack-plugin');
 
 /**
  * Webpack Constants
@@ -189,6 +190,11 @@ return webpackMerge(commonConfig({ env: ENV }), {
      new NormalModuleReplacementPlugin(
       /angular2-hmr/,
        helpers.root('config/modules/angular2-hmr-prod.js')
+     ),
+
+     new NormalModuleReplacementPlugin(
+        /zone\.js(\\|\/)dist(\\|\/)long-stack-trace-zone/,
+        helpers.root('config/empty.js')
      ),
 
   ],

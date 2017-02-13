@@ -1,6 +1,6 @@
-import { TestPipe, 
-         SanitizedUrlPipe,
-         IterablePipe } from 'app/pipes';
+import { TestPipe } from 'app/pipes/test';
+import { SanitizedUrlPipe } from 'app/pipes/url';
+import { IterablePipe } from 'app/pipes/iterable';
 
 const APP_PIPES = [
     TestPipe,

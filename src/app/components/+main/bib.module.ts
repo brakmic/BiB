@@ -4,8 +4,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
 import { TranslateModule } from 'ng2-translate/ng2-translate';
-import { TranslationProvider } from 'app/providers';
-import StatsModule from 'app/components/shared/stats';
+import { TranslationProvider } from '../../providers';
 
 import { AUTH_PROVIDERS, NoContent,
          Signup, ReaderStatusComponent,
@@ -15,12 +14,12 @@ import { AUTH_PROVIDERS, NoContent,
          ManageMediumComponent, BorrowMediaComponent,
          ManageReaderComponent, ManageUserComponent,
          DatabaseComponent, SessionInfoComponent,
-         AclComponent } from 'app/components/shared';
-import { BIB_DIRECTIVES, APP_PROVIDERS } from 'app/base';
-import { LogService } from 'app/services';
+         AclComponent, StatsModule } from '../shared';
+import { BIB_DIRECTIVES } from '../../base';
+import { LogService } from '../../services/log';
 import { BibComponent } from './bib.component';
 import { BIB_ROUTES } from './bib.routes';
-import { PipesModule } from 'app/pipes';
+import { AppPipesModule } from '../../pipes';
 
 const CHILD_COMPONENTS = [
     NoContent,
@@ -59,7 +58,7 @@ export const routes: Routes = BIB_ROUTES;
     TranslateModule,
     RouterModule.forChild(routes),
     StatsModule,
-    PipesModule
+    AppPipesModule
   ],
   providers: [
     ...AUTH_PROVIDERS

@@ -8,7 +8,7 @@ import { appReducer, i18nReducer,
          aclReducer } from 'app/reducers';
 
 // Define App-Store
-const appStore = provideStore({
+export const appStore = provideStore({
                     app: appReducer,
                     i18n: i18nReducer,
                     session: sessionReducer,
@@ -16,13 +16,9 @@ const appStore = provideStore({
                     acl: aclReducer
                   },
                   {
-                    app: undefined,
-                    i18n: undefined,
-                    session: undefined,
-                    stats: undefined,
-                    acl: undefined
+                    app: {},
+                    i18n: {},
+                    session: {},
+                    stats: {},
+                    acl: {}
                   });
-
-export {
-  appStore
-};

@@ -21,11 +21,11 @@ const images = {
 
 const getImage = (name: string): string => {
   return images[name];
-}
+};
 
 const getImageData = (name: string): string => {
   return images[name].data;
-}
+};
 
 export {
     getImage,

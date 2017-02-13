@@ -21,13 +21,14 @@ const ScriptExtHtmlWebpackPlugin = require('script-ext-html-webpack-plugin');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const DashboardPlugin = require('webpack-dashboard/plugin');
 const resolveNgRoute = require('@angularclass/resolve-angular-routes');
+const ngcWebpack = require('ngc-webpack');
 
 const AOT = helpers.hasNpmFlag('aot');
+const HMR = helpers.hasProcessFlag('hot');
 
 /*
  * Webpack Constants
  */
-const HMR = helpers.hasProcessFlag('hot');
 const METADATA = {
   port: 3000,
   host: 'localhost',
@@ -55,8 +56,10 @@ module.exports = function(options) {
   entry: {
 
     'polyfills': './src/init/polyfills.ts',
-    'vendor': './src/init/vendor.ts',
-    'main': './src/init/main.ts'
+    'vendor': AOT ? './src/init/vendor.aot.ts' :
+                 './src/init/vendor.ts',
+    'main': AOT ? './src/init/main.aot.ts' :
+                  './src/init/main.ts'
 
   },
 
@@ -136,13 +139,6 @@ module.exports = function(options) {
             }
           ],
           exclude: [/\.(spec|e2e)\.ts$/]
-        },
-      /*
-      * Native addons
-      */
-      { 
-        test: /\.node$/, 
-        use: 'node-loader' 
       },
       {
           test: /datatables\.net.*/,
@@ -221,49 +217,47 @@ module.exports = function(options) {
    * See: http://webpack.github.io/docs/configuration.html#plugins
    */
   plugins: [
+     new ProvidePlugin({
+         $: "jquery",
+         jQuery: "jquery",
+         "window.jQuery": "jquery"
+     }),
 
-
-    new ProvidePlugin({
-        $: "jquery",
-        jQuery: "jquery",
-        "window.jQuery": "jquery"
-    }),
-
-    /*
+     /*
      * Plugin: ForkCheckerPlugin
      * Description: Do type checking in a separate process, so webpack don't need to wait.
      *
      * See: https://github.com/s-panferov/awesome-typescript-loader#forkchecker-boolean-defaultfalse
      */
-    new CheckerPlugin(),
+     new CheckerPlugin(),
 
-    /**
+     /**
      * Plugin LoaderOptionsPlugin (experimental)
      *
      * See: https://gist.github.com/sokra/27b24881210b56bbaff7
      */
-    new LoaderOptionsPlugin({
-      options: {
-          METADATA: METADATA,
-          context: __dirname,
-          output: {
-            path: helpers.root('dist')
-          },
-          alias: {
-            // 'jquery': helpers.root('src/vendor/jquery/jquery-2.2.3.min'),
-          }
-      }
-    }),
+     new LoaderOptionsPlugin({
+       options: {
+           METADATA: METADATA,
+           context: __dirname,
+           output: {
+             path: helpers.root('dist')
+           },
+           alias: {
+             // 'jquery': helpers.root('src/vendor/jquery/jquery-2.2.3.min'),
+           }
+       }
+     }),
 
-    new ExtractTextPlugin({ filename: 'initial.css', allChunks: true }),
+     new ExtractTextPlugin({ filename: 'initial.css', allChunks: true }),
 
-    new AssetsPlugin({
+     new AssetsPlugin({
         path: helpers.root('dist'),
         filename: 'webpack-assets.json',
         prettyPrint: true
-    }),
+     }),
 
-    new DashboardPlugin(),
+     new DashboardPlugin(),
      /*
        * Plugin: CommonsChunkPlugin
        * Description: Shares common code between the pages.
@@ -272,27 +266,21 @@ module.exports = function(options) {
        * See: https://webpack.github.io/docs/list-of-plugins.html#commonschunkplugin
        * See: https://github.com/webpack/docs/wiki/optimization#multi-page-app
        */
-      new CommonsChunkPlugin({
+     new CommonsChunkPlugin({
         name: 'polyfills',
         chunks: ['polyfills']
-      }),
+     }),
       // This enables tree shaking of the vendor modules
-      new CommonsChunkPlugin({
-        name: 'vendor',
-        chunks: ['main'],
-        minChunks: module => /node_modules/.test(module.resource)
-      }),
-    /*
-     * Plugin: CommonsChunkPlugin
-     * Description: Shares common code between the pages.
-     * It identifies common modules and put them into a commons chunk.
-     *
-     * See: https://webpack.github.io/docs/list-of-plugins.html#commonschunkplugin
-     * See: https://github.com/webpack/docs/wiki/optimization#multi-page-app
-     */
-    new webpack.optimize.CommonsChunkPlugin({
-      name: ['polyfills', 'vendor'].reverse()
-    }),
+     new CommonsChunkPlugin({
+       name: 'vendor',
+       chunks: ['main'],
+       minChunks: module => /node_modules/.test(module.resource)
+     }),
+    
+     // Specify the correct order the scripts will be injected in
+     new CommonsChunkPlugin({
+        name: ['polyfills','vendor'].reverse()
+     }),
 
 
     new ContextReplacementPlugin(
@@ -396,28 +384,32 @@ module.exports = function(options) {
       headTags: require('./head-config.common')
     }),
 
-     // Fix Angular 2
-      new NormalModuleReplacementPlugin(
-        /facade(\\|\/)async/,
-        helpers.root('node_modules/@angular/core/src/facade/async.js')
-      ),
-      new NormalModuleReplacementPlugin(
-        /facade(\\|\/)collection/,
-        helpers.root('node_modules/@angular/core/src/facade/collection.js')
-      ),
-      new NormalModuleReplacementPlugin(
-        /facade(\\|\/)errors/,
-        helpers.root('node_modules/@angular/core/src/facade/errors.js')
-      ),
-      new NormalModuleReplacementPlugin(
-        /facade(\\|\/)lang/,
-        helpers.root('node_modules/@angular/core/src/facade/lang.js')
-      ),
-      new NormalModuleReplacementPlugin(
-        /facade(\\|\/)math/,
-        helpers.root('node_modules/@angular/core/src/facade/math.js')
-      ),
-
+    // Fix Angular 2
+    new NormalModuleReplacementPlugin(
+       /facade(\\|\/)async/,
+       helpers.root('node_modules/@angular/core/src/facade/async.js')
+    ),
+    new NormalModuleReplacementPlugin(
+      /facade(\\|\/)collection/,
+      helpers.root('node_modules/@angular/core/src/facade/collection.js')
+    ),
+    new NormalModuleReplacementPlugin(
+      /facade(\\|\/)errors/,
+      helpers.root('node_modules/@angular/core/src/facade/errors.js')
+    ),
+    new NormalModuleReplacementPlugin(
+      /facade(\\|\/)lang/,
+      helpers.root('node_modules/@angular/core/src/facade/lang.js')
+    ),
+    new NormalModuleReplacementPlugin(
+      /facade(\\|\/)math/,
+      helpers.root('node_modules/@angular/core/src/facade/math.js')
+    ),
+    new ngcWebpack.NgcWebpackPlugin({
+      disabled: !AOT,
+      tsConfig: helpers.root('tsconfig.webpack.json'),
+      resourceOverride: undefined//helpers.root('config/resource-override.js')
+    })
   ],
 
   /*

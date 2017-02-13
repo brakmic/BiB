@@ -7,8 +7,7 @@ const DEBUG_TOOLS_UNAVAILABLE = 'DEBUG_TOOLS_UNAVAILABLE';
 
 const initialState: any = {};
 
-const appReducer: ActionReducer<any> = (state: any =
-                                                    initialState, action: Action) => {
+export function appReducer(state: any = initialState, action: Action) {
   switch (action.type) {
     case LOGON_AVAILABLE:
       return Object.assign({}, state, { logon: true }, action.payload);
@@ -27,6 +26,5 @@ export {
   LOGON_AVAILABLE,
   LOGON_UNAVAILABLE,
   DEBUG_TOOLS_AVAILABLE,
-  DEBUG_TOOLS_UNAVAILABLE,
-  appReducer
+  DEBUG_TOOLS_UNAVAILABLE
 };

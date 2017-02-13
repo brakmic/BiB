@@ -1,7 +1,9 @@
-import { Component, Input, 
-         OnInit, ChangeDetectionStrategy,
-         ChangeDetectorRef, SimpleChanges,
-         NgZone } from '@angular/core';
+import {
+    Component, Input,
+    OnInit, ChangeDetectionStrategy,
+    ChangeDetectorRef, SimpleChanges,
+    NgZone
+} from '@angular/core';
 import { IAcl, IAppState } from 'app/interfaces';
 import { LogService, i18nService } from 'app/services';
 import { bibApi } from 'app/apis';
@@ -28,40 +30,40 @@ const cuid = require('cuid');
 export class AclComponent implements OnInit {
     @Input() public acl: any[] = [];
     @Input() public header: string = 'ACL_List';
-    private columns: any[] = [];
-    private tableId: string = '__table__';
+    public columns: any[] = [];
+    public tableId: string = '__table__';
     private aclTable: DataTables.DataTable = undefined;
     private aclObservable: Observable<IAcl>;
     private aclSubscription: Subscription;
 
     constructor(private cd: ChangeDetectorRef,
-                private logService: LogService,
-                private translation: i18nService,
-                private ngZone: NgZone,
-                private store: Store<IAppState>) { }
+        private logService: LogService,
+        private translation: i18nService,
+        private ngZone: NgZone,
+        private store: Store<IAppState>) { }
 
-    public ngOnInit() { 
-         const title = _.replace(this.header, / /g,'_');
-         this.tableId = `${title}_${cuid()}`;
-         const rights = this.acl[0];
-         this.columns = _.map(_.keys(_.omit(rights, 'ID')), k => {
-                 return {
-                     data: k,
-                     render: function (data, type, full, meta) {
-                            const checked = data ? 'checked' : '';
-                            const val = meta.settings.aoColumns[meta.col].data;
-                            return `<input name="${cuid()}" value="${val}" type="checkbox" ${checked}>`;
-                        }
-                 };
-             });
-         this.initSubscriptions();
+    public ngOnInit() {
+        const title = _.replace(this.header, / /g, '_');
+        this.tableId = `${title}_${cuid()}`;
+        const rights = this.acl[0];
+        this.columns = _.map(_.keys(_.omit(rights, 'ID')), k => {
+            return {
+                data: k,
+                render: function (data, type, full, meta) {
+                    const checked = data ? 'checked' : '';
+                    const val = meta.settings.aoColumns[meta.col].data;
+                    return `<input name="${cuid()}" value="${val}" type="checkbox" ${checked}>`;
+                }
+            };
+        });
+        this.initSubscriptions();
     }
     public ngOnChanges(changes: SimpleChanges) {
         const hdr = changes['header'];
         const acl = changes['acl'];
-        if((hdr && !_.isEqual(hdr.currentValue, hdr.previousValue)) ||
-            (acl && !_.isEqual(acl.currentValue, acl.previousValue))){
-               this.updateTable();
+        if ((hdr && !_.isEqual(hdr.currentValue, hdr.previousValue)) ||
+            (acl && !_.isEqual(acl.currentValue, acl.previousValue))) {
+            this.updateTable();
         }
     }
     public ngOnDestroy() {
@@ -73,13 +75,13 @@ export class AclComponent implements OnInit {
         this.initWidgets();
     }
     private initSubscriptions() {
-       this.aclObservable = this.store.select(store => store.acl);
-       this.aclSubscription = this.aclObservable.subscribe(acl => {
-           if (acl.ID == this.acl[0].ID) {
-               this.acl[0] = _.clone(acl);
-               this.updateTable();
-           }
-       });
+        this.aclObservable = this.store.select(store => store.acl);
+        this.aclSubscription = this.aclObservable.subscribe(acl => {
+            if (acl.ID == this.acl[0].ID) {
+                this.acl[0] = _.clone(acl);
+                this.updateTable();
+            }
+        });
     }
     private destroySubscriptions() {
         if (this.aclSubscription) {
@@ -90,33 +92,33 @@ export class AclComponent implements OnInit {
         if (!_.isNil(this.aclTable)) {
             this.aclTable.clear();
             this.aclTable.rows.add(this.acl);
-            this.aclTable.draw();       
+            this.aclTable.draw();
             this.cd.markForCheck();
         }
     }
     private initWidgets() {
         const self = this;
         domready(() => {
-          this.aclTable = $(`#${this.tableId}`).DataTable(<DataTables.Settings>{
-             processing: true,
-             data: this.acl,
-             searching: false,
-             select: false,
-             scrollX: true,
-             language: this.translation.getDataTablesLangObject(),
-             columns: this.columns,
-          });
-          this.aclTable.on('change', (e: any, dt: DataTables.DataTable,
-                                         type: string, indexes: number[]) => {
-              const right = e.target.value;
-              const granted = e.target.checked;
-              let rights = {};
-              rights[right] = granted;
-              const acl = _.assign(rights, _.omit(this.acl[0], right)) as IAcl;
-              this.store.dispatch({ type: ACL_CHANGED, payload: acl });
-              self.updateAcl(acl);
-          });
-          this.cd.markForCheck();
+            this.aclTable = $(`#${this.tableId}`).DataTable(<DataTables.Settings>{
+                processing: true,
+                data: this.acl,
+                searching: false,
+                select: false,
+                scrollX: true,
+                language: this.translation.getDataTablesLangObject(),
+                columns: this.columns,
+            });
+            this.aclTable.on('change', (e: any, dt: DataTables.DataTable,
+                type: string, indexes: number[]) => {
+                const right = e.target.value;
+                const granted = e.target.checked;
+                let rights = {};
+                rights[right] = granted;
+                const acl = _.assign(rights, _.omit(this.acl[0], right)) as IAcl;
+                this.store.dispatch({ type: ACL_CHANGED, payload: acl });
+                self.updateAcl(acl);
+            });
+            this.cd.markForCheck();
         });
     }
     @authorized()

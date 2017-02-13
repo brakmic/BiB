@@ -10,8 +10,8 @@ import { ActivatedRoute } from '@angular/router';
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AccessDeniedComponent {
-    private warningLogo: string;
-    private data: any;
+    public warningLogo: string;
+    public data: any;
 
     constructor(private route: ActivatedRoute) { }
 
@@ -19,7 +19,7 @@ export class AccessDeniedComponent {
       this.data = this.route.snapshot.data['data'];
     }
 
-    private goBack($event: any) {
+    public goBack($event: any) {
       $event.preventDefault();
       window.history.go(-1);
     }

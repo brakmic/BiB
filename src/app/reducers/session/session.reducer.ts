@@ -10,8 +10,7 @@ const initialState: ISession = {
   User: undefined
 };
 
-const sessionReducer: ActionReducer<ISession> = (state: ISession =
-                                                    initialState, action: Action) => {
+export function sessionReducer(state: ISession = initialState, action: Action) {
   switch (action.type) {
     case LOGON_SUCCEEDED:
       return Object.assign({}, state, action.payload);
@@ -30,6 +29,5 @@ export {
   LOGON_SUCCEEDED,
   LOGON_FAILED,
   SESSION_RESET,
-  LOGOUT_FAILED,
-  sessionReducer
+  LOGOUT_FAILED
 };

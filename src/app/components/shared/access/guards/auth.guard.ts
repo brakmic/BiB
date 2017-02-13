@@ -30,6 +30,7 @@ export class AuthGuard implements CanActivate {
               private router: Router,
               private logService: LogService,
               private sessionService: SessionService)  {
+                console.log(`AuthGuard activated`);
       this.sessionSubscription = this.getSessionState()
                                      .subscribe(state => this.loggedOn = !_.isNil(state) &&
                                                                          !_.isNil(state.User));

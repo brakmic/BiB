@@ -1,18 +1,26 @@
-import { Component, Input,
-         Output, EventEmitter,
-         OnInit, ChangeDetectorRef,
-         ChangeDetectionStrategy,
-         SimpleChanges, NgZone } from '@angular/core';
+import {
+    Component, Input,
+    Output, EventEmitter,
+    OnInit, ChangeDetectorRef,
+    ChangeDetectionStrategy,
+    SimpleChanges, NgZone
+} from '@angular/core';
 // Routing
-import { ActivatedRoute, Route,
-         Router } from '@angular/router';
-import { LogService, i18nService,
-         ConfigService } from 'app/services';
+import {
+    ActivatedRoute, Route,
+    Router
+} from '@angular/router';
+import {
+    LogService, i18nService,
+    ConfigService
+} from 'app/services';
 import { bibApi } from 'app/apis';
 import * as _ from 'lodash';
-import { IReader, IBorrow,
-         IMedium, IBorrowDisplay,
-         IAppState } from 'app/interfaces';
+import {
+    IReader, IBorrow,
+    IMedium, IBorrowDisplay,
+    IAppState
+} from 'app/interfaces';
 import { authorized } from 'app/decorators';
 // State Management with Redux
 import '@ngrx/core/add/operator/select';
@@ -35,13 +43,13 @@ export class BorrowComponent implements OnInit {
     private dateTimeFormat: string;
 
     constructor(private router: Router,
-                private route: ActivatedRoute,
-                private cd: ChangeDetectorRef,
-                private translation: i18nService, 
-                private logService: LogService,
-                private store: Store<IAppState>,
-                private ngZone: NgZone,
-                private configService: ConfigService) { }
+        private route: ActivatedRoute,
+        private cd: ChangeDetectorRef,
+        private translation: i18nService,
+        private logService: LogService,
+        private store: Store<IAppState>,
+        private ngZone: NgZone,
+        private configService: ConfigService) { }
 
     public ngOnInit() {
         this.route.data.forEach((data: { borrows: IBorrowDisplay[] }) => {
@@ -69,102 +77,102 @@ export class BorrowComponent implements OnInit {
         if (!_.isNil(this.borrowTable)) {
             this.borrowTable.clear();
             this.borrowTable.rows.add(this.borrows);
-            this.borrowTable.draw();       
+            this.borrowTable.draw();
             this.cd.markForCheck();
-            
+
         }
     }
     private initWidgets() {
         const self = this;
         domready(() => {
-          this.borrowTable = $('#borrow').DataTable(<DataTables.Settings>{
-             processing: true,
-             data: this.borrows,
-             searching: true,
-             select: true,
-             language: this.translation.getDataTablesLangObject(),
-             columns:  [
-                 { 'data' : 'ID' },
-                 { 'data' : 'ReaderID' },
-                 { 'data' : 'ReaderName' },
-                 { 'data' : 'MediumTitle' },
-                 { 'data' : 'BorrowDate' },
-                 { 'data' : 'IsOverdue' }
-             ],
-             columnDefs: [
-                  {
-                        "targets": [ 2 ],
-                        "visible": this.standalone,
-                        "searchable": this.standalone,
-                  },
-                  {
-                        "targets": [ 4 ],
-                        "visible": this.standalone,
-                        "searchable": this.standalone,
-                  },
-                  {
-                    data: 'BorrowDate',
-                    render: function (data, type, full, meta) {
-                       return moment(data).format(self.dateTimeFormat);
+            this.borrowTable = $('#borrow').DataTable(<DataTables.Settings>{
+                processing: true,
+                data: this.borrows,
+                searching: true,
+                select: true,
+                language: this.translation.getDataTablesLangObject(),
+                columns: [
+                    { 'data': 'ID' },
+                    { 'data': 'ReaderID' },
+                    { 'data': 'ReaderName' },
+                    { 'data': 'MediumTitle' },
+                    { 'data': 'BorrowDate' },
+                    { 'data': 'IsOverdue' }
+                ],
+                columnDefs: [
+                    {
+                        'targets': [2],
+                        'visible': this.standalone,
+                        'searchable': this.standalone,
                     },
-                    targets: 4
-                 },
-                  {
-                    data: 'IsOverdue',
-                    render: function (data, type, full, meta) {
-                        const text = data ? self.translation.instant('Yes') : self.translation.instant('No');
-                        if (data) {
-                            return `<div class="text-center" 
+                    {
+                        'targets': [4],
+                        'visible': this.standalone,
+                        'searchable': this.standalone,
+                    },
+                    {
+                        data: 'BorrowDate',
+                        render: function (data, type, full, meta) {
+                            return moment(data).format(self.dateTimeFormat);
+                        },
+                        targets: 4
+                    },
+                    {
+                        data: 'IsOverdue',
+                        render: function (data, type, full, meta) {
+                            const text = data ? self.translation.instant('Yes') : self.translation.instant('No');
+                            if (data) {
+                                return `<div class="text-center" 
                                          style="background-color: red; 
                                          color: white;">${text}</div>`;
-                        } else {
-                            return `<div class="text-center" 
+                            } else {
+                                return `<div class="text-center" 
                                          style="background-color: limegreen; 
                                          color: white;">${text}</div>`;
-                        }
+                            }
+                        },
+                        targets: 5
                     },
-                    targets: 5
-                 },
-             ]
-          });
-          this.cd.markForCheck();
+                ]
+            });
+            this.cd.markForCheck();
         });
     }
     private initContextMenu() {
         const self = this;
         domready(() => {
-                $('#borrow').children('tbody').contextMenu({
-                    selector: 'tr',
-                    build: function($trigger, e) {
-                        // this callback is executed every time the menu is to be shown
-                        // its results are destroyed every time the menu is hidden
-                        // e is the original contextmenu event, containing e.pageX and e.pageY (amongst other data)
-                        return {
-                            className: 'data-title',
-                            autoHide: true,
-                            callback: function(key, options) {
-                                let borrowID = -1;
-                                let readerID = -1;
-                                const data = $(this).children('td');
-                                const elem = _.find(data, el => {
-                                    return $(el).hasClass('sorting_1');
-                                });
-                                if(!_.isNil(elem)){
-                                    borrowID = Number(elem.textContent);
-                                    readerID = Number(elem.nextSibling.textContent);
-                                    self.unborrow(borrowID, readerID);
-                                }
-                            },
-                            items: {
-                                'mediareturn': {
-                                    name: self.translation.instant('MediaReturned'),
-                                    icon: 'fa-exchange',
-                                }
+            $('#borrow').children('tbody').contextMenu({
+                selector: 'tr',
+                build: function ($trigger, e) {
+                    // this callback is executed every time the menu is to be shown
+                    // its results are destroyed every time the menu is hidden
+                    // e is the original contextmenu event, containing e.pageX and e.pageY (amongst other data)
+                    return {
+                        className: 'data-title',
+                        autoHide: true,
+                        callback: function (key, options) {
+                            let borrowID = -1;
+                            let readerID = -1;
+                            const data = $(this).children('td');
+                            const elem = _.find(data, el => {
+                                return $(el).hasClass('sorting_1');
+                            });
+                            if (!_.isNil(elem)) {
+                                borrowID = Number(elem.textContent);
+                                readerID = Number(elem.nextSibling.textContent);
+                                self.unborrow(borrowID, readerID);
                             }
-                        };
-                    },
-                });
-                this.cd.markForCheck();
+                        },
+                        items: {
+                            'mediareturn': {
+                                name: self.translation.instant('MediaReturned'),
+                                icon: 'fa-exchange',
+                            }
+                        }
+                    };
+                },
+            });
+            this.cd.markForCheck();
         });
     }
     private initSubscriptions() {
@@ -175,10 +183,10 @@ export class BorrowComponent implements OnInit {
     }
     @authorized()
     private unborrow(borrowID: number, readerID: number) {
-        this.ngZone.runOutsideAngular(() => { 
+        this.ngZone.runOutsideAngular(() => {
             bibApi.getBorrowsForUser(readerID).then(result => {
-                _.each(result, borrow => {   
-                    if (borrow.ID == borrowID) {   
+                _.each(result, borrow => {
+                    if (borrow.ID == borrowID) {
                         bibApi.unborrow(borrowID).then(res => {
                             bibApi.getBorrowsForDisplay().then(borrows => {
                                 this.borrows = _.slice(borrows);

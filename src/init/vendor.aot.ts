@@ -34,25 +34,6 @@ import '../vendor/bootstrap-dialog/bootstrap-dialog.min';
 import * as toastr from '../vendor/toastr/toastr';
 (<IWindowEx>window).toastr = toastr;
 
-// Angular 2
-import '@angular/platform-browser';
-import '@angular/platform-browser-dynamic';
-import '@angular/core';
-import '@angular/common';
-import '@angular/compiler';
-import '@angular/forms';
-import '@angular/http';
-import '@angular/router';
-
-import '@angularclass/hmr';
-
-// RxJS
-import 'rxjs/add/operator/map';
-import 'rxjs/add/operator/mergeMap';
-import 'rxjs/add/observable/of';
-import 'rxjs/add/operator/do';
-import 'rxjs/add/observable/fromPromise';
-
 // Hammjer.js
 import 'hammerjs';
 
@@ -71,10 +52,3 @@ import '../platform/helpers/browser-events';
 // Circular JSON (for better serializing of complex objects)
 import 'circular-json';
 
-if ('production' === ENV) {
-  // Production
-
-} else {
-  // Development
-  require('angular2-hmr');
-}

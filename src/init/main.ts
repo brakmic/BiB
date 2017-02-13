@@ -10,7 +10,7 @@ import { decorateModuleRef } from '../platform/environment';
 * AppModule
 * our top level NgModule that holds all of our components
 */
-import { AppModule } from 'app/components';
+import { AppModule } from '../app/components';
 /*
  * Bootstrap our Angular app with a top level NgModule
  */
@@ -20,6 +20,5 @@ export function main(): Promise<any> {
     .then(decorateModuleRef)
     .catch(err => console.error(err));
 }
-
 
 bootloader(main);

@@ -11,8 +11,7 @@ export const STATS_CHANGED = 'STATS_CHANGED';
 /**
  * Medium reducer
  */
-export const statsReducer: ActionReducer<any> = (state =
-                                                                initialState, action: Action) => {
+export function statsReducer(state = initialState, action: Action) {
   switch (action.type) {
     case 'STATS_CHANGED':
       return Object.assign({}, action.payload);

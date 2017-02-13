@@ -86,7 +86,7 @@ export class BibDynamicComponent implements OnInit {
     }
     public ngAfterViewInit() {
     }
-    public ngOnChanges() {
+    public ngOnChanges(changes: any) {
     }
     public ngOnDestroy() {
         $('bib-root').siblings().remove();

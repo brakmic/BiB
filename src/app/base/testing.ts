@@ -29,7 +29,7 @@ import { APP_PROVIDERS } from './providers';
 import {
         AppState, ConfigService,
         LogonService, LogService,
-        ConsoleService, WindowService,
+        // ConsoleService, WindowService,
         i18nService, LocalStorageService,
         HttpEx, SessionService
 } from 'app/services';
@@ -58,7 +58,7 @@ const config: IConfig = require('config.json');
 const SERVICES = [
     AppState, ConfigService,
     LogonService, LogService,
-    ConsoleService, WindowService,
+    // ConsoleService, WindowService,
     i18nService, LocalStorageService,
     HttpEx, SessionService
 ];
@@ -87,16 +87,16 @@ class ComponentMock implements Component {
     }
 }
 
-class AppComponentMock extends AppComponent {
-     constructor(private _router: Router,
-                 private _route: ActivatedRoute,
-                 private _log: LogService,
-                 private _session: SessionService) {
-         super(_router, _route, _log, _session);
-     }
-     public ngAfterViewInit() {
-     }
-}
+// class AppComponentMock extends AppComponent {
+//      constructor(private _router: Router,
+//                  private _route: ActivatedRoute,
+//                  private _log: LogService,
+//                  private _session: SessionService) {
+//          super(_router, _route, _log, _session);
+//      }
+//      public ngAfterViewInit() {
+//      }
+// }
 
 class LogServiceMock extends LogService {
   constructor() {
@@ -320,7 +320,7 @@ export const COMMON_TESTING_PROVIDERS = [
         },
         deps: [MockBackend, BaseRequestOptions]
     },
-    { provide: WindowService, useValue: window },
+    // { provide: WindowService, useValue: window },
     { provide: AuthGuard, useValue: getAuthGuard() },
     { provide: SessionService, useValue: getSessionService() },
     { provide: Store, useValue: getStore() },
@@ -340,7 +340,7 @@ export const LEAN_COMMON_TESTING_PROVIDERS = [
         },
         deps: [MockBackend, BaseRequestOptions]
     },
-    { provide: WindowService, useValue: window },
+    // { provide: WindowService, useValue: window },
     { provide: AuthGuard, useValue: getAuthGuard() },
     { provide: SessionService, useValue: getSessionService() },
     { provide: Store, useValue: getStore() },
@@ -366,7 +366,7 @@ export const COMMON_TESTING_MODULES = [
 export {
     Mock,
     ComponentMock,
-    AppComponentMock,
+    // AppComponentMock,
     RendererMock,
     RouterMock,
     AuthGuardMock,

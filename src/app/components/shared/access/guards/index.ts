@@ -1,8 +1,6 @@
 import { AuthGuard } from './auth.guard';
 
-const AUTH_PROVIDERS: any[] = [
-                                AuthGuard
-                            ];
+const AUTH_PROVIDERS = [ AuthGuard ];
 
 export {
     AuthGuard,

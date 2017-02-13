@@ -21,8 +21,7 @@ export const MEDIA_ACTIONS: {[key: string]: MediaAction } = {
 /**
  * Medium reducer
  */
-export const mediaReducer: ActionReducer<any> = (state =
-                                                                initialState, action: Action) => {
+export function mediaReducer(state = initialState, action: Action) {
   switch (action.type) {
     case 'BORROW_MEDIUM':
       const id = (<IMedium>action.payload).ID;

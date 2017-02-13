@@ -13,7 +13,7 @@ const routes: Routes = [
     resolve: {
       data: DataResolver
     },
-    pathMatch: 'full' 
+    pathMatch: 'full'
   }
 ];
 

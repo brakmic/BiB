@@ -18,11 +18,6 @@ if ('production' === ENV) {
   disableDebugTools();
   enableProdMode();
 
-  PROVIDERS = [
-    ...PROVIDERS
-    // custom providers in production
-  ];
-
 } else {
 
   _decorateModuleRef = (modRef: any) => {
@@ -35,12 +30,6 @@ if ('production' === ENV) {
     (<any>window).ng.coreTokens = _ng.coreTokens;
     return modRef;
   };
-
-  // Development
-  PROVIDERS = [
-    ...PROVIDERS
-    // custom providers in development
-  ];
 
 }
 

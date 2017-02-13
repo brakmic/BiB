@@ -1,13 +1,15 @@
-import {Component, ViewContainerRef,
-        ViewChild, ReflectiveInjector,
-        ComponentFactoryResolver, OnInit,
-        ChangeDetectorRef, ChangeDetectionStrategy,
-        Input, Output, EventEmitter, Injector,
-        SimpleChanges } from '@angular/core';  
-import { FormBuilder, FormGroup, Validators  } from '@angular/forms';
+import {
+    Component, ViewContainerRef,
+    ViewChild, ReflectiveInjector,
+    ComponentFactoryResolver, OnInit,
+    ChangeDetectorRef, ChangeDetectionStrategy,
+    Input, Output, EventEmitter, Injector,
+    SimpleChanges
+} from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import * as _ from 'lodash';
 import { LogService, i18nService } from 'app/services';
-import { IUser, IUserGroup, IAcl } from 'app/interfaces'; 
+import { IUser, IUserGroup, IAcl } from 'app/interfaces';
 import { ActionType, ComponentType } from 'app/enums';
 import { authorized } from 'app/decorators';
 // RxJS
@@ -24,7 +26,7 @@ const domready = require('domready');
     selector: 'bib-modal-manage-user',
     styleUrls: [
         './manage-user.component.scss'
-        ],
+    ],
     templateUrl: './manage-user.component.html',
     changeDetection: ChangeDetectionStrategy.OnPush
 })
@@ -33,23 +35,22 @@ export class ManageUserComponent implements OnInit {
     @Input() public groups: IUserGroup[];
     @Input() public userID: number;
     public _event: Subject<any> = new Subject<any>();
-    private form: FormGroup;
-    private dialog: JQuery;
-    private select: JQuery;
-    private action: ActionType;
-    private title: string;
+    public form: FormGroup;
+    public action: ActionType;
+    public title: string;
     private pwdDirty: boolean = false;
     private originalPwd: string;
     private pwdSub: Subscription;
-    
+    private dialog: JQuery;
+    private select: JQuery;
 
     constructor(private formBuilder: FormBuilder,
-                private cd: ChangeDetectorRef,
-                private logService: LogService,
-                private translation: i18nService,
-                private injector: Injector) { }
+        private cd: ChangeDetectorRef,
+        private logService: LogService,
+        private translation: i18nService,
+        private injector: Injector) { }
 
-    public ngOnInit() { 
+    public ngOnInit() {
         this.userID = this.injector.get('userID');
         this.action = this.injector.get('action');
         this.initForm();
@@ -61,6 +62,41 @@ export class ManageUserComponent implements OnInit {
     }
     public ngAfterViewInit() {
         this.initDialog();
+    }
+    public onCancelClicked($event) {
+        this.form.reset();
+        this.dialog.dialog('close');
+    }
+    @authorized()
+    public onSubmitUserData({ value, valid }: {
+        value: {
+            id: string;
+            group: string;
+            userName: string;
+            firstName: string;
+            lastName: string;
+            password: string;
+        }, valid: boolean
+    }) {
+        const user: IUser = {
+            ID: Number(value.id),
+            Group: this.user.Group,
+            AccountName: value.userName,
+            FirstName: value.firstName,
+            LastName: value.lastName,
+            IsActive: true,
+            Password: this.pwdDirty ? this.getPwdHash(value.password) : value.password,
+            Acl: null
+        };
+        this.form.reset();
+        this.dialog.dialog('close');
+        this._event.next({
+            data: user,
+            action: this.action
+        });
+    }
+    public onPasswordFocus($event: any) {
+        $('#password').select();
     }
     private initUser() {
         const id = this.userID;
@@ -82,7 +118,7 @@ export class ManageUserComponent implements OnInit {
         }
         bibApi.getUserGroups().then(groups => {
             this.groups = _.slice(groups);
-            if(id > 0) {
+            if (id > 0) {
                 bibApi.getUser(id).then(user => {
                     this.user = _.clone(user);
                     this.originalPwd = this.user.Password;
@@ -101,10 +137,10 @@ export class ManageUserComponent implements OnInit {
                     this.logService.logEx(`Password changed!`, 'ManageUser');
                 });
             }
-            
+
         });
     }
-    private initForm(){
+    private initForm() {
         this.form = this.formBuilder.group({
             id: ['', [Validators.required]],
             group: ['', [Validators.required]],
@@ -113,8 +149,8 @@ export class ManageUserComponent implements OnInit {
             lastName: ['', [Validators.required]],
             password: ['', [Validators.required]]
         });
-        this.title = this.action == ActionType.AddUser ? this.translation.instant('UserAdd') :  
-                                                         this.translation.instant('UserModify');
+        this.title = this.action == ActionType.AddUser ? this.translation.instant('UserAdd') :
+            this.translation.instant('UserModify');
     }
     private initSelect2() {
         this.select = $('#select-group').select2(<Select2Options>{
@@ -144,7 +180,7 @@ export class ManageUserComponent implements OnInit {
     private initDialog() {
         const self = this;
         domready(() => {
-            this.dialog = $("#manage-user-dialog-form").dialog({
+            this.dialog = $('#manage-user-dialog-form').dialog({
                 autoOpen: true,
                 height: self.action == ActionType.AddUser ? 450 : 500,
                 width: 300,
@@ -154,41 +190,8 @@ export class ManageUserComponent implements OnInit {
                     $('#select-group').remove();
                     self.cd.markForCheck();
                 }
-             });
-           this.cd.markForCheck();
-        });
-    }
-    private onCancelClicked($event) {
-        this.form.reset();
-        this.dialog.dialog('close');
-    }
-    private onPasswordFocus($event: any) {
-        $('#password').select();
-    }
-    @authorized()
-    private onSubmitUserData({ value, valid }: { value: {
-        id: string;
-        group: string;
-        userName: string;
-        firstName: string;
-        lastName: string;
-        password: string;
-    }, valid: boolean }){
-        const user: IUser = {
-                ID: Number(value.id),
-                Group: this.user.Group,
-                AccountName: value.userName,
-                FirstName: value.firstName,
-                LastName: value.lastName,
-                IsActive: true,
-                Password: this.pwdDirty ? this.getPwdHash(value.password) : value.password,
-                Acl: null
-            };
-        this.form.reset();
-        this.dialog.dialog('close');
-        this._event.next({
-            data: user,
-            action: this.action
+            });
+            this.cd.markForCheck();
         });
     }
     private getPwdHash(pwd: string) {

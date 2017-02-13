@@ -9,7 +9,7 @@ import { imagesApi } from 'app/apis';
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class HomeComponent implements OnInit {
-    private photo = '';
+    public photo = '';
     constructor(private cd: ChangeDetectorRef) { }
 
     public ngOnInit() {

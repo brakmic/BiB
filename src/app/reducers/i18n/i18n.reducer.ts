@@ -17,8 +17,7 @@ export const I18N_ACTIONS: any = {
 /**
  * Language reducer
  */
-export const i18nReducer: ActionReducer<ILanguageState> = (state: ILanguageState =
-                                                                initialState, action: Action) => {
+export function i18nReducer(state: ILanguageState = initialState, action: Action) {
   switch (action.type) {
     case I18N_ACTIONS.LANG_CHANGED:
       return Object.assign({}, state, action.payload);

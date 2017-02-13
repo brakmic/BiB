@@ -1,4 +1,2 @@
-export * from './test';
-export * from './url';
-export * from './module';
-export * from './iterable';
+export { AppPipesModule } from './app.pipes.module';
+

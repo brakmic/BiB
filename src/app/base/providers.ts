@@ -1,5 +1,5 @@
 import { IConfig } from 'app/interfaces';
-const config: IConfig = require('config.json');
+import config from 'config.json';
 
 import { NgModule, ApplicationRef } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
@@ -37,7 +37,6 @@ import { AUTH_PROVIDERS } from 'app/components/shared';
 import {
   AppState, ConfigService,
   LogonService, LogService,
-  ConsoleService, WindowService,
   i18nService, LocalStorageService,
   HttpEx,
   SessionService,
@@ -48,20 +47,31 @@ import {
 
 import { TranslationProvider } from 'app/providers';
 
+
+export function _window(): any {
+   // return the global native browser window object
+   return window;
+}
+
+export function _console(): any {
+  return console;
+}
+
 const BROWSER_PROVIDERS = [
-  { provide: WindowService, useValue: window },
-  { provide: ConsoleService, useValue: console }
+  // { provide: WindowService, useValue: window },
+  // { provide: ConsoleService, useValue: console }
 ];
 
-let EXTRA_PROVIDERS: any[] = [];
+let EXTRA_PROVIDERS = [];
 
 if (config.useHttpExService) {
   EXTRA_PROVIDERS.push(
       { provide: Http,
-        useFactory: (xhrBackend: XHRBackend,
+        useFactory: function(xhrBackend: XHRBackend,
                      requestOptions: RequestOptions,
-                     logService: LogService) =>
-               new HttpEx(xhrBackend, requestOptions, logService),
+                     logService: LogService) {
+               return new HttpEx(xhrBackend, requestOptions, logService)
+        },
         deps: [XHRBackend, RequestOptions, LogService]
       }
   );
@@ -84,9 +94,9 @@ const BIB_SERVICES = [
   ConfigService,
   LogonService,
   LogService,
-  ConsoleService,
-  ...BROWSER_PROVIDERS,
-  ...EXTRA_PROVIDERS,
+  // ConsoleService,
+  // ...BROWSER_PROVIDERS,
+  // ...EXTRA_PROVIDERS,
   ...TRANSLATION_SERVICES,
   SessionService,
   StatsService,
@@ -98,7 +108,7 @@ const BIB_SERVICES = [
 const APP_PROVIDERS = [
   ...APP_RESOLVER_PROVIDERS,
   ...BIB_SERVICES,
-  ...AUTH_PROVIDERS,
+  // ...AUTH_PROVIDERS,
   ...ADV_VALIDATORS,
   appStore,
   PreloadSelectedModulesStrategy
@@ -125,12 +135,16 @@ const ENV_MODULES = [
                             })
 ];
 
+export function translateLoaderFactory(http: Http) {
+  return new TranslateStaticLoader(http, 'assets/i18n', '.json');
+}
+
 const VENDOR_MODULES = [
   TranslateModule.forRoot({
               // provide: TranslateLoader,
               // useClass: TranslationProvider
               provide: TranslateLoader, deps: [Http],
-              useFactory: (http: Http) => new TranslateStaticLoader(http, 'assets/i18n', '.json')
+              useFactory: translateLoaderFactory
   })
 ];
 

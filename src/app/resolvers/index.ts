@@ -1,14 +1,6 @@
 export * from './data';
 import { DataResolver } from './data';
 
-const APP_RESOLVERS: any[] = [
+export const APP_RESOLVERS = [
     DataResolver
 ];
-
-export {
-    APP_RESOLVERS
-};
-
-export {
-    DataResolver
-};

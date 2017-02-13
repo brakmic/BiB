@@ -29,13 +29,13 @@ export class AppComponent {
    * @param {SessionService} private sessionService Session service
    */
   constructor(private router: Router,
-              private route: ActivatedRoute,
-              private logService: LogService,
-              private sessionService: SessionService) {
+    private route: ActivatedRoute,
+    private logService: LogService,
+    private sessionService: SessionService) {
   }
 
   public ngOnInit() {
-    
+
   }
 
   public ngOnDestroy() {
@@ -43,29 +43,29 @@ export class AppComponent {
   }
 
   public ngAfterViewInit() {
-      this.initSubscriptions();
-      this.blockBrowserMenu();
+    this.initSubscriptions();
+    this.blockBrowserMenu();
   }
   public ngOnChanges(changes: any) {
   }
   private blockBrowserMenu() {
     domready(() => {
-      $('body').contextmenu(function(e) {
-          return (e.target.nodeName == 'td');
+      $('body').contextmenu(function (e) {
+        return (e.target.nodeName == 'td');
       });
-    }); 
+    });
   }
   private initSubscriptions() {
     domready(() => {
       this.sessionSubscription = this.sessionService.getSessionStatus().subscribe(state => {
         if (_.isNil(state) ||
-            _.isNil(state.User)) {
-              try {
-                this.router.navigate(['logon']);
-              } catch (error) {
-                this.logService.logJson(error, 'App');
-              }
-            }
+          _.isNil(state.User)) {
+          try {
+            this.router.navigate(['logon']);
+          } catch (error) {
+            this.logService.logJson(error, 'App');
+          }
+        }
       });
     });
   }

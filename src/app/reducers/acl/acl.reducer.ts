@@ -5,8 +5,7 @@ const ACL_CHANGED = 'ACL_CHANGED';
 
 const initialState: any = {};
 
-const aclReducer: ActionReducer<any> = (state: any =
-                                                    initialState, action: Action) => {
+export function aclReducer(state: any = initialState, action: Action) {
   switch (action.type) {
     case ACL_UPDATED:
       return Object.assign({}, action.payload);
@@ -19,6 +18,5 @@ const aclReducer: ActionReducer<any> = (state: any =
 
 export {
   ACL_UPDATED,
-  ACL_CHANGED,
-  aclReducer
+  ACL_CHANGED
 };

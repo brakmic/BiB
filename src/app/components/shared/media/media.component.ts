@@ -1,23 +1,29 @@
-import { Component, Input,
-         Output, EventEmitter,
-         OnInit, ChangeDetectorRef,
-         ChangeDetectionStrategy,
-         SimpleChanges, ElementRef,
-         NgZone } from '@angular/core';
-import { FormBuilder, FormGroup, Validators  } from '@angular/forms';
+import {
+    Component, Input,
+    Output, EventEmitter,
+    OnInit, ChangeDetectorRef,
+    ChangeDetectionStrategy,
+    SimpleChanges, ElementRef,
+    NgZone
+} from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { LogService, i18nService } from 'app/services';
 import { ManageMediumComponent, BorrowMediaComponent } from 'app/components';
 import { ComponentType, ActionType } from 'app/enums';
 import { bibApi } from 'app/apis';
 import * as _ from 'lodash';
-import { IReader, IBorrow,
-         IMedium, IMediumSelectedEvent,
-         IMediumDisplay, IComponentData,
-         IAppState } from 'app/interfaces';
+import {
+    IReader, IBorrow,
+    IMedium, IMediumSelectedEvent,
+    IMediumDisplay, IComponentData,
+    IAppState
+} from 'app/interfaces';
 import { authorized } from 'app/decorators';
 // Routing
-import { ActivatedRoute, Route,
-         Router } from '@angular/router';
+import {
+    ActivatedRoute, Route,
+    Router
+} from '@angular/router';
 // State Management with Redux
 import '@ngrx/core/add/operator/select';
 import { Store } from '@ngrx/store';
@@ -33,24 +39,22 @@ const domready = require('domready');
 export class MediaComponent implements OnInit {
     @Input() public media: IMediumDisplay[] = [];
     @Output() public mediumSelected = new EventEmitter<IMediumSelectedEvent>(true);
+    public dynamicComponent: IComponentData = null;
+    public form: any;
+    public readers: IReader[] = [];
+    public selectedReaderID: number;
+    public confirmDeletionText: string;
 
-    private dynamicComponent: IComponentData = null;
-    
     private mediaTable: DataTables.DataTable;
-    
-    private form: any;
-    private readers: IReader[] = [];
-    private selectedReaderID: number;
-    private confirmDeletionText: string;
 
     constructor(private router: Router,
-                private route: ActivatedRoute,
-                private cd: ChangeDetectorRef,
-                private translation: i18nService,
-                private logService: LogService,
-                private el: ElementRef,
-                private store: Store<IAppState>,
-                private ngZone: NgZone) { }
+        private route: ActivatedRoute,
+        private cd: ChangeDetectorRef,
+        private translation: i18nService,
+        private logService: LogService,
+        private el: ElementRef,
+        private store: Store<IAppState>,
+        private ngZone: NgZone) { }
 
     public ngOnInit() {
         this.route.data.forEach((data: { media: IMediumDisplay[] }) => {
@@ -71,7 +75,7 @@ export class MediaComponent implements OnInit {
         }
     }
     public ngOnDestroy() {
-        $("#borrow-dialog-form").remove();
+        $('#borrow-dialog-form').remove();
         $('#select-reader').remove();
         $('bib-root').siblings().remove();
     }
@@ -81,6 +85,28 @@ export class MediaComponent implements OnInit {
         this.initContextMenu();
         this.cd.markForCheck();
     }
+    public onDynamicEvent($event: {
+        sender: any,
+        data: IMedium,
+        type: ComponentType,
+        action: ActionType
+    }) {
+        switch ($event.action) {
+            case ActionType.AddMedium:
+                this.insertMedium($event.data);
+                break;
+            case ActionType.ModifyMedium:
+                this.updateMedium($event.data);
+                break;
+            case ActionType.RemoveMedium:
+                this.deleteMedium($event.data.ID)
+                break;
+            default:
+                this.refresh();
+                break;
+        }
+    }
+
     private updateTable() {
         if (!_.isNil(this.mediaTable)) {
             this.mediaTable.clear();
@@ -91,138 +117,138 @@ export class MediaComponent implements OnInit {
     }
     private initOptions() {
         $.confirm.options = {
-            text: "Are you sure?",
-            title: "",
+            text: 'Are you sure?',
+            title: '',
             confirmButton: this.translation.instant('Yes'),
             cancelButton: this.translation.instant('Cancel'),
             post: false,
             submitForm: false,
-            confirmButtonClass: "btn-warning",
-            cancelButtonClass: "btn-default",
-            dialogClass: "modal-dialog"
+            confirmButtonClass: 'btn-warning',
+            cancelButtonClass: 'btn-default',
+            dialogClass: 'modal-dialog'
         }
     }
     private initWidgets() {
         const self = this;
         domready(() => {
-          this.mediaTable = $('#media').DataTable(<DataTables.Settings>{
-             processing: true,
-             select: true,
-             data: this.media,
-             language: this.translation.getDataTablesLangObject(),
-             columns:  [
-                 { 'data': 'ID' },
-                 { 'data': 'Title' },
-                 { 'data': 'Author' },
-                 { 'data': 'Description' },
-                 { 'data': 'Year' },
-                 { 'data': 'ISBN' },
-                 { 'data': 'IsBorrowed' }
-             ],
-             columnDefs: [
-                  {
-                    "targets": [ 2 ],
-                    "visible": false,
-                    "searchable": true,
-                  },
-                  {
-                    "targets": [ 3 ],
-                    "visible": false,
-                    "searchable": true,
-                  },
-                  {
-                    data: 'IsBorrowed',
-                    render: function (data, type, row) {
-                        return data ? self.translation.instant('Yes') : self.translation.instant('No');
+            this.mediaTable = $('#media').DataTable(<DataTables.Settings>{
+                processing: true,
+                select: true,
+                data: this.media,
+                language: this.translation.getDataTablesLangObject(),
+                columns: [
+                    { 'data': 'ID' },
+                    { 'data': 'Title' },
+                    { 'data': 'Author' },
+                    { 'data': 'Description' },
+                    { 'data': 'Year' },
+                    { 'data': 'ISBN' },
+                    { 'data': 'IsBorrowed' }
+                ],
+                columnDefs: [
+                    {
+                        'targets': [2],
+                        'visible': false,
+                        'searchable': true,
                     },
-                    targets: 6
-                 },
-             ]
-          });
-          this.mediaTable.on('select', (e: Event, dt: DataTables.DataTable,
-                                         type: string, indexes: number[]) => {
-              let medium = dt.rows(indexes[0]).data()['0'];
-              this.mediumSelected.emit({
-                  sender: this,
-                  medium: medium
-              });
-          });
-          this.cd.markForCheck();
+                    {
+                        'targets': [3],
+                        'visible': false,
+                        'searchable': true,
+                    },
+                    {
+                        data: 'IsBorrowed',
+                        render: function (data, type, row) {
+                            return data ? self.translation.instant('Yes') : self.translation.instant('No');
+                        },
+                        targets: 6
+                    },
+                ]
+            });
+            this.mediaTable.on('select', (e: Event, dt: DataTables.DataTable,
+                type: string, indexes: number[]) => {
+                let medium = dt.rows(indexes[0]).data()['0'];
+                this.mediumSelected.emit({
+                    sender: this,
+                    medium: medium
+                });
+            });
+            this.cd.markForCheck();
         });
     }
     private initContextMenu() {
         const self = this;
         domready(() => {
-                $('#media').children('tbody').contextMenu({
+            $('#media').children('tbody').contextMenu({
                 selector: 'tr',
-                build: function($trigger, e) {
+                build: function ($trigger, e) {
                     // this callback is executed every time the menu is to be shown
                     // its results are destroyed every time the menu is hidden
                     // e is the original contextmenu event, containing e.pageX and e.pageY (amongst other data)
                     return {
                         className: 'data-title',
                         autoHide: true,
-                        callback: function(key, options) {            
-                            switch(key) {
-                            case 'borrowmedium':
-                            {
-                                let mediumID = -1;
-                                const data = $(this).children('td');
-                                const elem = _.find(data, el => {
-                                    return $(el).hasClass('sorting_1');
-                                });
-                                if(!_.isNil(elem)){                           
-                                    const mediumID = Number(elem.textContent);
-                                    self.borrowMedium(mediumID);
-                                }
-                            }
-                            break;
-                            case 'addmedium':
-                            {
-                                self.addMedium();
-                            }
-                            break;
-                            case 'modifymedium':
-                            {
-                                let mediumID = -1;
-                                const data = $(this).children('td');
-                                const elem = _.find(data, el => {
-                                    return $(el).hasClass('sorting_1');
-                                });
-                                if(!_.isNil(elem)){
-                                    mediumID = Number(elem.textContent);
-                                    self.modifyMedium(mediumID);
-                                }
-                            }
-                            break;
-                            case 'removemedium':
-                            {
-                                let mediumID = -1;
-                                let title = '';
-                                const data = $(this).children('td');
-                                const elem = _.find(data, el => {
-                                    return $(el).hasClass('sorting_1');
-                                });
-                                if(!_.isNil(elem)){
-                                    mediumID = Number(elem.textContent);
-                                    title = elem.nextSibling.textContent;
-                                } else {
-                                    return;
-                                }
-                                $.confirm({
-                                    text: `${self.confirmDeletionText} : "${title}"`,
-                                    title: self.translation.instant("MediaRemove"),
-                                    confirm: () => {
-                                        self.removeMedium(mediumID);
-                                    },
-                                    cancel: () => {
-                                        
-                                    },
-                                });
-                            }
-                            break;
-                            default:
-                                break;
+                        callback: function (key, options) {
+                            switch (key) {
+                                case 'borrowmedium':
+                                    {
+                                        let mediumID = -1;
+                                        const data = $(this).children('td');
+                                        const elem = _.find(data, el => {
+                                            return $(el).hasClass('sorting_1');
+                                        });
+                                        if (!_.isNil(elem)) {
+                                            mediumID = Number(elem.textContent);
+                                            self.borrowMedium(mediumID);
+                                        }
+                                    }
+                                    break;
+                                case 'addmedium':
+                                    {
+                                        self.addMedium();
+                                    }
+                                    break;
+                                case 'modifymedium':
+                                    {
+                                        let mediumID = -1;
+                                        const data = $(this).children('td');
+                                        const elem = _.find(data, el => {
+                                            return $(el).hasClass('sorting_1');
+                                        });
+                                        if (!_.isNil(elem)) {
+                                            mediumID = Number(elem.textContent);
+                                            self.modifyMedium(mediumID);
+                                        }
+                                    }
+                                    break;
+                                case 'removemedium':
+                                    {
+                                        let mediumID = -1;
+                                        let title = '';
+                                        const data = $(this).children('td');
+                                        const elem = _.find(data, el => {
+                                            return $(el).hasClass('sorting_1');
+                                        });
+                                        if (!_.isNil(elem)) {
+                                            mediumID = Number(elem.textContent);
+                                            title = elem.nextSibling.textContent;
+                                        } else {
+                                            return;
+                                        }
+                                        $.confirm({
+                                            text: `${self.confirmDeletionText} : "${title}"`,
+                                            title: self.translation.instant('MediaRemove'),
+                                            confirm: () => {
+                                                self.removeMedium(mediumID);
+                                            },
+                                            cancel: () => {
+
+                                            },
+                                        });
+                                    }
+                                    break;
+                                default:
+                                    break;
                             }
                         },
                         items: {
@@ -249,35 +275,16 @@ export class MediaComponent implements OnInit {
             self.cd.markForCheck();
         });
     }
-    
-    
+
+
     private initSubscriptions() {
 
     }
     private destroySubscriptions() {
 
     }
-    private onDynamicEvent($event: { sender: any,
-                                     data: IMedium,
-                                     type: ComponentType,
-                                     action: ActionType }) {
-        switch ($event.action) {
-            case ActionType.AddMedium:
-                this.insertMedium($event.data);
-                break;
-            case ActionType.ModifyMedium:
-                this.updateMedium($event.data);
-                break;
-            case ActionType.RemoveMedium:
-                this.deleteMedium($event.data.ID)
-                break;
-            default:
-               this.refresh();
-                break;
-        }    
-    }
     @authorized()
-    private borrowMedium(mediumID: number){
+    private borrowMedium(mediumID: number) {
         this.ngZone.runOutsideAngular(() => {
             bibApi.getReaders().then(readers => {
                 const cmpData: IComponentData = {
@@ -313,7 +320,7 @@ export class MediaComponent implements OnInit {
         this.cd.markForCheck();
     }
     @authorized()
-    private modifyMedium(mediumID: number){
+    private modifyMedium(mediumID: number) {
         this.ngZone.runOutsideAngular(() => {
             bibApi.getMedium(mediumID).then(medium => {
                 const data: IComponentData = {
@@ -342,7 +349,7 @@ export class MediaComponent implements OnInit {
             }).catch(err => this.logService.logJson(err, 'Media'));
         });
     }
-    private refresh(){
+    private refresh() {
         bibApi.getMediaForDisplay().then((media: IMediumDisplay[]) => {
             this.media = _.slice(media);
             this.updateTable();
@@ -350,15 +357,15 @@ export class MediaComponent implements OnInit {
         });
     }
     private insertMedium(medium: IMedium) {
-         this.ngZone.runOutsideAngular(() => { 
+        this.ngZone.runOutsideAngular(() => {
             bibApi.insertMedium(medium).then(result => {
                 this.ngZone.run(() => {
-                   this.refresh();
+                    this.refresh();
                 });
             });
-         });
+        });
     }
-    private updateMedium(medium: IMedium){
+    private updateMedium(medium: IMedium) {
         this.ngZone.runOutsideAngular(() => {
             bibApi.updateMedium(medium).then(result => {
                 this.ngZone.run(() => {
@@ -367,7 +374,7 @@ export class MediaComponent implements OnInit {
             });
         });
     }
-    private deleteMedium(mediumID: number){
+    private deleteMedium(mediumID: number) {
         this.ngZone.runOutsideAngular(() => {
             bibApi.removeMedium(mediumID).then(result => {
                 this.ngZone.run(() => {
@@ -376,7 +383,7 @@ export class MediaComponent implements OnInit {
             });
         });
     }
-    private getEmptyMedium(): IMedium{
+    private getEmptyMedium(): IMedium {
         return <IMedium>{
             ID: -1,
             Author: '',

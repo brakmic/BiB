@@ -4,7 +4,7 @@
   "logonUrlPath" : "login",
   "protocol"     : "http",
   "debug"        : true,
-  "language"     : "de-DE",
+  "language"     : "en-US",
   "availableLanguages": [
     "de",
     "en",
@@ -91,7 +91,7 @@
   "db": {
     "host": "127.0.0.1",
     "user": "root",
-    "password": "aab++112",
+    "password": "YOUR_DB_PASSWORD",
     "db": "bib"
   },
   "bib_datetime_format": "DD.MM.YYYY",

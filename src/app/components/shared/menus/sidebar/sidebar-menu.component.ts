@@ -4,7 +4,7 @@ import { Component,
         ChangeDetectorRef,
         EventEmitter } from '@angular/core';
 import { LogService,
-         i18nService, WindowService } from 'app/services';
+         i18nService } from 'app/services';
 import { IMenuEntry, IAppState,
          ILanguageState, IWindowEx } from 'app/interfaces';
 // Enums
@@ -43,7 +43,6 @@ export class SidebarMenuComponent {
   constructor(private store: Store<IAppState>,
               private logService: LogService,
               private translate: i18nService,
-              private win: WindowService,
               private cd: ChangeDetectorRef) {
   }
   public ngOnInit() {
@@ -68,11 +67,14 @@ export class SidebarMenuComponent {
       const self = this;
       $('.navbar-nav li').click(function(){
         const a = $(this).children('a')[0];
-        const href = _.split(a.attributes[3].textContent, '=')[0];
-        self.selectMenu(this, href);
-        $(this).addClass('isActive').siblings().removeClass('isActive');
-        if(!$(this).hasClass('nochange')){
-          $('#settings-submenu').removeClass('in');
+        const attrib = a.attributes[3];
+        if (attrib) {
+          const href = _.split(attrib.textContent, '=')[0];
+          self.selectMenu(this, href);
+          $(this).addClass('isActive').siblings().removeClass('isActive');
+          if(!$(this).hasClass('nochange')){
+            $('#settings-submenu').removeClass('in');
+          }
         }
       });
       this.cd.markForCheck();

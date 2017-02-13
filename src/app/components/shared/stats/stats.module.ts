@@ -1,4 +1,4 @@
-import { LogonComponent } from './logon.component';
+import { StatsComponent } from './stats.component';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgModule } from '@angular/core';
@@ -6,32 +6,20 @@ import { RouterModule, Routes } from '@angular/router';
 import { TranslateModule } from 'ng2-translate/ng2-translate';
 import { AppPipesModule } from 'app/pipes';
 
-// WebpackAsyncRoute expects a route for this module to load  the Logon-Component
-const routes: Routes = [
-  {
-    path: '',
-    component: LogonComponent
-  },
-  {
-    path: 'logon',
-    redirectTo: '',
-    pathMatch: 'full'
-  }
-];
-
 @NgModule({
   declarations: [
-    LogonComponent
+    StatsComponent
   ],
   imports: [
-    AppPipesModule,
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
     TranslateModule,
-    RouterModule.forChild(routes)
+    AppPipesModule
+  ],
+  exports: [
+      StatsComponent
   ]
 })
-export class LogonModule {
-  public static routes = routes;
+export class StatsModule {
 }
