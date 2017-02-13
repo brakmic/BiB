@@ -86,13 +86,19 @@ If you're planning to develop this app then you should use
 
 `npm run start:client` 
 
-to run it under the WebPack DevServer. 
+to run it with WebPack DevServer. 
 
 To run it as a complete web app use 
 
 `npm run build:prod`
 
 to create a new productive build in **dist** folder. Afterwards, copy the contents to your preferred web server.
+
+You can also create an [AOT](https://angular.io/docs/ts/latest/cookbook/aot-compiler.html)-build that's much smaller in size than standard Angular apps.
+
+```
+npm run build:AOT
+```
 
 In either case your application will need a proper backend:
 
