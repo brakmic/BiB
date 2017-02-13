@@ -173,7 +173,7 @@ The most frequently used options are:
 
 Any help regarding new languages or extending the existing ones is greatly appreciated.
 
-<img src="http://i.giphy.com/l0JLVEUhJEAkiSKXe.gif">
+<img src="http://i.giphy.com/l0He8oZOpRFmgZUt2.gif">
 
 
 ## License 
