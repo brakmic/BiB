@@ -94,7 +94,7 @@ To run it as a complete web app use
 
 to create a new productive build in **dist** folder. Afterwards, copy the contents to your preferred web server.
 
-You can also create an [AOT](https://angular.io/docs/ts/latest/cookbook/aot-compiler.html)-build that's much smaller in size than standard Angular apps.
+You can also create an [AOT](https://angular.io/docs/ts/latest/cookbook/aot-compiler.html)-build:
 
 `npm run build:AOT`
 
