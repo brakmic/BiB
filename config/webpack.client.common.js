@@ -142,11 +142,11 @@ module.exports = function(options) {
       */
       { 
         test: /\.node$/, 
-        loader: 'node-loader' 
+        use: 'node-loader' 
       },
       {
           test: /datatables\.net.*/,
-          loader: 'imports-loader?define=>false'
+          use: 'imports-loader?define=>false'
       },
       /*
        * Json loader support for *.json files.
@@ -155,7 +155,7 @@ module.exports = function(options) {
        */
       {
         test: /\.json$/,
-        loader: 'json-loader'
+        use: 'json-loader'
       },
 
       /*
@@ -166,7 +166,7 @@ module.exports = function(options) {
        */
       {
         test: /\.css$/,
-        loaders: ['to-string-loader', 'raw-loader', 'css-loader']
+        use: ['to-string-loader', 'raw-loader', 'css-loader']
       },
       /*
       * Load Sass Styles
@@ -174,24 +174,24 @@ module.exports = function(options) {
       */
       {
         test: /\.scss$/,
-        loaders: ['to-string-loader','raw-loader', 'sass-loader']
+        use: ['to-string-loader','raw-loader', 'sass-loader']
         // loaders: ['raw-loader', 'sass-loader']
       },
       {
         test: /index\.scss$/,
-        loader: ExtractTextPlugin.extract(
+        use: ExtractTextPlugin.extract(
           {
-            fallbackLoader: 'style-loader',
-            loader: 'css-loader!sass-loader?sourceMap'
+            fallback: 'style-loader',
+            use: 'css-loader!sass-loader?sourceMap'
           })
       },
       {
         test: /\.woff(2)?(\?v=.+)?$/,
-        loader: 'url-loader?limit=10000&mimetype=application/font-woff'
+        use: 'url-loader?limit=10000&mimetype=application/font-woff'
       },
       {
         test: /\.(ttf|eot|svg)(\?v=.+)?$/,
-        loader: 'file-loader'
+        use: 'file-loader'
       },
       /* Raw loader support for *.html
        * Returns file content as string
@@ -200,7 +200,7 @@ module.exports = function(options) {
        */
       {
         test: /\.html$/,
-        loader: 'raw-loader',
+        use: 'raw-loader',
         exclude: [helpers.root('src/index.html')]
       },
 
@@ -208,7 +208,7 @@ module.exports = function(options) {
       */
       {
         test: /\.(jpg|png|gif)$/,
-        loader: 'file-loader'
+        use: 'file-loader'
       }
 
     ]
