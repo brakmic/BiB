@@ -56,7 +56,7 @@ module.exports = function(options) {
   entry: {
 
     'polyfills': './src/init/polyfills.ts',
-    'vendor': AOT ? './src/init/vendor.aot.ts' :
+    'bib': AOT ? './src/init/vendor.aot.ts' :
                  './src/init/vendor.ts',
     'main': AOT ? './src/init/main.aot.ts' :
                   './src/init/main.ts'
@@ -279,7 +279,7 @@ module.exports = function(options) {
     
      // Specify the correct order the scripts will be injected in
      new CommonsChunkPlugin({
-        name: ['polyfills','vendor'].reverse()
+        name: ['vendor','bib','polyfills']
      }),
 
 
