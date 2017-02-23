@@ -1,6 +1,6 @@
 {
   "name": "bib",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Library Management Application for primary schools",
   "private": true,
   "main": "index.js",
