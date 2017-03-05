@@ -12,6 +12,7 @@
         "importHelpers": true,
         "strictNullChecks": false,
         "baseUrl": "./src",
+        "skipLibCheck": true,
         "paths": {},
         "lib": [
             "dom",
