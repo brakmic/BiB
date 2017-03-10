@@ -91,7 +91,7 @@
   "db": {
     "host": "127.0.0.1",
     "user": "root",
-    "password": "aab++112",
+    "password": "YOUR_PWD_HERE",
     "db": "bib"
   },
   "bib_datetime_format": "DD.MM.YYYY",
