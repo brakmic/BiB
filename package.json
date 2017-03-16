@@ -1,6 +1,6 @@
 {
   "name": "bib",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Library Management Application for primary schools",
   "private": true,
   "main": "index.js",
@@ -66,7 +66,7 @@
     "reflect-metadata": "^0.1.10",
     "rxjs": "^5.2.0",
     "sqlite3": "^3.1.8",
-    "zone.js": "^0.7.8"
+    "zone.js": "^0.8.4"
   },
   "devDependencies": {
     "@angularclass/conventions-loader": "^1.0.13",
