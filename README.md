@@ -9,7 +9,7 @@
 
 It comprises of these parts:
 
-* A client-side UI based on [Angular 2](https://angular.io/)
+* A client-side UI based on [Angular 4](https://angular.io/)
 * A backend based on [HapiJS](https://hapijs.com/)
 * An SQL-database ([MariaDB](https://mariadb.com/) by default, or similar databases)
 
