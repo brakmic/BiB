@@ -72,7 +72,7 @@ const isBorrowed = (id: number): Promise<boolean> => {
 const borrowMedium = (readerId: number, mediumId: number): Promise<any> => {
     const borrow: IBorrow = {
         ID: -1,
-        BorrowDate: moment(Date.now()).format('YYYY-MM-DD'),
+        BorrowDate: new Date().toISOString(), // moment(Date.now()).format('YYYY-MM-DD'),
         MediumID: mediumId,
         ReaderID: readerId,
         ReturnDate: undefined
