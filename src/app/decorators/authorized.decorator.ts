@@ -116,9 +116,9 @@ export function authorized() {
       }
       console.log(`Calling: ${fn}(${args}) => ${json.stringify(result)}`);
       return result;
-    }
+    };
     // return edited descriptor
     return descriptor;
   };
 
-};
+}
