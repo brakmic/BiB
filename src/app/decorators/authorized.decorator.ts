@@ -5,6 +5,7 @@ import {
   ISession, IConfig, IWindowEx,
   ICountry, ILocalData, IAcl
 } from 'app/interfaces';
+import { ActionType } from 'app/enums';
 import { bibApi } from 'app/apis';
 import * as fetchApi from 'app/apis/fetch';
 import * as _ from 'lodash';
@@ -29,7 +30,7 @@ const getLocalData = (): ILocalData => {
 
 const getAcl = (acls: IAcl[], data: ILocalData): IAcl => {
   return _.find(acls, acl => {
-    return acl.ID === data.userAclID;
+    return _.eq(_.toString(acl.ID), _.toString(data.userAclID));
   });
 };
 
@@ -42,7 +43,7 @@ const getUserID = (data: ILocalData): number => {
 
 const getGroup = (groups: IUserGroup[], data: ILocalData): IUserGroup => {
   return _.find(groups, gr => {
-    return gr.ID === data.groupID;
+    return _.eq(_.toString(gr.ID), _.toString(data.groupID));
   });
 };
 
@@ -67,12 +68,43 @@ const showWarning = (message: string, caption: string) => {
 };
 
 // a very simple method to check for permission
-const hasSufficientPermissions = (group: IUserGroup, userAcl: IAcl = undefined): boolean => {
-  return ((group.Name === 'Administrators') ||
-    (group.Name === 'Librarians'));
+const isAdminUser = (group: IUserGroup, userAcl: IAcl = undefined): boolean => {
+  return (group.Name === 'Administrators');
 };
+
+const canExecuteAction = (group: IUserGroup, userAcl: IAcl, action: ActionType): boolean => {
+    switch (action) {
+      case ActionType.AddMedium:
+        return userAcl.CanAddMedia;
+      case ActionType.AddReader:
+        return userAcl.CanAddReaders;
+      case ActionType.AddUser:
+        return userAcl.CanAddUsers;
+      case ActionType.BorrowMedium:
+        return true;
+      case ActionType.ManageUser:
+        return userAcl.CanModifyUsers;
+      case ActionType.ModifyMedium:
+        return userAcl.CanModifyMedia;
+      case ActionType.ModifyReader:
+        return userAcl.CanModifyReaders;
+      case ActionType.ModifyUser:
+        return userAcl.CanModifyUsers;
+      case ActionType.RemoveMedium:
+        return userAcl.CanRemoveMedia;
+      case ActionType.RemoveReader:
+        return userAcl.CanRemoveReaders;
+      case ActionType.RemoveUser:
+        return userAcl.CanRemoveUsers;
+      case ActionType.UnborrowMedium:
+        return true;
+      default:
+        return false;
+    }
+};
+
 /**
- * authorized decorator 
+ * authorized decorator
  * It returns a function that executes the decorated method
  */
 export function authorized() {
@@ -102,6 +134,10 @@ export function authorized() {
     const originalMethod = descriptor.value;
     // editing the descriptor/value parameter
     descriptor.value = function (...args: any[]) {
+      if (_.isNil(this) || _.isNil(this.action)) {
+        return originalMethod.apply(this, args);
+      }
+      let action = !_.isNil(this.action) ? this.action : this.dynamicComponent.inputs['action'];
       let result = undefined;
       const data = getLocalData();
       const code = getLangCode(data);
@@ -109,11 +145,15 @@ export function authorized() {
       const acl = getAcl(acls, data);
 
       langFile = _.find(langFiles, { code: code })['file'];
-      if (hasSufficientPermissions(group, acl)) {
+      if (isAdminUser(group, acl)) {
         // call function if access is granted
         result = originalMethod.apply(this, args);
       } else {
-        showWarning(langFile['WarnInsufficientRights'], langFile['Error']);
+        if (canExecuteAction(group, group.Acl, action)) {
+          result = originalMethod.apply(this, args);
+        } else {
+          showWarning(langFile['WarnInsufficientRights'], langFile['Error']);
+        }
       }
       console.log(`Calling: ${fn}(${args}) => ${json.stringify(result)}`);
       return result;

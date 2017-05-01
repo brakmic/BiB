@@ -217,11 +217,17 @@ export class UsersComponent implements OnInit {
                                     {
                                         let userID;
                                         let userName;
+                                        (<any>self).action = ActionType.RemoveUser;
                                         const data = $(this).children('td');
                                         const elem = _.find(data, d => { return $(d).hasClass('sorting_1'); });
                                         if (!_.isNil(elem)) {
-                                            userID = Number(elem.textContent);
-                                            userName = elem.nextSibling.textContent;
+                                            if (!_.isNaN(_.toNumber(elem.textContent))) {
+                                                userID = Number(elem.textContent);
+                                                userName = elem.nextSibling.textContent;
+                                            } else {
+                                                userID = Number(elem.previousSibling.textContent);
+                                                userName = elem.previousSibling.previousSibling.textContent;
+                                            }
                                         } else {
                                             return;
                                         }
@@ -239,9 +245,14 @@ export class UsersComponent implements OnInit {
                                     break;
                                 case 'modifyuser': {
                                     const data = $(this).children('td');
-                                    const el = _.find(data, d => { return $(d).hasClass('sorting_1'); });
-                                    if (!_.isNil(el)) {
-                                        const userID = Number(el.textContent);
+                                    const elem = _.find(data, d => { return $(d).hasClass('sorting_1'); });
+                                    if (!_.isNil(elem)) {
+                                        let userID = undefined;
+                                        if (!_.isNaN(_.toNumber(elem.textContent))) {
+                                            userID = Number(elem.textContent);
+                                        } else {
+                                            userID = Number(elem.previousSibling.textContent);
+                                        }
                                         const cmp: IComponentData = {
                                             component: ManageUserComponent,
                                             inputs: {

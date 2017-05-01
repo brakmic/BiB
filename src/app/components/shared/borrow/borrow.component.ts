@@ -22,6 +22,7 @@ import {
     IAppState
 } from 'app/interfaces';
 import { authorized } from 'app/decorators';
+import { ActionType } from 'app/enums';
 // State Management with Redux
 import '@ngrx/core/add/operator/select';
 import { Store } from '@ngrx/store';
@@ -151,6 +152,7 @@ export class BorrowComponent implements OnInit {
                         className: 'data-title',
                         autoHide: true,
                         callback: function (key, options) {
+                            (<any>self).action = ActionType.UnborrowMedium;
                             let borrowID = -1;
                             let readerID = -1;
                             const data = $(this).children('td');

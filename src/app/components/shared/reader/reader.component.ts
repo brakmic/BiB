@@ -46,14 +46,14 @@ export class ReaderComponent implements OnInit {
     private confirmDeletionText: string;
 
     constructor(private router: Router,
-        private route: ActivatedRoute,
-        private cd: ChangeDetectorRef,
-        private translation: i18nService,
-        private logService: LogService,
-        private formBuilder: FormBuilder,
-        private ngZone: NgZone,
-        private store: Store<IAppState>,
-        private appRef: ApplicationRef) { }
+                private route: ActivatedRoute,
+                private cd: ChangeDetectorRef,
+                private translation: i18nService,
+                private logService: LogService,
+                private formBuilder: FormBuilder,
+                private ngZone: NgZone,
+                private store: Store<IAppState>,
+                private appRef: ApplicationRef) { }
 
     public ngOnInit() {
         this.route.data.forEach((data: { readers: IReader[] }) => {
@@ -138,6 +138,7 @@ export class ReaderComponent implements OnInit {
                                         let readerID;
                                         let readerName;
                                         const data = $(this).children('td');
+                                        (<any>self).action = ActionType.RemoveReader;
                                         const elem = _.find(data, d => { return $(d).hasClass('sorting_1'); });
                                         if (!_.isNil(elem)) {
                                             if (!_.isNaN(_.toNumber(elem.textContent))) {
@@ -164,6 +165,7 @@ export class ReaderComponent implements OnInit {
                                 case 'modifyreader': {
                                     let readerID;
                                     const data = $(this).children('td');
+                                    (<any>self).action = ActionType.ModifyReader;
                                     const elem = _.find(data, d => { return $(d).hasClass('sorting_1'); });
                                     if (!_.isNil(elem)) {
                                         if (!_.isNaN(_.toNumber(elem.textContent))) {
@@ -282,15 +284,14 @@ export class ReaderComponent implements OnInit {
     private removeReader(readerID: number) {
         this.ngZone.runOutsideAngular(() => {
             bibApi.removeReader(readerID).then(res => {
-                this.ngZone.run(() => {
-                    bibApi.getReaders().then((readers: IReader[]) => {
+                bibApi.getReaders().then((readers: IReader[]) => {
+                    this.ngZone.run(() => {
                         this.readers = readers;
                         this.updateTable();
                         this.store.dispatch({ type: STATS_CHANGED, payload: { data: res } });
                     });
                 });
-            })
-                .catch(err => this.logService.logJson(err, 'Reader'));
+            }).catch(err => this.logService.logJson(err, 'Reader'));
         });
     }
     private getEmptyReader(): IReader {

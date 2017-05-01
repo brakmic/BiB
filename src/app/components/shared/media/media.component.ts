@@ -192,6 +192,7 @@ export class MediaComponent implements OnInit {
                             switch (key) {
                                 case 'borrowmedium':
                                     {
+                                        (<any>self).action = ActionType.BorrowMedium;
                                         let mediumID = -1;
                                         const data = $(this).children('td');
                                         const elem = _.find(data, el => {
@@ -214,6 +215,7 @@ export class MediaComponent implements OnInit {
                                     break;
                                 case 'modifymedium':
                                     {
+                                        (<any>self).action = ActionType.ModifyMedium;
                                         let mediumID = -1;
                                         const data = $(this).children('td');
                                         const elem = _.find(data, el => {
@@ -231,6 +233,7 @@ export class MediaComponent implements OnInit {
                                     break;
                                 case 'removemedium':
                                     {
+                                        (<any>self).action = ActionType.RemoveMedium;
                                         let mediumID = -1;
                                         let title = '';
                                         const data = $(this).children('td');

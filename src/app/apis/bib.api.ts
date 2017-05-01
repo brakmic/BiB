@@ -322,18 +322,18 @@ const _mapAcl = (acl: any): IAcl => {
     if (!acl) return undefined;
     return <IAcl>{
             ID: acl.ID,
-            CanAddMedia: acl.CanAddMedia === 1 ? true : false,
-            CanAddReaders: acl.CanAddReaders === 1 ? true : false,
-            CanAddUsers: acl.CanAddUsers === 1 ? true : false,
-            CanAddUserGroups: acl.CanAddUserGroups === 1 ? true : false,
-            CanRemoveMedia: acl.CanRemoveMedia === 1 ? true : false,
-            CanRemoveReaders: acl.CanRemoveReaders === 1 ? true : false,
-            CanRemoveUsers: acl.CanRemoveUsers === 1 ? true : false,
-            CanRemoveUserGroups: acl.CanRemoveUserGroups === 1 ? true : false,
-            CanModifyMedia: acl.CanModifyMedia === 1 ? true : false,
-            CanModifyReaders: acl.CanModifyReaders === 1 ? true : false,
-            CanModifyUsers: acl.CanModifyUsers === 1 ? true : false,
-            CanModifyUserGroups: acl.CanModifyUserGroups === 1 ? true : false
+            CanAddMedia: acl.CanAddMedia == 1 ? true : false,
+            CanAddReaders: acl.CanAddReaders == 1 ? true : false,
+            CanAddUsers: acl.CanAddUsers == 1 ? true : false,
+            CanAddUserGroups: acl.CanAddUserGroups == 1 ? true : false,
+            CanRemoveMedia: acl.CanRemoveMedia == 1 ? true : false,
+            CanRemoveReaders: acl.CanRemoveReaders == 1 ? true : false,
+            CanRemoveUsers: acl.CanRemoveUsers == 1 ? true : false,
+            CanRemoveUserGroups: acl.CanRemoveUserGroups == 1 ? true : false,
+            CanModifyMedia: acl.CanModifyMedia == 1 ? true : false,
+            CanModifyReaders: acl.CanModifyReaders == 1 ? true : false,
+            CanModifyUsers: acl.CanModifyUsers == 1 ? true : false,
+            CanModifyUserGroups: acl.CanModifyUserGroups == 1 ? true : false
         };
 };
 
