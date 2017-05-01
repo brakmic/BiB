@@ -130,11 +130,13 @@ The complete list of all available API calls is located [here](https://github.co
 
 ## User Management 
 
-<img src="https://i.imgsafe.org/95a3d23a72.png">
+![user_management_picture](https://i.imgsafe.org/95a3d23a72.png)
 
 **BiB** [supports](https://github.com/brakmic/BiB/blob/master/src/app/decorators/authorized.decorator.ts) user- and group-based Access Control Lists. Currenty, only group-based ACLs are active but the technical capability to enforce more fine-grained access control is 
 already available. Future versions will also include additional options for UI-based user rights management. Internally, **BiB** relies on Angular 2 Decorators to enforce restrictions on certain system tasks that can 
 manipulate database and other vital data. The current implementation is rather simple and based on a few interesting ideas from various blog posts. 
+
+![user_management](https://media.giphy.com/media/3oKIPC6b9myq6mjKbm/giphy.gif)
 
 ## System Configuration 
 
