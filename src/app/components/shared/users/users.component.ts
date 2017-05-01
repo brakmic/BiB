@@ -282,7 +282,7 @@ export class UsersComponent implements OnInit {
     }
     private showAcls(userID: number) {
         const user = _.find(this.users, usr => {
-            return usr.ID === userID;
+            return _.eq(_.toString(usr.ID), _.toString(userID));
         });
         this.userAcl = [];
         this.groupAcl = [];
@@ -308,7 +308,7 @@ export class UsersComponent implements OnInit {
             bibApi.removeUser(userID).then(res => {
                 this.ngZone.run(() => {
                     this.users = _.filter(this.users, (e) => {
-                        return e.ID !== userID;
+                        return !_.eq(_.toString(e.ID), _.toString(userID));
                     });
                     this.updateTable();
                 });

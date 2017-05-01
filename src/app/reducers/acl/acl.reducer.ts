@@ -8,9 +8,9 @@ const initialState: any = {};
 export function aclReducer(state: any = initialState, action: Action) {
   switch (action.type) {
     case ACL_UPDATED:
-      return Object.assign({}, state, action.payload);
-    case ACL_CHANGED:
-      return Object.assign({}, state, action.payload);
+      return Object.assign({}, state, { acl: action.payload });
+    // case ACL_CHANGED:
+    //   return Object.assign({}, state, { acl: action.payload });
     default:
       return state;
   }

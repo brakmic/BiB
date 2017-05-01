@@ -77,8 +77,8 @@ export class AclComponent implements OnInit {
     private initSubscriptions() {
         this.aclObservable = this.store.select(store => store.acl);
         this.aclSubscription = this.aclObservable.subscribe(acl => {
-            if (acl.ID === this.acl[0].ID) {
-                this.acl[0] = _.clone(acl);
+            if (_.eq(_.toString(acl.ID), _.toString(this.acl[0].ID))) {
+                this.acl[0] = _.cloneDeep(acl);
                 this.updateTable();
             }
         });
@@ -115,7 +115,6 @@ export class AclComponent implements OnInit {
                 let rights = {};
                 rights[right] = granted;
                 const acl = _.assign(rights, _.omit(this.acl[0], right)) as IAcl;
-                this.store.dispatch({ type: ACL_CHANGED, payload: acl });
                 self.updateAcl(acl);
             });
             this.cd.markForCheck();
@@ -123,8 +122,12 @@ export class AclComponent implements OnInit {
     }
     @authorized()
     private updateAcl(acl: IAcl) {
-        bibApi.updateAcl(acl).then(result => {
-            this.store.dispatch({ type: ACL_UPDATED, payload: acl });
+        this.ngZone.runOutsideAngular(() => {
+            bibApi.updateAcl(acl).then(result => {
+                this.ngZone.run(() => {
+                    this.store.dispatch({ type: ACL_UPDATED, payload: acl });
+                });
+            });
         });
     }
 
