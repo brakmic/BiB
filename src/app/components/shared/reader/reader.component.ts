@@ -140,7 +140,7 @@ export class ReaderComponent implements OnInit {
                                         const data = $(this).children('td');
                                         const elem = _.find(data, d => { return $(d).hasClass('sorting_1'); });
                                         if (!_.isNil(elem)) {
-                                            if (_.isNumber(elem.textContent)) {
+                                            if (!_.isNaN(_.toNumber(elem.textContent))) {
                                                 readerID = Number(elem.textContent);
                                             } else {
                                                 readerID = Number(elem.previousSibling.textContent);
@@ -166,7 +166,7 @@ export class ReaderComponent implements OnInit {
                                     const data = $(this).children('td');
                                     const elem = _.find(data, d => { return $(d).hasClass('sorting_1'); });
                                     if (!_.isNil(elem)) {
-                                        if (_.isNumber(elem.textContent)) {
+                                        if (!_.isNaN(_.toNumber(elem.textContent))) {
                                             readerID = Number(elem.textContent);
                                         } else {
                                             readerID = Number(elem.previousSibling.textContent);
