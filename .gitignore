@@ -40,3 +40,7 @@ dist/
 compiled/
 dll/
 .vscode
+
+# ignore config.json (private data)
+
+src/config.json
