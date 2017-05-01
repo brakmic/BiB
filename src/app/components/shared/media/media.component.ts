@@ -186,8 +186,12 @@ export class MediaComponent implements OnInit {
                     // its results are destroyed every time the menu is hidden
                     // e is the original contextmenu event, containing e.pageX and e.pageY (amongst other data)
                     return {
-                        className: 'data-title',
                         autoHide: true,
+                        className: 'data-title',
+                        events: { show: function(options: any) {
+                                     $('.data-title').attr('data-menutitle', self.translation.instant('Media'));
+                                },
+                        },
                         callback: function (key, options) {
                             switch (key) {
                                 case 'borrowmedium':

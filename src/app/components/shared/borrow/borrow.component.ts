@@ -149,8 +149,13 @@ export class BorrowComponent implements OnInit {
                     // its results are destroyed every time the menu is hidden
                     // e is the original contextmenu event, containing e.pageX and e.pageY (amongst other data)
                     return {
-                        className: 'data-title',
                         autoHide: true,
+                        className: 'data-title',
+                        events: { show: function(options: any) {
+                                    console.log('menu shown');
+                                     $('.data-title').attr('data-menutitle', self.translation.instant('Borrow'));
+                                },
+                        },
                         callback: function (key, options) {
                             (<any>self).action = ActionType.UnborrowMedium;
                             let borrowID = -1;
@@ -180,6 +185,7 @@ export class BorrowComponent implements OnInit {
                     };
                 },
             });
+            
             this.cd.markForCheck();
         });
     }

@@ -200,8 +200,12 @@ export class UsersComponent implements OnInit {
                 selector: 'tr',
                 build: function ($trigger, e) {
                     return {
-                        className: 'data-title',
                         autoHide: true,
+                        className: 'data-title',
+                        events: { show: function(options: any) {
+                                     $('.data-title').attr('data-menutitle', self.translation.instant('Users'));
+                                },
+                        },
                         callback: function (key, options) {
                             switch (key) {
                                 case 'adduser':

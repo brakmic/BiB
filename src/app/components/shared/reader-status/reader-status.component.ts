@@ -2,7 +2,8 @@ import {
     Component, Input,
     Output, EventEmitter,
     OnInit, ChangeDetectorRef,
-    ChangeDetectionStrategy, SimpleChanges
+    ChangeDetectionStrategy, SimpleChanges,
+    NgZone
 } from '@angular/core';
 // Routing
 import {
@@ -38,7 +39,8 @@ export class ReaderStatusComponent implements OnInit {
         private route: ActivatedRoute,
         private cd: ChangeDetectorRef,
         private translation: i18nService,
-        private logService: LogService) { }
+        private logService: LogService,
+        private zone: NgZone) { }
 
     public ngOnInit() {
         this.route.data.forEach((data: { readers: IReader[] }) => {
@@ -55,11 +57,15 @@ export class ReaderStatusComponent implements OnInit {
         $('bib-root').siblings().remove();
     }
     public onReaderSelected($event: IReaderSelectedEvent) {
-        bibApi.getBorrowsForDisplay().then((borrows: IBorrowDisplay[]) => {
-            this.borrows = _.filter(borrows, b => {
-                return ((b.ReaderID === $event.reader.ID) && _.isNil(b.ReturnDate));
+        this.zone.runOutsideAngular(() => {
+            bibApi.getBorrowsForDisplay().then((borrows: IBorrowDisplay[]) => {
+                this.zone.run(() => {
+                    this.borrows = _.filter(borrows, b => {
+                        return ((_.eq(_.toString(b.ReaderID), _.toString($event.reader.ID))) && _.isNil(b.ReturnDate));
+                    });
+                    this.cd.markForCheck();
+                });
             });
-            this.cd.markForCheck();
         });
     }
     public onBorrowSelected($event: any) {
