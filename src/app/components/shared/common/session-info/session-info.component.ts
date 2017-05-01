@@ -60,7 +60,7 @@ const domready = require('domready');
 export class SessionInfoComponent implements OnInit {
     @Input() public session: ISession;
     constructor(private cd: ChangeDetectorRef,
-        private logService: LogService, ) { }
+                private logService: LogService) { }
 
     public ngOnInit() {
 

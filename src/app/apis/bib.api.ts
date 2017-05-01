@@ -104,7 +104,7 @@ const prepareMediumForDisplay = (medium: IMedium): Promise<IMediumDisplay> => {
 };
 
 const getMediaForDisplay = (): Promise<IMediumDisplay[]> => {
-    return getMedia().then(media => {
+    return getMedia().then((media: IMedium[]) => {
         const results = _.map(media, m => {
             return prepareMediumForDisplay(m).then(_m => {
                 return _m;
@@ -129,7 +129,7 @@ const getMediaDisplayForDb = (media: IMediumDisplay[]): IMedium[] => {
                 Type: Number(medium.Type),
                 Year: Number(medium.Year)
             };
-        })
+        });
 };
 
 const createFakeMedium = (id: number): IMedium => {
@@ -198,7 +198,6 @@ const updateReader = (reader: IReader): Promise<any> => {
 };
 
 const convertToDbReader = (reader: IReader): any => {
-    console.log(reader);
     return {
         ID: reader.ID,
         Card_ID: reader.CardID,
@@ -217,7 +216,7 @@ const convertToBibReader = (reader: any): IReader => {
         FirstName: reader.FirstName,
         LastName: reader.LastName,
         Phone: reader.Phone,
-        IsActive: reader.IsActive == 1 ? true : false,
+        IsActive: reader.IsActive === 1 ? true : false,
         Address: reader.Address
     };
 };
@@ -267,7 +266,7 @@ const isOverdue = (borrowDate: any): boolean => {
 };
 
 const getActiveBorrows = (): Promise<IBorrow[]> => {
-    return getBorrows().then(borrows => {
+    return getBorrows().then((borrows: IBorrow[]) => {
         return _.filter(borrows, borrow => {
             return _.isNil(borrow.ReturnDate);
         });
@@ -275,16 +274,16 @@ const getActiveBorrows = (): Promise<IBorrow[]> => {
 };
 
 const isMediumBorrowed = (id: number): Promise<boolean> => {
-   return getActiveBorrows().then(borrows => {
+   return getActiveBorrows().then((borrows: IBorrow[]) => {
        return _.filter(borrows, borrow => {
-           return borrow.ReaderID == id;
+           return borrow.ReaderID === id;
        }).length > 0;
    });
 };
 
 const prepareBorrowForDisplay = (borrow: IBorrow): Promise<IBorrowDisplay> => {
-    return getMedium(borrow.MediumID).then(medium => {
-                return getReader(borrow.ReaderID).then(reader => {
+    return getMedium(borrow.MediumID).then((medium: IMedium) => {
+                return getReader(borrow.ReaderID).then((reader: IReader) => {
                     return <IBorrowDisplay>{
                         BorrowDate: borrow.BorrowDate,
                         ID: borrow.ID,
@@ -308,7 +307,7 @@ const convertToBorrowsDisplay = (borrows: IBorrow[]): Promise<IBorrowDisplay[]> 
 };
 
 const getBorrowsForDisplay = (): Promise<IBorrowDisplay[]> => {
-    return getBorrows().then(borrows => {
+    return getBorrows().then((borrows: IBorrow[]) => {
         const results = _.map(borrows, b => {
             return prepareBorrowForDisplay(b).then(_b => {
                 return _b;
@@ -323,18 +322,18 @@ const _mapAcl = (acl: any): IAcl => {
     if (!acl) return undefined;
     return <IAcl>{
             ID: acl.ID,
-            CanAddMedia: acl.CanAddMedia == 1 ? true : false,
-            CanAddReaders: acl.CanAddReaders == 1 ? true : false,
-            CanAddUsers: acl.CanAddUsers == 1 ? true : false,
-            CanAddUserGroups: acl.CanAddUserGroups == 1 ? true : false,
-            CanRemoveMedia: acl.CanRemoveMedia == 1 ? true : false,
-            CanRemoveReaders: acl.CanRemoveReaders == 1 ? true : false,
-            CanRemoveUsers: acl.CanRemoveUsers == 1 ? true : false,
-            CanRemoveUserGroups: acl.CanRemoveUserGroups == 1 ? true : false,
-            CanModifyMedia: acl.CanModifyMedia == 1 ? true : false,
-            CanModifyReaders: acl.CanModifyReaders == 1 ? true : false,
-            CanModifyUsers: acl.CanModifyUsers == 1 ? true : false,
-            CanModifyUserGroups: acl.CanModifyUserGroups == 1 ? true : false
+            CanAddMedia: acl.CanAddMedia === 1 ? true : false,
+            CanAddReaders: acl.CanAddReaders === 1 ? true : false,
+            CanAddUsers: acl.CanAddUsers === 1 ? true : false,
+            CanAddUserGroups: acl.CanAddUserGroups === 1 ? true : false,
+            CanRemoveMedia: acl.CanRemoveMedia === 1 ? true : false,
+            CanRemoveReaders: acl.CanRemoveReaders === 1 ? true : false,
+            CanRemoveUsers: acl.CanRemoveUsers === 1 ? true : false,
+            CanRemoveUserGroups: acl.CanRemoveUserGroups === 1 ? true : false,
+            CanModifyMedia: acl.CanModifyMedia === 1 ? true : false,
+            CanModifyReaders: acl.CanModifyReaders === 1 ? true : false,
+            CanModifyUsers: acl.CanModifyUsers === 1 ? true : false,
+            CanModifyUserGroups: acl.CanModifyUserGroups === 1 ? true : false
         };
 };
 
@@ -343,28 +342,28 @@ const _mapUser = (user: IUser): IUser => {
     _user.Acl = _mapAcl(user.Acl);
     if (_user.Group) {
         _user.Group.Acl = _mapAcl(_user.Group.Acl);
-    };
+    }
     return _user;
 };
 
 const getUsers = (): Promise<IUser[]> => {
-    return doFetch(`${usersUrl}`).then(users => {
+    return doFetch(`${usersUrl}`).then((users: IUser[]) => {
         return _.map(users, (user: IUser) => {
             return _mapUser(user);
         });
     });
-}
+};
 
 const getUser = (id: number): Promise<IUser> => {
-    return doFetch(`${usersUrl}/${id}`).then(user => {
+    return doFetch(`${usersUrl}/${id}`).then((user: IUser) => {
         return _mapUser(user);
     });
 };
 
 const getUserByName = (name: string): Promise<any> => {
-    return doFetch(`${usersUrl}`).then(users => {
+    return doFetch(`${usersUrl}`).then((users: IUser[]) => {
         return _.find(users, (user: IUser) => {
-            return user.AccountName == name;
+            return user.AccountName === name;
         });
     });
 };
@@ -389,7 +388,7 @@ const _mapUserGroup = (group: any): IUserGroup => {
 };
 
 const getUserGroups = (): Promise<IUserGroup[]> => {
-    return doFetch(`${groupsUrl}`).then(groups => {
+    return doFetch(`${groupsUrl}`).then((groups: IUserGroup[]) => {
         return _.map(groups, group => {
             return _mapUserGroup(group);
         });
@@ -403,9 +402,9 @@ const getUserGroup = (id: number): Promise<IUserGroup> => {
 };
 
 const getUserGroupByName = (name: string): Promise<IUserGroup> => {
-    return doFetch(`${groupsUrl}`).then(groups => {
+    return doFetch(`${groupsUrl}`).then((groups: IUserGroup[]) => {
         const grp = _.find(groups, (group: IUserGroup) => {
-            return group.Name == name;
+            return group.Name === name;
         });
         return _mapUserGroup(grp);
     });
@@ -416,7 +415,7 @@ const getAcls = (): Promise<IAcl[]> => {
         return _.map(acls, acl => {
             return _mapAcl(acl);
         });
-    })
+    });
 };
 
 const getAcl = (id: number): Promise<IAcl> => {
@@ -430,7 +429,7 @@ const updateAcl = (acl: IAcl): Promise<any> => {
 };
 
 const deleteAcl = (id: number): Promise<any> => {
-    return doDelete(`${aclsUrl}`,id);
+    return doDelete(`${aclsUrl}`, id);
 };
 
 const getWorldCatEntry = (isbn: string): Promise<IWorldCatEntry> => {

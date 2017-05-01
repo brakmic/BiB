@@ -51,7 +51,7 @@ export class AppComponent {
   private blockBrowserMenu() {
     domready(() => {
       $('body').contextmenu(function (e) {
-        return (e.target.nodeName == 'td');
+        return (e.target.nodeName === 'td');
       });
     });
   }

@@ -117,7 +117,7 @@ export class BibComponent {
 
   public ngOnChanges(changes: any) {
   }
-  
+
   /**
    * Selects the module bound to the selected menu
    * @param {Event} [event] Object containing menu data (id, name, optional submenus)
@@ -163,7 +163,7 @@ export class BibComponent {
   }
   private collectStatistics() {
     domready(() => {
-      bibApi.getStats().then(stats => {
+      bibApi.getStats().then((stats: IStats) => {
         this.readersCount = stats.readersCount;
         this.borrowsCount = stats.borrowsCount;
         this.overduesCount = stats.overduesCount;

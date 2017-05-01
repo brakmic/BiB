@@ -77,7 +77,7 @@ export class AclComponent implements OnInit {
     private initSubscriptions() {
         this.aclObservable = this.store.select(store => store.acl);
         this.aclSubscription = this.aclObservable.subscribe(acl => {
-            if (acl.ID == this.acl[0].ID) {
+            if (acl.ID === this.acl[0].ID) {
                 this.acl[0] = _.clone(acl);
                 this.updateTable();
             }

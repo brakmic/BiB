@@ -158,8 +158,14 @@ export class BorrowComponent implements OnInit {
                                 return $(el).hasClass('sorting_1');
                             });
                             if (!_.isNil(elem)) {
-                                borrowID = Number(elem.textContent);
-                                readerID = Number(elem.nextSibling.textContent);
+
+                                if (_.isNumber(elem.textContent)) {
+                                    borrowID = Number(elem.textContent);
+                                    readerID = Number(elem.nextSibling.textContent);
+                                } else {
+                                    readerID = Number(elem.previousSibling.textContent);
+                                    borrowID = Number(elem.previousSibling.previousSibling.textContent);
+                                }
                                 self.unborrow(borrowID, readerID);
                             }
                         },
@@ -184,12 +190,12 @@ export class BorrowComponent implements OnInit {
     @authorized()
     private unborrow(borrowID: number, readerID: number) {
         this.ngZone.runOutsideAngular(() => {
-            bibApi.getBorrowsForUser(readerID).then(result => {
-                _.each(result, borrow => {
-                    if (borrow.ID == borrowID) {
+            bibApi.getBorrowsForUser(readerID).then((borrows: IBorrow[]) => {
+                _.each(borrows, borrow => {
+                    if (_.eq(borrow.ID.toString(), borrowID.toString())) {
                         bibApi.unborrow(borrowID).then(res => {
-                            bibApi.getBorrowsForDisplay().then((borrows: IBorrowDisplay[]) => {
-                                this.borrows = _.slice(borrows);
+                            bibApi.getBorrowsForDisplay().then((dborrows: IBorrowDisplay[]) => {
+                                this.borrows = _.slice(dborrows);
                                 this.updateTable();
                                 this.ngZone.run(() => {
                                     this.store.dispatch({ type: STATS_CHANGED, payload: { data: `Medium returned by reader` } });

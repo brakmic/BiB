@@ -79,10 +79,10 @@ export class ReaderComponent implements OnInit {
         data: IReader,
         action: ActionType
     }) {
-        if ($event.action == ActionType.AddReader) {
+        if ($event.action === ActionType.AddReader) {
             this.ngZone.runOutsideAngular(() => {
                 bibApi.insertReader($event.data).then(result => {
-                    bibApi.getReaders().then(readers => {
+                    bibApi.getReaders().then((readers: IReader[]) => {
                         this.readers = _.slice(readers);
                         this.ngZone.run(() => {
                             this.updateTable();
@@ -91,9 +91,9 @@ export class ReaderComponent implements OnInit {
                     });
                 }).catch(err => this.logService.logJson(err, 'Reader'));
             });
-        } else if ($event.action == ActionType.ModifyReader) {
+        } else if ($event.action === ActionType.ModifyReader) {
             bibApi.updateReader($event.data).then(res => {
-                bibApi.getReaders().then(readers => {
+                bibApi.getReaders().then((readers: IReader[]) => {
                     this.readers = _.slice(readers);
                     this.ngZone.run(() => {
                         this.updateTable();
@@ -140,7 +140,11 @@ export class ReaderComponent implements OnInit {
                                         const data = $(this).children('td');
                                         const elem = _.find(data, d => { return $(d).hasClass('sorting_1'); });
                                         if (!_.isNil(elem)) {
-                                            readerID = Number(elem.textContent);
+                                            if (_.isNumber(elem.textContent)) {
+                                                readerID = Number(elem.textContent);
+                                            } else {
+                                                readerID = Number(elem.previousSibling.textContent);
+                                            }
                                             readerName = elem.nextSibling.textContent;
                                         } else {
                                             return;
@@ -158,10 +162,15 @@ export class ReaderComponent implements OnInit {
                                     }
                                     break;
                                 case 'modifyreader': {
+                                    let readerID;
                                     const data = $(this).children('td');
-                                    const el = _.find(data, d => { return $(d).hasClass('sorting_1'); });
-                                    if (!_.isNil(el)) {
-                                        const readerID = Number(el.textContent);
+                                    const elem = _.find(data, d => { return $(d).hasClass('sorting_1'); });
+                                    if (!_.isNil(elem)) {
+                                        if (_.isNumber(elem.textContent)) {
+                                            readerID = Number(elem.textContent);
+                                        } else {
+                                            readerID = Number(elem.previousSibling.textContent);
+                                        }
                                         self.modifyReader(readerID);
                                     }
                                 }
@@ -274,7 +283,7 @@ export class ReaderComponent implements OnInit {
         this.ngZone.runOutsideAngular(() => {
             bibApi.removeReader(readerID).then(res => {
                 this.ngZone.run(() => {
-                    bibApi.getReaders().then(readers => {
+                    bibApi.getReaders().then((readers: IReader[]) => {
                         this.readers = readers;
                         this.updateTable();
                         this.store.dispatch({ type: STATS_CHANGED, payload: { data: res } });

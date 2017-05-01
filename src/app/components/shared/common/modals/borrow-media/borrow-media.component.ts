@@ -75,7 +75,7 @@ export class BorrowMediaComponent implements OnInit {
                 return;
             } else {
                 this.initBorrowDialog();
-                bibApi.getMedium(this.mediumID).then(medium => {
+                bibApi.getMedium(this.mediumID).then((medium: IMedium) => {
                     this.medium = medium;
                     this.form.setValue({
                         mediumTitle: medium.Title

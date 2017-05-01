@@ -153,7 +153,7 @@ export class LogonComponent {
       groupID: userData.Group_ID,
       logonDate: new Date().toString(),
       language: this.translate.getCurrentLang(),
-      isActive: userData.IsActive == 1 ? true : false
+      isActive: userData.IsActive === 1 ? true : false
     }));
   }
 
@@ -171,7 +171,7 @@ export class LogonComponent {
         templateSelection: (object: Select2SelectionObject) => {
           const isoAlpha2 = _.trim(object.text);
           const country = _.find(this.countries, c => {
-            return c.isoAlpha2 == isoAlpha2;
+            return c.isoAlpha2 === isoAlpha2;
           });
 
           self.translate.changeLang(country.language);
@@ -181,7 +181,7 @@ export class LogonComponent {
           if (!object.id) return object.text;
           const isoAlpha2 = _.trim(object.text);
           const country = _.find(this.countries, c => {
-            return c.isoAlpha2 == isoAlpha2;
+            return c.isoAlpha2 === isoAlpha2;
           });
           const tmpl = $(`<img src="data:image/png;base64,${country.flag}" style="width:30px;height:20px;">`);
           return tmpl;

@@ -33,7 +33,7 @@ export class SidebarMenuComponent {
 
   /**
    * Creates a Sidebar menu.
-   * 
+   *
    * @param {Store<IAppState>} store
    * @param {LogService} logService
    * @param {i18nService} i18nService
@@ -72,7 +72,7 @@ export class SidebarMenuComponent {
           const href = _.split(attrib.textContent, '=')[0];
           self.selectMenu(this, href);
           $(this).addClass('isActive').siblings().removeClass('isActive');
-          if(!$(this).hasClass('nochange')){
+          if (!$(this).hasClass('nochange')) {
             $('#settings-submenu').removeClass('in');
           }
         }

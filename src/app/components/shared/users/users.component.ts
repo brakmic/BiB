@@ -87,9 +87,9 @@ export class UsersComponent implements OnInit {
         data: IUser,
         action: ActionType
     }) {
-        if ($event.action == ActionType.ModifyUser) {
+        if ($event.action === ActionType.ModifyUser) {
             bibApi.updateUser($event.data).then(res => {
-                bibApi.getUsers().then(users => {
+                bibApi.getUsers().then((users: IUser[]) => {
                     this.users = _.slice(users);
                     this.updateTable();
                 });
@@ -99,7 +99,7 @@ export class UsersComponent implements OnInit {
             });
         } else {
             bibApi.insertUser($event.data).then(res => {
-                bibApi.getUsers().then(users => {
+                bibApi.getUsers().then((users: IUser[]) => {
                     this.users = _.slice(users);
                     this.updateTable();
                 });
@@ -179,7 +179,7 @@ export class UsersComponent implements OnInit {
     }
     private refreshUserAcls(id: number) {
         this.ngZone.runOutsideAngular(() => {
-            bibApi.getUsers().then(users => {
+            bibApi.getUsers().then((users: IUser[]) => {
                 this.ngZone.run(() => {
                     this.users = _.slice(users);
                     this.showAcls(id);
@@ -227,7 +227,7 @@ export class UsersComponent implements OnInit {
                                         }
                                         $.confirm({
                                             text: `${self.confirmDeletionText} : "${userName}"`,
-                                            title: self.translation.instant("UserRemove"),
+                                            title: self.translation.instant('UserRemove'),
                                             confirm: () => {
                                                 self.removeUser(userID);
                                             },
@@ -242,7 +242,7 @@ export class UsersComponent implements OnInit {
                                     const el = _.find(data, d => { return $(d).hasClass('sorting_1'); });
                                     if (!_.isNil(el)) {
                                         const userID = Number(el.textContent);
-                                        const data: IComponentData = {
+                                        const cmp: IComponentData = {
                                             component: ManageUserComponent,
                                             inputs: {
                                                 userID: userID,
@@ -250,7 +250,7 @@ export class UsersComponent implements OnInit {
                                             },
                                             type: ComponentType.ModifyUser
                                         };
-                                        self.dynamicComponent = data;
+                                        self.dynamicComponent = cmp;
                                         self.cd.markForCheck();
                                     }
                                 }
@@ -273,7 +273,7 @@ export class UsersComponent implements OnInit {
                                 icon: 'fa-remove',
                             }
                         }
-                    }
+                    };
                 },
 
             });
@@ -281,8 +281,8 @@ export class UsersComponent implements OnInit {
         });
     }
     private showAcls(userID: number) {
-        const user = _.find(this.users, user => {
-            return user.ID == userID;
+        const user = _.find(this.users, usr => {
+            return usr.ID === userID;
         });
         this.userAcl = [];
         this.groupAcl = [];
@@ -290,14 +290,14 @@ export class UsersComponent implements OnInit {
         const _group: any[] = [];
         if (!_.isNil(user.Acl) &&
             _.keys(user.Acl).length > 0) {
-            const info_header_user = `${this.translation.instant('AclTypeUser')} - ${user.AccountName}`;
-            this.aclTypeUser = info_header_user;
+            const infoHeaderUser = `${this.translation.instant('AclTypeUser')} - ${user.AccountName}`;
+            this.aclTypeUser = infoHeaderUser;
             this.userAcl.push({ ..._.clone(user.Acl) });
         }
         if (!_.isNil(user.Group) &&
             _.keys(user.Group.Acl).length > 0) {
-            const info_header_group = `${this.translation.instant('AclTypeGroup')} - ${user.Group.Name}`;
-            this.aclTypeGroup = info_header_group;
+            const infoHeaderGroup = `${this.translation.instant('AclTypeGroup')} - ${user.Group.Name}`;
+            this.aclTypeGroup = infoHeaderGroup;
             this.groupAcl.push({ ..._.clone(user.Group.Acl) });
         }
         this.cd.markForCheck();
@@ -308,7 +308,7 @@ export class UsersComponent implements OnInit {
             bibApi.removeUser(userID).then(res => {
                 this.ngZone.run(() => {
                     this.users = _.filter(this.users, (e) => {
-                        return e.ID != userID;
+                        return e.ID !== userID;
                     });
                     this.updateTable();
                 });

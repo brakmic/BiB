@@ -55,9 +55,9 @@ export class ReaderStatusComponent implements OnInit {
         $('bib-root').siblings().remove();
     }
     public onReaderSelected($event: IReaderSelectedEvent) {
-        bibApi.getBorrowsForDisplay().then(borrows => {
+        bibApi.getBorrowsForDisplay().then((borrows: IBorrowDisplay[]) => {
             this.borrows = _.filter(borrows, b => {
-                return ((b.ReaderID == $event.reader.ID) && _.isNil(b.ReturnDate));
+                return ((b.ReaderID === $event.reader.ID) && _.isNil(b.ReturnDate));
             });
             this.cd.markForCheck();
         });

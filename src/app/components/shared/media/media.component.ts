@@ -60,7 +60,7 @@ export class MediaComponent implements OnInit {
         this.route.data.forEach((data: { media: IMediumDisplay[] }) => {
             this.media = _.slice(data.media);
         });
-        bibApi.getReaders().then(readers => {
+        bibApi.getReaders().then((readers: IReader[]) => {
             this.readers = _.slice(readers);
         });
         this.confirmDeletionText = this.translation.instant('ConfirmDeletionMedium');
@@ -99,7 +99,7 @@ export class MediaComponent implements OnInit {
                 this.updateMedium($event.data);
                 break;
             case ActionType.RemoveMedium:
-                this.deleteMedium($event.data.ID)
+                this.deleteMedium($event.data.ID);
                 break;
             default:
                 this.refresh();
@@ -126,7 +126,7 @@ export class MediaComponent implements OnInit {
             confirmButtonClass: 'btn-warning',
             cancelButtonClass: 'btn-default',
             dialogClass: 'modal-dialog'
-        }
+        };
     }
     private initWidgets() {
         const self = this;
@@ -198,7 +198,11 @@ export class MediaComponent implements OnInit {
                                             return $(el).hasClass('sorting_1');
                                         });
                                         if (!_.isNil(elem)) {
-                                            mediumID = Number(elem.textContent);
+                                            if (!_.isNaN(_.toNumber(elem.textContent))) {
+                                                mediumID = Number(elem.textContent);
+                                            } else {
+                                                mediumID = Number(elem.previousSibling.textContent);
+                                            }
                                             self.borrowMedium(mediumID);
                                         }
                                     }
@@ -216,7 +220,11 @@ export class MediaComponent implements OnInit {
                                             return $(el).hasClass('sorting_1');
                                         });
                                         if (!_.isNil(elem)) {
-                                            mediumID = Number(elem.textContent);
+                                            if (!_.isNaN(_.toNumber(elem.textContent))) {
+                                                mediumID = Number(elem.textContent);
+                                            } else {
+                                                mediumID = Number(elem.previousSibling.textContent);
+                                            }
                                             self.modifyMedium(mediumID);
                                         }
                                     }
@@ -230,7 +238,11 @@ export class MediaComponent implements OnInit {
                                             return $(el).hasClass('sorting_1');
                                         });
                                         if (!_.isNil(elem)) {
-                                            mediumID = Number(elem.textContent);
+                                            if (!_.isNaN(_.toNumber(elem.textContent))) {
+                                                mediumID = Number(elem.textContent);
+                                            } else {
+                                                mediumID = Number(elem.previousSibling.textContent);
+                                            }
                                             title = elem.nextSibling.textContent;
                                         } else {
                                             return;
@@ -322,7 +334,7 @@ export class MediaComponent implements OnInit {
     @authorized()
     private modifyMedium(mediumID: number) {
         this.ngZone.runOutsideAngular(() => {
-            bibApi.getMedium(mediumID).then(medium => {
+            bibApi.getMedium(mediumID).then((medium: IMedium) => {
                 const data: IComponentData = {
                     component: ManageMediumComponent,
                     inputs: {

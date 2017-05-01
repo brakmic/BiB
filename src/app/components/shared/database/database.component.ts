@@ -119,7 +119,7 @@ export class DatabaseComponent implements OnInit {
         this.subscription = this.upload.uploadFile(`${bibApi.isbnUrl}`, fileList).subscribe(result => {
             let counter = 1;
             const filtered = _.filter(result.file.data, (raw: IWorldCatEntry) => {
-                return raw.stat == "ok";
+                return raw.stat === 'ok';
             });
             this.media = _.map(filtered, f => {
                 const entry = f.list[0];
@@ -182,8 +182,8 @@ export class DatabaseComponent implements OnInit {
     }
     private styleUploadButton() {
         this.ngZone.run(() => {
-            (<any>$(":file")).filestyle({
-                buttonName: "btn-primary",
+            (<any>$(':file')).filestyle({
+                buttonName: 'btn-primary',
                 buttonText: this.translate.instant('SelectFile'),
                 buttonBefore: true,
                 badge: true,

@@ -18,7 +18,7 @@ export class HomeComponent implements OnInit {
     public ngOnDestroy() {
         $('bib-root').siblings().remove();
     }
-    public ngAfterViewInit(){
+    public ngAfterViewInit() {
         this.photo = imagesApi.getImageData('photo');
         this.cd.markForCheck();
     }

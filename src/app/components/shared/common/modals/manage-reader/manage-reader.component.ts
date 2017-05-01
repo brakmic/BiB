@@ -41,7 +41,7 @@ export class ManageReaderComponent implements OnInit {
         this.reader = this.injector.get('reader');
         this.readerID = this.injector.get('readerID');
         this.action = this.injector.get('action');
-        this.title = this.action == ActionType.AddReader ? this.translation.instant('ReaderAdd') :
+        this.title = this.action === ActionType.AddReader ? this.translation.instant('ReaderAdd') :
             this.translation.instant('ReaderModify');
         this.initForm();
         this.initReader();

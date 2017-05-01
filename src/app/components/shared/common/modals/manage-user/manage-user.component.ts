@@ -100,7 +100,7 @@ export class ManageUserComponent implements OnInit {
     }
     private initUser() {
         const id = this.userID;
-        if (this.action == ActionType.AddUser) {
+        if (this.action === ActionType.AddUser) {
             this.user = <IUser>{
                 ID: 0,
                 AccountName: '',
@@ -116,10 +116,10 @@ export class ManageUserComponent implements OnInit {
             };
             this.originalPwd = this.user.Password;
         }
-        bibApi.getUserGroups().then(groups => {
+        bibApi.getUserGroups().then((groups: IUserGroup[]) => {
             this.groups = _.slice(groups);
             if (id > 0) {
-                bibApi.getUser(id).then(user => {
+                bibApi.getUser(id).then((user: IUser) => {
                     this.user = _.clone(user);
                     this.originalPwd = this.user.Password;
                     this.updateForm();
@@ -149,7 +149,7 @@ export class ManageUserComponent implements OnInit {
             lastName: ['', [Validators.required]],
             password: ['', [Validators.required]]
         });
-        this.title = this.action == ActionType.AddUser ? this.translation.instant('UserAdd') :
+        this.title = this.action === ActionType.AddUser ? this.translation.instant('UserAdd') :
             this.translation.instant('UserModify');
     }
     private initSelect2() {
@@ -160,7 +160,7 @@ export class ManageUserComponent implements OnInit {
         });
         this.select.on('change', (e: Select2JQueryEventObject) => {
             const groupName = this.select.select2('val');
-            bibApi.getUserGroupByName(groupName).then(group => {
+            bibApi.getUserGroupByName(groupName).then((group: IUserGroup) => {
                 this.user.Group = group;
                 this.cd.markForCheck();
             });
@@ -182,7 +182,7 @@ export class ManageUserComponent implements OnInit {
         domready(() => {
             this.dialog = $('#manage-user-dialog-form').dialog({
                 autoOpen: true,
-                height: self.action == ActionType.AddUser ? 450 : 500,
+                height: self.action === ActionType.AddUser ? 450 : 500,
                 width: 300,
                 modal: true,
                 close: () => {
