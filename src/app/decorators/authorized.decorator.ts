@@ -68,7 +68,7 @@ const showWarning = (message: string, caption: string) => {
 
 const hasSufficientPermissions = (group: IUserGroup, userAcl: IAcl = undefined): boolean => {
   return ((group.Name == 'Administrators') ||
-    (group.Name == 'Librarian'));
+    (group.Name == 'Librarians'));
 };
 /**
  * authorized decorator 
