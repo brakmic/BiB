@@ -24,7 +24,7 @@ const getGroups = (): Promise<IUserGroup[]> => {
 };
 
 const getLocalData = (): ILocalData => {
-  return JSON.parse(localStorage.getItem(config.bib_localstorage));;
+  return JSON.parse(localStorage.getItem(config.bib_localstorage));
 };
 
 const getAcl = (acls: IAcl[], data: ILocalData): IAcl => {
