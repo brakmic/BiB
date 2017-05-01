@@ -1,3 +1,7 @@
+
+# ignore config.json (private data)
+src/config.json
+
 # Logs
 logs
 *.log
@@ -40,7 +44,3 @@ dist/
 compiled/
 dll/
 .vscode
-
-# ignore config.json (private data)
-
-/src/config.json
