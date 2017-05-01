@@ -31,4 +31,4 @@ export function mediaReducer(state = initialState, action: Action) {
     default:
       return state;
   }
-};
+}

@@ -122,12 +122,12 @@ export class BorrowComponent implements OnInit {
                         render: function (data, type, full, meta) {
                             const text = data ? self.translation.instant('Yes') : self.translation.instant('No');
                             if (data) {
-                                return `<div class="text-center" 
-                                         style="background-color: red; 
+                                return `<div class="text-center"
+                                         style="background-color: red;
                                          color: white;">${text}</div>`;
                             } else {
-                                return `<div class="text-center" 
-                                         style="background-color: limegreen; 
+                                return `<div class="text-center"
+                                         style="background-color: limegreen;
                                          color: white;">${text}</div>`;
                             }
                         },
@@ -188,7 +188,7 @@ export class BorrowComponent implements OnInit {
                 _.each(result, borrow => {
                     if (borrow.ID == borrowID) {
                         bibApi.unborrow(borrowID).then(res => {
-                            bibApi.getBorrowsForDisplay().then(borrows => {
+                            bibApi.getBorrowsForDisplay().then((borrows: IBorrowDisplay[]) => {
                                 this.borrows = _.slice(borrows);
                                 this.updateTable();
                                 this.ngZone.run(() => {

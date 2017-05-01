@@ -8,13 +8,13 @@ const initialState: any = {};
 export function aclReducer(state: any = initialState, action: Action) {
   switch (action.type) {
     case ACL_UPDATED:
-      return Object.assign({}, action.payload);
+      return Object.assign({}, state, action.payload);
     case ACL_CHANGED:
-      return Object.assign({}, action.payload);
+      return Object.assign({}, state, action.payload);
     default:
       return state;
   }
-};
+}
 
 export {
   ACL_UPDATED,

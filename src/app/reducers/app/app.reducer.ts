@@ -20,7 +20,7 @@ export function appReducer(state: any = initialState, action: Action) {
     default:
       return state;
   }
-};
+}
 
 export {
   LOGON_AVAILABLE,

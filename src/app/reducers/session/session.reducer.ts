@@ -23,7 +23,7 @@ export function sessionReducer(state: ISession = initialState, action: Action) {
     default:
       return state;
   }
-};
+}
 
 export {
   LOGON_SUCCEEDED,

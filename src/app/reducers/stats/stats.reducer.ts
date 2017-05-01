@@ -14,8 +14,8 @@ export const STATS_CHANGED = 'STATS_CHANGED';
 export function statsReducer(state = initialState, action: Action) {
   switch (action.type) {
     case 'STATS_CHANGED':
-      return Object.assign({}, action.payload);
+      return Object.assign({}, state, action.payload);
     default:
       return state;
   }
-};
+}

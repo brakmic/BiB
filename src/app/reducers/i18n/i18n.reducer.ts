@@ -24,4 +24,4 @@ export function i18nReducer(state: ILanguageState = initialState, action: Action
     default:
       return state;
   }
-};
+}
