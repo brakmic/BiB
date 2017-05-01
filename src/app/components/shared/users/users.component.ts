@@ -14,7 +14,8 @@ import {
     IUser, IUserDisplay,
     IUserGroup, IUserSettings,
     IAcl, IComponentData,
-    IAppState
+    IAppState, ILocalData,
+    IConfig
 } from 'app/interfaces';
 import { ManageUserComponent } from 'app/components';
 import { AclComponent } from 'app/components/shared/common/partials';
@@ -31,6 +32,7 @@ import { ACL_UPDATED, ACL_CHANGED } from 'app/reducers';
 import * as _ from 'lodash';
 const domready = require('domready');
 const cuid = require('cuid');
+const config: IConfig = require('../../../../config.json');
 
 @Component({
     selector: 'bib-users',
@@ -43,6 +45,7 @@ export class UsersComponent implements OnInit {
     public userAcl: any[] = [];
     public groupAcl: any[] = [];
     public dynamicComponent: IComponentData = null;
+    public isAdmin: boolean = false;
 
     private userTable: DataTables.DataTable;
     private confirmDeletionText: string;
@@ -55,15 +58,18 @@ export class UsersComponent implements OnInit {
     private selectedUser: IUser = undefined;
 
     constructor(private cd: ChangeDetectorRef,
-        private formBuilder: FormBuilder,
-        private logService: LogService,
-        private router: Router,
-        private route: ActivatedRoute,
-        private translation: i18nService,
-        private ngZone: NgZone,
-        private store: Store<IAppState>) { }
+                private formBuilder: FormBuilder,
+                private logService: LogService,
+                private router: Router,
+                private route: ActivatedRoute,
+                private translation: i18nService,
+                private ngZone: NgZone,
+                private store: Store<IAppState>) { }
 
     public ngOnInit() {
+        bibApi.getUserGroup(this.getLocalData().groupID).then((group: IUserGroup) => {
+            this.isAdmin = group.Name === 'Administrators';
+        });
         this.route.data.forEach((data: { users: IUser[] }) => {
             this.users = _.slice(data.users);
             this.updateTable();
@@ -325,5 +331,9 @@ export class UsersComponent implements OnInit {
                 });
             }).catch(err => this.logService.logJson(err, 'User'));
         });
+    }
+
+    private getLocalData(): ILocalData {
+        return JSON.parse(localStorage.getItem(config.bib_localstorage));
     }
 }

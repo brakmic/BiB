@@ -264,16 +264,16 @@ export class ReaderComponent implements OnInit {
     private modifyReader(readerID: number) {
         this.ngZone.runOutsideAngular(() => {
             bibApi.getReader(readerID).then(reader => {
-                const data: IComponentData = {
-                    component: ManageReaderComponent,
-                    inputs: {
-                        reader: reader,
-                        readerID: readerID,
-                        action: ActionType.ModifyReader
-                    },
-                    type: ComponentType.ModifyReader
-                };
                 this.ngZone.run(() => {
+                    const data: IComponentData = {
+                        component: ManageReaderComponent,
+                        inputs: {
+                            reader: reader,
+                            readerID: readerID,
+                            action: ActionType.ModifyReader
+                        },
+                        type: ComponentType.ModifyReader
+                    };
                     this.dynamicComponent = data;
                     this.cd.markForCheck();
                 });

@@ -103,6 +103,7 @@ export class AclComponent implements OnInit {
                 processing: true,
                 data: this.acl,
                 searching: false,
+                paging: false,
                 select: false,
                 scrollX: true,
                 language: this.translation.getDataTablesLangObject(),
