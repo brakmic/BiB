@@ -77,8 +77,8 @@ const hasSufficientPermissions = (group: IUserGroup, userAcl: IAcl = undefined):
 export function authorized() {
   let acls: IAcl[] = [];
   let groups: IUserGroup[] = [];
-  getAcls().then(_acls => acls = _acls);
-  getGroups().then(_groups => groups = _groups);
+  getAcls().then((_acls: IAcl[]) => acls = _acls);
+  getGroups().then((_groups: IUserGroup[]) => groups = _groups);
 
   return (target: any, fn: string, descriptor: any) => {
     let langFiles = {};
