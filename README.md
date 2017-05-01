@@ -27,7 +27,7 @@ BiB is based on these fine projects, packages & languages:
 
 * TypeScript
 
-* Angular 2
+* Angular 4
 
 * HapiJS 
 
