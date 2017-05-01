@@ -9,3 +9,26 @@
 #select-language {
   width: 60px;
 }
+
+.logon-box {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 400px;
+  height: 400px;
+  -webkit-border-radius: 20px;
+  -moz-border-radius: 20px;
+  border-radius: 20px;
+  border:3px solid #FFFFFF;
+  background:rgba(37,149,235,0.8);
+}
+
+.logon-logo-container {
+  padding-bottom: 1em;
+  padding-left: 7em;
+}
+
+.logon-box-header {
+  //padding-left: 3em;
+  color: white;
+}

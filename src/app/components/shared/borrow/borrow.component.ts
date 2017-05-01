@@ -159,7 +159,7 @@ export class BorrowComponent implements OnInit {
                             });
                             if (!_.isNil(elem)) {
 
-                                if (_.isNumber(elem.textContent)) {
+                                if (!_.isNaN(_.toNumber(elem.textContent))) {
                                     borrowID = Number(elem.textContent);
                                     readerID = Number(elem.nextSibling.textContent);
                                 } else {
