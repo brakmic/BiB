@@ -1,6 +1,6 @@
 
 # ignore config.json (private data)
-src/config.json
+# src/config.json
 
 # Logs
 logs
