@@ -22,19 +22,21 @@ After a successful login this screen appears. The UI comprises of three parts:
 
 ### Sidebar Menu
 
-![sidebar_menu](http://i.giphy.com/d3pX5Tcz6x9n8hPi.gif)
-
 The sidebar menu contains links to activate different activities.
+
+![sidebar_menu](http://i.giphy.com/d3pX5Tcz6x9n8hPi.gif)
 
 #### Activities
 
-![activities](http://i.giphy.com/3oz8xSN7WNKYEAk1uo.gif)
-
 **BiB** offeres different views to certain aspects of the system, like *media lists*, *lending*, *user management*, *reader management* etc.
 
-![user_management](http://i.giphy.com/l3vR0BWVbaBpFZe00.gif)
+![activities](http://i.giphy.com/3oz8xSN7WNKYEAk1uo.gif)
 
-The management of these entries is done via context menus that get activated by clicking on the right mouse button, just like with typical desktop apps.
+#### Media Lending
+
+Everything is done via context menus, just like desktop apps.
+
+![media_lending](http://i.giphy.com/l3vR0BWVbaBpFZe00.gif)
 
 #### Statistics
 
@@ -44,4 +46,10 @@ The statistics display on the right changes its contents in real-time.
 
 #### Display additional media information
 
+Each time a media gets clicked the information block on the right will update accordingly.
+
 ![show_book_details](https://media.giphy.com/media/l0IyhuZNlnxF1C5Tq/giphy.gif)
+
+#### Search
+
+![media_search](https://media.giphy.com/media/3oKIPaa9nhgHPw1bqM/giphy.gif)
