@@ -1,4 +1,6 @@
 import { ICountry } from './ICountry';
+import { IDevelopmentPlan } from './IDevelopmentPlan';
+
 export interface IConfig {
     data: any;
     server: string;
@@ -33,4 +35,7 @@ export interface IConfig {
     bib_logon_mask_logo: string;
     bib_use_fake_isbn_server: boolean;
     bib_datetime_format: string;
+    bib_googlebooks_api_key: string;
+    bib_isbndb_api_key: string;
+    bib_development_plans: IDevelopmentPlan[];
 }

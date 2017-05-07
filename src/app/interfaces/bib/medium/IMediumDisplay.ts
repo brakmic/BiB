@@ -8,5 +8,6 @@ export interface IMediumDisplay {
     Picture: string;
     IsBorrowed: boolean;
     Type: string;
+    DevelopmentPlan?: number;
 }
 

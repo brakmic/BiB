@@ -44,6 +44,7 @@ export class ReaderComponent implements OnInit {
 
     private readerTable: DataTables.DataTable;
     private confirmDeletionText: string;
+    private selectedReaderID: number;
 
     constructor(private router: Router,
                 private route: ActivatedRoute,
@@ -110,7 +111,7 @@ export class ReaderComponent implements OnInit {
         if (!_.isNil(this.readerTable)) {
             this.readerTable.clear();
             this.readerTable.rows.add(this.readers);
-            this.readerTable.draw();
+            this.readerTable.draw(false);
             this.cd.markForCheck();
         }
     }
@@ -239,6 +240,13 @@ export class ReaderComponent implements OnInit {
                     sender: this,
                     reader: reader
                 });
+            });
+            this.readerTable.on('select', (e: Event, dt: DataTables.DataTable, type: string, indexes: any[] ) => {
+                if (type === 'row') {
+                    let data = this.readerTable.rows(indexes).data().pluck('ID');
+                    this.selectedReaderID = Number(data[0]);
+                    console.log(`Selected Reader ID: ${this.selectedReaderID}`);
+                }
             });
             this.cd.markForCheck();
         });

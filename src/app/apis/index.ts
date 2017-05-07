@@ -6,4 +6,4 @@ export {
   bibApi,
   logonApi,
   imagesApi
-}
+};

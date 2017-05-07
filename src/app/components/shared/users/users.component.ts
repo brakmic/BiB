@@ -132,7 +132,7 @@ export class UsersComponent implements OnInit {
         if (!_.isNil(this.userTable)) {
             this.userTable.clear();
             this.userTable.rows.add(this.users);
-            this.userTable.draw();
+            this.userTable.draw(false);
             this.cd.markForCheck();
         }
     }

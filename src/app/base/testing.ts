@@ -34,7 +34,7 @@ import {
         HttpEx, SessionService
 } from 'app/services';
 import { DataResolver } from 'app/resolvers';
-import { appStore } from 'app/stores/app';
+// import { appStore } from 'app/stores/app';
 // Reducers
 import { sessionReducer,
          appReducer, i18nReducer } from 'app/reducers';

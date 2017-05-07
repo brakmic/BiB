@@ -1,4 +1,6 @@
-import { NgModule, ApplicationRef } from '@angular/core';
+import { NgModule, ApplicationRef,
+         NO_ERRORS_SCHEMA,
+         CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpModule, Http } from '@angular/http';
@@ -8,9 +10,16 @@ import { AppState, LogService } from 'app/services';
 import { StoreType } from 'app/types';
 import { AppComponent } from './app.component';
 
+// State management
+import { StoreModule } from '@ngrx/store';
+import { EffectsModule } from '@ngrx/effects';
+import { AppReducer } from '../../stores';
+import { RouteEffects } from '../../effects';
+
 import { ENV_MODULES,
          VENDOR_MODULES, APP_DECLARATIONS,
          ENV_PROVIDERS, APP_PROVIDERS,
+         BIB_ACTIONS, BIB_EFFECTS,
          PreloadSelectedModulesStrategy } from 'app/base';
 
 /**
@@ -19,15 +28,23 @@ import { ENV_MODULES,
 @NgModule({
   bootstrap: [ AppComponent ], // declare Main component
   providers: [      // provide Services to Angular's Dependency Injection mechanism
-    ...ENV_PROVIDERS,
-    ...APP_PROVIDERS
+    ENV_PROVIDERS,
+    APP_PROVIDERS,
+    BIB_ACTIONS,
+    BIB_EFFECTS
   ],
   imports: [          // import Angular's & own modules
-    ...ENV_MODULES,
-    ...VENDOR_MODULES,
+    ENV_MODULES,
+    VENDOR_MODULES,
+    StoreModule.provideStore(AppReducer),
+    EffectsModule.run(RouteEffects),
   ],
   declarations: [     // load all available components & directives
     AppComponent
+  ],
+  schemas: [
+    NO_ERRORS_SCHEMA,
+    CUSTOM_ELEMENTS_SCHEMA
   ]
 })
 export class AppModule {

@@ -33,7 +33,8 @@ import {
     IMenuEntry, IAppState,
     ISession, IWindowEx,
     IWorldCatEntry, IMediaEntry,
-    IMediumDisplay, IMedium
+    IMediumDisplay, IMedium,
+    IGoogleBook, ISBNDbBook
 } from 'app/interfaces';
 // Services
 import {
@@ -64,20 +65,20 @@ export class DatabaseComponent implements OnInit {
     private subscription: Subscription;
 
     constructor(private formBuilder: FormBuilder,
-        private el: ElementRef,
-        private renderer: Renderer,
-        private router: Router,
-        private activatedRoute: ActivatedRoute,
-        private http: Http,
-        private store: Store<IAppState>,
-        private cd: ChangeDetectorRef,
-        private logService: LogService,
-        private translate: i18nService,
-        private config: ConfigService,
-        private upload: UploadService,
-        private ngZone: NgZone,
-        private translation: i18nService,
-        private toast: ToastService) { }
+                private el: ElementRef,
+                private renderer: Renderer,
+                private router: Router,
+                private activatedRoute: ActivatedRoute,
+                private http: Http,
+                private store: Store<IAppState>,
+                private cd: ChangeDetectorRef,
+                private logService: LogService,
+                private translate: i18nService,
+                private config: ConfigService,
+                private upload: UploadService,
+                private ngZone: NgZone,
+                private translation: i18nService,
+                private toast: ToastService) { }
 
     public ngOnInit() {
     }
@@ -117,22 +118,41 @@ export class DatabaseComponent implements OnInit {
     public onFileSelected($event) {
         let fileList: FileList = $event.target.files;
         this.subscription = this.upload.uploadFile(`${bibApi.isbnUrl}`, fileList).subscribe(result => {
+            console.log(JSON.stringify(result));
             let counter = 1;
-            const filtered = _.filter(result.file.data, (raw: IWorldCatEntry) => {
-                return raw.stat === 'ok';
+            if (_.isNil(result.file)) {
+                this.toast.show(`No data retrieved!`, this.translate.instant('Error'), ActionStatus.Failure);
+                this.updateTable();
+                this.shouldUpload = false;
+                return;
+            }
+            const filtered = _.filter(result.file.data, (raw: IGoogleBook) => {
+                return !_.isEmpty(raw.items);
             });
             this.media = _.map(filtered, f => {
-                const entry = f.list[0];
+                // const entry = f.list[0];
+                const entry = f.items[0].volumeInfo;
+                // return <IMediumDisplay>{
+                //     ID: counter++,
+                //     Author: !_.isEmpty(entry.author_data) ? entry.author_data[0].name : '',
+                //     Description: '',
+                //     ISBN: !_.isNil(entry.isbn13) ? entry.isbn13 : entry.isbn10,
+                //     IsBorrowed: false,
+                //     Picture: '',
+                //     Title: entry.title,
+                //     Type: 'Book',
+                //     Year: 0
+                // };
                 return <IMediumDisplay>{
                     ID: counter++,
-                    Author: entry.author,
+                    Author: !_.isEmpty(entry.authors) ? entry.authors[0] : '',
                     Description: '',
-                    ISBN: (entry.isbn && entry.isbn.length > 0) ? entry.isbn[0] : '',
+                    ISBN: !_.isNil(entry.industryIdentifiers[1]) ? entry.industryIdentifiers[1].identifier : '',
                     IsBorrowed: false,
-                    Picture: '',
+                    Picture: !_.isEmpty(entry.imageLinks) ? entry.imageLinks.thumbnail : '',
                     Title: entry.title,
-                    Type: '',
-                    Year: Number(entry.year)
+                    Type: entry.printType,
+                    Year: Number(entry.publishedDate)
                 };
             });
             const statusInfo = `Retrieved ${this.media.length} entries.`;
@@ -145,7 +165,7 @@ export class DatabaseComponent implements OnInit {
         if (!_.isNil(this.uploadTable)) {
             this.uploadTable.clear();
             this.uploadTable.rows.add(this.media);
-            this.uploadTable.draw();
+            this.uploadTable.draw(false);
             this.styleUploadButton();
             this.cd.markForCheck();
         }

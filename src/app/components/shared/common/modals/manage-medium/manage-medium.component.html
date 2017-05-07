@@ -19,6 +19,17 @@
             />
         </div>
         <div class="form-group">
+            <label for="mediumdevelopmentplan">{{ 'DevelopmentPlan' | translate }}</label>
+            <!--<input type="text" name="mediumdevelopmentplan" id="mediumdevelopmentplan" placeholder="" class="form-control" formControlName="mediumDevelopmentPlan"
+            />-->
+             <select name="mediumdevelopmentplan" id="mediumdevelopmentplan" placeholder="" 
+                     class="form-control" formControlName="mediumDevelopmentPlan" [(ngModel)]="planName">
+                <!--<option value="default">--- SELECT ---</option>-->
+                <option *ngFor="let plan of plans" [value]="plan.id"
+                        [selected]="planName == plan.name ? true : null">{{plan.name}}</option>
+              </select>
+        </div>
+        <div class="form-group">
             <label for="mediumisbn">{{ 'ISBN' | translate }}</label>
             <input type="text" name="mediumisbn" id="mediumisbn" placeholder="" class="form-control" formControlName="mediumISBN" />
         </div>

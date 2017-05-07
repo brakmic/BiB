@@ -10,8 +10,12 @@ import { IMedium, IReader,
          IWorldCatEntry, IMediaEntry,
          IStats } from 'app/interfaces';
 const config: IConfig = require('../../config.json');
+const googleBooksApiKey = config.bib_googlebooks_api_key;
+const isbndbApiKey = config.bib_isbndb_api_key;
 const server = `http://${config.bib_server}:${config.bib_server_port}${config.bib_server_baseUrl}`;
 const worldcatServer = `http://xisbn.worldcat.org`;
+const googleApiServer = `https://www.googleapis.com`;
+const isbndbApiServer = `https://isbndb.com`;
 const worldcatIsbnService = `webservices/xid/isbn`;
 const worldcatQueryMethod = `?method=getMetadata&format=json&fl=*`;
 const mediaUrl = `${server}media`;
@@ -21,6 +25,8 @@ const usersUrl = `${server}users`;
 const aclsUrl = `${server}acls`;
 const groupsUrl = `${server}usergroups`;
 const worldcatUrl = `${worldcatServer}/${worldcatIsbnService}`;
+const googleBooksApiUrl = `${googleApiServer}/books/v1/volumes?q=isbn:[ISBN_VALUE]&key=${googleBooksApiKey}`;
+const isbndbBooksApiUrl = `${isbndbApiServer}/api/v2/json/${isbndbApiKey}/book/[ISBN_VALUE]`;
 const isbnUrl = `${server}isbn`;
 const translationsUrl = `${server}translations`;
 const statsUrl = `${server}stats`;
@@ -98,7 +104,8 @@ const prepareMediumForDisplay = (medium: IMedium): Promise<IMediumDisplay> => {
             ISBN: medium.ISBN,
             IsBorrowed: ib,
             Picture: medium.Picture,
-            Title: medium.Title
+            Title: medium.Title,
+            DevelopmentPlan: medium.DevelopmentPlan
         };
     });
 };
@@ -127,7 +134,8 @@ const getMediaDisplayForDb = (media: IMediumDisplay[]): IMedium[] => {
                 Picture: medium.Picture,
                 Title: medium.Title,
                 Type: Number(medium.Type),
-                Year: Number(medium.Year)
+                Year: Number(medium.Year),
+                DevelopmentPlan: medium.DevelopmentPlan
             };
         });
 };
@@ -143,7 +151,8 @@ const createFakeMedium = (id: number): IMedium => {
         Description: 'info info info',
         Year: 2010,
         IsAvailable: true,
-        IsDeleted: false
+        IsDeleted: false,
+        DevelopmentPlan: 0
     };
 };
 
@@ -292,7 +301,8 @@ const prepareBorrowForDisplay = (borrow: IBorrow): Promise<IBorrowDisplay> => {
                         MediumTitle: medium.Title,
                         ReaderName: `${reader.FirstName} ${reader.LastName}`,
                         IsOverdue: isOverdue(borrow.BorrowDate),
-                        ReturnDate: borrow.ReturnDate
+                        ReturnDate: borrow.ReturnDate,
+                        DevelopmentPlan: medium.DevelopmentPlan
                     };
             });
     });
@@ -318,6 +328,7 @@ const getBorrowsForDisplay = (): Promise<IBorrowDisplay[]> => {
     });
 };
 
+// tslint:disable:triple-equals
 const _mapAcl = (acl: any): IAcl => {
     if (!acl) return undefined;
     return <IAcl>{
@@ -487,6 +498,8 @@ export {
     getUserGroup,
     getUserGroupByName,
     getWorldCatEntry,
+    isbndbBooksApiUrl,
+    googleBooksApiUrl,
     worldcatUrl,
     worldcatQueryMethod,
     translationsUrl,

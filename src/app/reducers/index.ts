@@ -4,3 +4,4 @@ export * from './i18n';
 export * from './media';
 export * from './stats';
 export * from './acl';
+export * from './route';

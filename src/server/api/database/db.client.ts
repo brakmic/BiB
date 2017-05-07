@@ -5,7 +5,8 @@ import {
     IMediaType, IUser,
     IUserGroup, IUserSettings,
     IAcl, IWorldCatEntry,
-    IMediaEntry, IStats
+    IMediaEntry, IStats,
+    IGoogleBook, ISBNDbBook
 } from 'app/interfaces';
 
 import * as fetchApi from '../../../app/apis/fetch';
@@ -113,7 +114,8 @@ export default class DbClient {
                                                                 ISBN,
                                                                 Picture,
                                                                 Type,
-                                                                IsAvailable) VALUES (
+                                                                IsAvailable,
+                                                                DevelopmentPlan) VALUES (
                                                                      :id,
                                                                      :title,
                                                                      :author,
@@ -122,7 +124,8 @@ export default class DbClient {
                                                                      :isbn,
                                                                      :picture,
                                                                      :type,
-                                                                     :isAvailable)`);
+                                                                     :isAvailable,
+                                                                     :developmentPlan)`);
         return new Promise((resolve, reject) => {
             this.client.query(prep({
                 id: null,
@@ -133,7 +136,8 @@ export default class DbClient {
                 isbn: medium.ISBN,
                 picture: medium.Picture ? medium.Picture : null,
                 type: medium.Type ? medium.Type : null,
-                isAvailable: medium.IsAvailable ? 1 : 0
+                isAvailable: medium.IsAvailable ? 1 : 0,
+                developmentPlan: medium.DevelopmentPlan
             }),
                 (err, result) => {
                     if (!_.isNil(err)) {
@@ -166,7 +170,8 @@ export default class DbClient {
                                                                               ISBN = :isbn,
                                                                               Picture = :picture,
                                                                               IsAvailable = :isAvailable,
-                                                                              IsDeleted = :isDeleted
+                                                                              IsDeleted = :isDeleted,
+                                                                              DevelopmentPlan = :developmentPlan
                                                                               WHERE ID = :id`);
         return new Promise((resolve, reject) => {
             this.client.query(prep({
@@ -177,7 +182,8 @@ export default class DbClient {
                 isbn: medium.ISBN,
                 picture: medium.Picture,
                 isAvailable: medium.IsAvailable ? 1 : 0,
-                isDeleted: medium.IsDeleted ? 1 : 0
+                isDeleted: medium.IsDeleted ? 1 : 0,
+                developmentPlan: medium.DevelopmentPlan
             }),
                 (err, result) => {
                     if (!_.isNil(err)) {
@@ -894,8 +900,12 @@ export default class DbClient {
             ]);
     }
     // ISBN API 
-    public queryIsbn(isbn: string): Promise<IWorldCatEntry> {
-        return fetchApi.doFetch(`${bibApi.worldcatUrl}/${isbn}/${bibApi.worldcatQueryMethod}`);
+    public queryIsbn(isbn: string): Promise<IGoogleBook> {
+        // return fetchApi.doFetch(`${bibApi.worldcatUrl}/${isbn}/${bibApi.worldcatQueryMethod}`);
+        const queryUrl = _.replace(`${bibApi.googleBooksApiUrl}`, '[ISBN_VALUE]', isbn);
+        // const queryUrl = _.replace(`${bibApi.isbndbBooksApiUrl}`, '[ISBN_VALUE]', isbn);
+        console.log(`querying ${queryUrl}`);
+        return fetchApi.doFetch(queryUrl);
     }
 
     // *********************

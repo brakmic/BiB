@@ -5,6 +5,7 @@ export * from './reader';
 export * from './borrow';
 export * from './reader-status';
 export * from './media';
+export * from './media-info';
 export * from './menus';
 export * from './home';
 export * from './users';

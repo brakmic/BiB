@@ -17,7 +17,7 @@ import { ENV_PROVIDERS } from 'platform/environment';
 import { APP_RESOLVER_PROVIDERS } from './resolvers';
 
 // Redux Store
-import { appStore } from 'app/stores';
+// import { appStore } from 'app/stores';
 
 import { IntegralStateType } from 'app/types';
 
@@ -33,6 +33,10 @@ import { BibMissingTranslationHandler } from 'app/handlers';
 import { APP_ROUTES, PreloadSelectedModulesStrategy } from './routes';
 
 import { AUTH_PROVIDERS } from 'app/components/shared';
+
+
+import { RouteActions } from '../actions';
+import { RouteEffects } from '../effects';
 
 import {
   AppState, ConfigService,
@@ -110,12 +114,21 @@ const APP_PROVIDERS = [
   ...BIB_SERVICES,
   // ...AUTH_PROVIDERS,
   ...ADV_VALIDATORS,
-  appStore,
+  // appStore,
   PreloadSelectedModulesStrategy
 ];
 
 const BIB_DIRECTIVES = [
 ];
+
+const BIB_ACTIONS = [
+  RouteActions
+];
+
+const BIB_EFFECTS = [
+  RouteEffects
+];
+
 
 const APP_DECLARATIONS = [
   ...BIB_DIRECTIVES
@@ -154,5 +167,7 @@ export {
     VENDOR_MODULES,
     APP_PROVIDERS,
     BIB_DIRECTIVES,
+    BIB_ACTIONS,
+    BIB_EFFECTS,
     APP_DECLARATIONS
 };

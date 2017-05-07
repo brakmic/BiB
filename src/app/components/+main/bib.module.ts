@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { NgModule } from '@angular/core';
 
 import { TranslateModule } from 'ng2-translate/ng2-translate';
 import { TranslationProvider } from '../../providers';
@@ -14,7 +14,7 @@ import { AUTH_PROVIDERS, NoContent,
          ManageMediumComponent, BorrowMediaComponent,
          ManageReaderComponent, ManageUserComponent,
          DatabaseComponent, SessionInfoComponent,
-         AclComponent, StatsModule } from '../shared';
+         AclComponent, StatsModule, MediaInfoComponent } from '../shared';
 import { BIB_DIRECTIVES } from '../../base';
 import { LogService } from '../../services/log';
 import { BibComponent } from './bib.component';
@@ -22,12 +22,14 @@ import { BIB_ROUTES } from './bib.routes';
 import { AppPipesModule } from '../../pipes';
 
 const CHILD_COMPONENTS = [
+    BibComponent,
     NoContent,
     Signup,
     ReaderComponent,
     BorrowComponent,
     ReaderStatusComponent,
     MediaComponent,
+    MediaInfoComponent,
     SidebarMenuComponent,
     HomeComponent,
     UsersComponent,
@@ -47,9 +49,8 @@ export const routes: Routes = BIB_ROUTES;
 
 @NgModule({
   declarations: [
-    BibComponent,
-    ...CHILD_COMPONENTS,
-    ...BIB_DIRECTIVES
+    CHILD_COMPONENTS,
+    BIB_DIRECTIVES
   ],
   imports: [
     CommonModule,
@@ -61,7 +62,7 @@ export const routes: Routes = BIB_ROUTES;
     AppPipesModule
   ],
   providers: [
-    ...AUTH_PROVIDERS
+    AUTH_PROVIDERS
   ]
 })
 export class BibModule {

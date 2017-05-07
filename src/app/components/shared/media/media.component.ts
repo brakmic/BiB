@@ -4,10 +4,12 @@ import {
     OnInit, ChangeDetectorRef,
     ChangeDetectionStrategy,
     SimpleChanges, ElementRef,
-    NgZone
+    NgZone, OnChanges, OnDestroy,
+    AfterViewInit
 } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { LogService, i18nService } from 'app/services';
+import { LogService, i18nService,
+         ConfigService } from 'app/services';
 import { ManageMediumComponent, BorrowMediaComponent } from 'app/components';
 import { ComponentType, ActionType } from 'app/enums';
 import { bibApi } from 'app/apis';
@@ -16,7 +18,7 @@ import {
     IReader, IBorrow,
     IMedium, IMediumSelectedEvent,
     IMediumDisplay, IComponentData,
-    IAppState
+    IAppState, IConfig
 } from 'app/interfaces';
 import { authorized } from 'app/decorators';
 // Routing
@@ -32,11 +34,15 @@ import { STATS_CHANGED } from 'app/reducers';
 const domready = require('domready');
 
 @Component({
+    moduleId: module.id,
     selector: 'bib-media',
     templateUrl: './media.component.html',
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class MediaComponent implements OnInit {
+export class MediaComponent implements OnInit,
+                                       OnChanges,
+                                       OnDestroy,
+                                       AfterViewInit {
     @Input() public media: IMediumDisplay[] = [];
     @Output() public mediumSelected = new EventEmitter<IMediumSelectedEvent>(true);
     public dynamicComponent: IComponentData = null;
@@ -44,19 +50,24 @@ export class MediaComponent implements OnInit {
     public readers: IReader[] = [];
     public selectedReaderID: number;
     public confirmDeletionText: string;
+    public selectedMedium: IMediumDisplay;
 
+    private appConfig: IConfig;
     private mediaTable: DataTables.DataTable;
+    private currentPage: number;
 
     constructor(private router: Router,
-        private route: ActivatedRoute,
-        private cd: ChangeDetectorRef,
-        private translation: i18nService,
-        private logService: LogService,
-        private el: ElementRef,
-        private store: Store<IAppState>,
-        private ngZone: NgZone) { }
+                private route: ActivatedRoute,
+                private cd: ChangeDetectorRef,
+                private translation: i18nService,
+                private logService: LogService,
+                private el: ElementRef,
+                private store: Store<IAppState>,
+                private ngZone: NgZone,
+                private config: ConfigService) { }
 
     public ngOnInit() {
+        this.config.getConfig().subscribe(cfg => this.appConfig = cfg).unsubscribe();
         this.route.data.forEach((data: { media: IMediumDisplay[] }) => {
             this.media = _.slice(data.media);
         });
@@ -111,7 +122,7 @@ export class MediaComponent implements OnInit {
         if (!_.isNil(this.mediaTable)) {
             this.mediaTable.clear();
             this.mediaTable.rows.add(this.media);
-            this.mediaTable.draw();
+            this.mediaTable.draw(false);
             this.cd.markForCheck();
         }
     }
@@ -134,6 +145,7 @@ export class MediaComponent implements OnInit {
             this.mediaTable = $('#media').DataTable(<DataTables.Settings>{
                 processing: true,
                 select: true,
+                ordering: true,
                 data: this.media,
                 language: this.translation.getDataTablesLangObject(),
                 columns: [
@@ -141,6 +153,7 @@ export class MediaComponent implements OnInit {
                     { 'data': 'Title' },
                     { 'data': 'Author' },
                     { 'data': 'Description' },
+                    { 'data': 'DevelopmentPlan' },
                     { 'data': 'Year' },
                     { 'data': 'ISBN' },
                     { 'data': 'IsBorrowed' }
@@ -157,21 +170,48 @@ export class MediaComponent implements OnInit {
                         'searchable': true,
                     },
                     {
+                        data: 'DevelopmentPlan',
+                        render: function (data, type, row) {
+                            return self.appConfig.bib_development_plans.filter(p => p.id === Number(data))[0].name;
+                        },
+                        targets: 4
+                    },
+                    {
+                        'targets': [5],
+                        'visible': false,
+                        'searchable': true,
+                    },
+                    {
+                        'targets': [6],
+                        'visible': false,
+                        'searchable': true,
+                    },
+                    {
                         data: 'IsBorrowed',
                         render: function (data, type, row) {
                             return data ? self.translation.instant('Yes') : self.translation.instant('No');
                         },
-                        targets: 6
+                        targets: 7
                     },
                 ]
             });
             this.mediaTable.on('select', (e: Event, dt: DataTables.DataTable,
                 type: string, indexes: number[]) => {
-                let medium = dt.rows(indexes[0]).data()['0'];
-                this.mediumSelected.emit({
-                    sender: this,
-                    medium: medium
-                });
+                    this.ngZone.runOutsideAngular(() => {
+                        let medium = dt.rows(indexes[0]).data()['0'];
+                        this.mediumSelected.emit({
+                            sender: this,
+                            medium: medium
+                        });
+                        this.ngZone.run(() => {
+                            this.selectedMedium = medium;
+                            this.cd.detectChanges();
+                        });
+                    });
+            });
+            this.mediaTable.on('page.dt', (e: Event, settings: DataTables.Settings) => {
+                let info = this.mediaTable.page.info();
+                this.currentPage = info.page;
             });
             this.cd.markForCheck();
         });
@@ -312,7 +352,8 @@ export class MediaComponent implements OnInit {
                         mediumID: mediumID,
                         readers: readers,
                         medium: undefined,
-                        action: ActionType.BorrowMedium
+                        action: ActionType.BorrowMedium,
+                        plans: this.appConfig.bib_development_plans
                     },
                     type: ComponentType.BorrowMedia
                 };
@@ -331,7 +372,8 @@ export class MediaComponent implements OnInit {
             inputs: {
                 medium: medium,
                 mediumID: medium.ID,
-                action: ActionType.AddMedium
+                action: ActionType.AddMedium,
+                plans: this.appConfig.bib_development_plans
             },
             type: ComponentType.AddMedia
         };
@@ -347,7 +389,8 @@ export class MediaComponent implements OnInit {
                     inputs: {
                         medium: medium,
                         mediumID: medium.ID,
-                        action: ActionType.ModifyMedium
+                        action: ActionType.ModifyMedium,
+                        plans: this.appConfig.bib_development_plans
                     },
                     type: ComponentType.AddMedia
                 };
@@ -413,7 +456,8 @@ export class MediaComponent implements OnInit {
             Picture: '',
             Title: '',
             Type: undefined,
-            Year: new Date().getFullYear()
+            Year: new Date().getFullYear(),
+            DevelopmentPlan: 0
         };
     }
 }

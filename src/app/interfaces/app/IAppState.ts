@@ -1,13 +1,10 @@
-import { IAcl } from 'app/interfaces';
-interface IAppState {
-  app: any;
-  i18n: any;
-  session: any;
-  stats: any;
-  acl: IAcl;
+import { IRouteState } from 'app/states';
+export interface IAppState {
+    app: any;
+    i18n: any;
+    session: any;
+    stats: any;
+    acl: any;
+    route: IRouteState;
 }
-
-export {
-  IAppState
-};
 

@@ -81,18 +81,18 @@ export class BibComponent {
   private sessionSubscription: Subscription;
 
   constructor(private el: ElementRef,
-    private renderer: Renderer,
-    private router: Router,
-    private activatedRoute: ActivatedRoute,
-    private http: Http,
-    private store: Store<IAppState>,
-    private cd: ChangeDetectorRef,
-    private logService: LogService,
-    private translate: i18nService,
-    private config: ConfigService,
-    private appRef: ApplicationRef,
-    private ngZone: NgZone,
-    private toast: ToastService) {
+              private renderer: Renderer,
+              private router: Router,
+              private activatedRoute: ActivatedRoute,
+              private http: Http,
+              private store: Store<IAppState>,
+              private cd: ChangeDetectorRef,
+              private logService: LogService,
+              private translate: i18nService,
+              private config: ConfigService,
+              private appRef: ApplicationRef,
+              private ngZone: NgZone,
+              private toast: ToastService) {
   }
 
   /**

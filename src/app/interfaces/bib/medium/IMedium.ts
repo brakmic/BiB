@@ -9,4 +9,5 @@ export interface IMedium {
     Type: number;
     IsAvailable: boolean;
     IsDeleted: boolean;
+    DevelopmentPlan?: number;
 }

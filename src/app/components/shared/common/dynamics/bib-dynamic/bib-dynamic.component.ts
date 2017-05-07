@@ -77,9 +77,9 @@ export class BibDynamicComponent implements OnInit {
     private currentComponent = null;
 
     constructor(private resolver: ComponentFactoryResolver,
-        private logService: LogService,
-        private cd: ChangeDetectorRef,
-        private store: Store<IAppState>) { }
+                private logService: LogService,
+                private cd: ChangeDetectorRef,
+                private store: Store<IAppState>) { }
 
     public ngOnInit() {
 

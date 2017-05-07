@@ -78,9 +78,8 @@ export class BorrowComponent implements OnInit {
         if (!_.isNil(this.borrowTable)) {
             this.borrowTable.clear();
             this.borrowTable.rows.add(this.borrows);
-            this.borrowTable.draw();
+            this.borrowTable.draw(false);
             this.cd.markForCheck();
-
         }
     }
     private initWidgets() {
@@ -185,7 +184,6 @@ export class BorrowComponent implements OnInit {
                     };
                 },
             });
-            
             this.cd.markForCheck();
         });
     }
@@ -203,9 +201,9 @@ export class BorrowComponent implements OnInit {
                     if (_.eq(borrow.ID.toString(), borrowID.toString())) {
                         bibApi.unborrow(borrowID).then(res => {
                             bibApi.getBorrowsForDisplay().then((dborrows: IBorrowDisplay[]) => {
-                                this.borrows = _.slice(dborrows);
-                                this.updateTable();
                                 this.ngZone.run(() => {
+                                    this.borrows = _.slice(dborrows);
+                                    this.updateTable();
                                     this.store.dispatch({ type: STATS_CHANGED, payload: { data: `Medium returned by reader` } });
                                 });
                             });

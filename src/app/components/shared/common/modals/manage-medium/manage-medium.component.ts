@@ -8,7 +8,8 @@ import {
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import * as _ from 'lodash';
 import { LogService, i18nService } from 'app/services';
-import { IMedium, IMediumAddedEvent } from 'app/interfaces';
+import { IMedium, IMediumAddedEvent,
+         IDevelopmentPlan } from 'app/interfaces';
 import { authorized } from 'app/decorators';
 import { ComponentType, ActionType } from 'app/enums';
 import { Subject } from 'rxjs/Subject';
@@ -29,18 +30,21 @@ export class ManageMediumComponent implements OnInit {
     public medium: IMedium;
     public mediumID: number;
     public title: string;
+    public planName: string;
+    public plans: IDevelopmentPlan[] = [];
     private dialog: JQuery;
 
     constructor(private formBuilder: FormBuilder,
-        private cd: ChangeDetectorRef,
-        private logService: LogService,
-        private translation: i18nService,
-        private injector: Injector) { }
+                private cd: ChangeDetectorRef,
+                private logService: LogService,
+                private translation: i18nService,
+                private injector: Injector) { }
 
     public ngOnInit() {
         this.medium = this.injector.get('medium');
         this.mediumID = this.injector.get('mediumID');
         this.action = this.injector.get('action');
+        this.plans = this.injector.get('plans');
         this.setTitle();
         this.initForm();
     }
@@ -63,6 +67,7 @@ export class ManageMediumComponent implements OnInit {
             mediumISBN: string;
             mediumName: string;
             mediumYear: number;
+            mediumDevelopmentPlan: number;
         }, valid: boolean
     }) {
         const medium: IMedium = {
@@ -75,7 +80,8 @@ export class ManageMediumComponent implements OnInit {
             Picture: undefined,
             Title: value.mediumName,
             Year: value.mediumYear,
-            Type: undefined
+            Type: undefined,
+            DevelopmentPlan: this.plans.filter(p => p.id === Number(value.mediumDevelopmentPlan))[0].id
         };
         this.form.reset();
         this.dialog.dialog('close');
@@ -102,7 +108,8 @@ export class ManageMediumComponent implements OnInit {
             mediumAuthor: this.medium.Author,
             mediumYear: this.medium.Year,
             mediumDescription: this.medium.Description,
-            mediumISBN: this.medium.ISBN
+            mediumISBN: this.medium.ISBN,
+            mediumDevelopmentPlan: this.medium.DevelopmentPlan
         });
     }
     private initDialog() {
@@ -110,7 +117,7 @@ export class ManageMediumComponent implements OnInit {
         domready(() => {
             this.dialog = $('#manage-medium-dialog-form').dialog({
                 autoOpen: true,
-                height: 500,
+                height: 550,
                 width: 300,
                 modal: true
             });

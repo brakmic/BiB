@@ -16,9 +16,9 @@ export default class IsbnController {
     }
     public queryIsbn(request: Hapi.Request, reply: Hapi.IReply) {
         const isbn = request.params['id'];
+        console.log(`Querying ISBN: ${isbn}`);
         this.dbClient.queryIsbn(isbn).then(mediaData => reply(mediaData).code(200))
                                      .catch(err => reply(err).code(404));
-        
     }
     public queryIsbns(request: Hapi.Request, reply: Hapi.IReply) {
         let body = '';

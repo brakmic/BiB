@@ -3,23 +3,33 @@
         {{ 'Media' | translate }}
     </div>
     <div class="panel-body">
-    <table id="media" class="table table-striped
-                            table-bordered table-hover 
-                            table-responsive" 
-                            cellspacing="0" width="100%">
-        <thead>
-            <tr>
-                <th>{{ 'Id' }}</th>
-                <th>{{ 'MediumTitle' | translate }}</th>
-                <th>{{ 'Author' | translate }}</th>
-                <th>{{ 'Description' | translate }}</th>
-                <th>{{ 'Year' | translate }}</th>
-                <th>{{ 'ISBN' | translate }}</th>
-                <!--<th>{{ 'Picture' | translate }}</th>-->
-                <th>{{ 'Borrowed' | translate }}</th>
-            </tr>
-        </thead>
-    </table>
+        <div class="col col-lg-7 col-md-7 col-sm-7">
+            <div class="row">
+                <table id="media" class="table table-striped
+                                        table-bordered table-hover 
+                                        table-responsive" 
+                                        cellspacing="0" width="100%">
+                    <thead>
+                        <tr>
+                            <th>{{ 'Id' }}</th>
+                            <th>{{ 'MediumTitle' | translate }}</th>
+                            <th>{{ 'Author' | translate }}</th>
+                            <th>{{ 'Description' | translate }}</th>
+                            <th>{{ 'DevelopmentPlan' | translate }}</th>
+                            <th>{{ 'Year' | translate }}</th>
+                            <th>{{ 'ISBN' | translate }}</th>
+                            <!--<th>{{ 'Picture' | translate }}</th>-->
+                            <th>{{ 'Borrowed' | translate }}</th>
+                        </tr>
+                    </thead>
+                </table>
+            </div>
+        </div>
+        <div class="col col-lg-5 col-md-5 col-sm-5">
+            <div class="row">
+                <bib-media-info *ngIf="selectedMedium" [medium]="selectedMedium"></bib-media-info>
+            </div>
+        </div>
     </div>
 </div>
 <bib-dynamic [dynamicComponent]="dynamicComponent" (dynamicEvent)="onDynamicEvent($event)"></bib-dynamic>

@@ -91,11 +91,23 @@
   "db": {
     "host": "127.0.0.1",
     "user": "root",
-    "password": "YOUR_PWD_HERE",
+    "password": "YOUR_DB_PWD_KEY",
     "db": "bib"
   },
+  "bib_development_plans": [
+    {
+      "id": 0,
+      "name": "----" 
+    },
+    {
+      "id": 1,
+      "name": "Antolin"
+    }
+  ],
   "bib_datetime_format": "DD.MM.YYYY",
   "bib_use_fake_isbn_server": false,
+  "bib_googlebooks_api_key": "YOUR_GOOGLE-BOOKS_API_KEY",
+  "bib_isbndb_api_key": "YOUR_ISBNDB_API_KEY",
   "bib_server": "localhost",
   "bib_server_port": 10000,
   "bib_server_baseUrl": "/",
