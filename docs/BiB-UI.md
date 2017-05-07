@@ -1,43 +1,47 @@
-## BiB - User Manual
+## BiB - Visual Manual
 
-*Login*
+### Login
 
-<img src="https://i.imgsafe.org/962008b4ed.png">
+![login](https://i.imgsafe.org/962008b4ed.png)
 
 
 Type in your account data and click **Login**.
 
-To change language use the list below Login button.
+To change language use the list below.
 
 
-*Main Screen*
+### Main Screen
 
-<img src="https://i.imgsafe.org/962ab8eb97.png">
+![main_screen](https://i.imgsafe.org/962ab8eb97.png)
 
-After you have successfully logged in this screen will appear. In general the UI comprises of three parts:
+After a successful login this screen appears. The UI comprises of three parts:
 
 * **Sidebar Menu** on the left
-* **Activity** at the center
+* **Current Activity** at the center
 * **Statistics** on the right
 
-*Sidebar Menu**
+### Sidebar Menu
 
-<img src="http://i.giphy.com/d3pX5Tcz6x9n8hPi.gif">
+![sidebar_menu](http://i.giphy.com/d3pX5Tcz6x9n8hPi.gif)
 
-The Sidebar Menu contains links to different functionalities that'll get shown in the Activity area.
+The sidebar menu contains links to activate different activities.
 
-*Activities*
+#### Activities
 
-<img src="http://i.giphy.com/3oz8xSN7WNKYEAk1uo.gif">
+![activities](http://i.giphy.com/3oz8xSN7WNKYEAk1uo.gif)
 
-**BiB** offeres different views to certain aspects of the system, like Media lists, Lending, or User management. All of them follow the same tabular display pattern.
+**BiB** offeres different views to certain aspects of the system, like *media lists*, *lending*, *user management*, *reader management* etc.
 
-<img src="http://i.giphy.com/l3vR0BWVbaBpFZe00.gif">
+![user_management](http://i.giphy.com/l3vR0BWVbaBpFZe00.gif)
 
 The management of these entries is done via context menus that get activated by clicking on the right mouse button, just like with typical desktop apps.
 
-*Statistics*
+#### Statistics
 
-<img src="http://i.giphy.com/26FKVhWRoOyErBWBq.gif">
+The statistics display on the right changes its contents in real-time.
 
-Depending on the current state of the system the statistics display changes its contents.
+![book_lending](http://i.giphy.com/26FKVhWRoOyErBWBq.gif)
+
+#### Display additional media information
+
+![show_book_details](https://media.giphy.com/media/l0IyhuZNlnxF1C5Tq/giphy.gif)

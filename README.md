@@ -15,13 +15,17 @@ It comprises of these parts:
 
 The only real requirement is one of the modern browsers like Chrome, Firefox, IE11, or Edge.
 
-**BiB** supports retrieval of library content via [WorldCat](https://www.worldcat.org/). 
+**BiB** supports retrieval of library content via [WorldCat](https://www.worldcat.org/), [Google Books API](https://developers.google.com/books/) and [ISBN-DB API](http://isbndb.com/api/v2/docs).
+
+To use them you have to register first and enter your account data in [config.json](https://github.com/brakmic/BiB/blob/master/src/config.json#L109-L110). 
+
+### Documentation
 
 For a visual representation of BiB's features check out [this](https://github.com/brakmic/BiB/blob/master/docs/BiB-UI.md) manual.
 
 The user manuals are available in [German](https://github.com/brakmic/BiB/blob/master/docs/BiB_DE.pdf) and [English](https://github.com/brakmic/BiB/blob/master/docs/BiB_EN.pdf).
 
-## Technologies
+### Technologies
 
 BiB is based on these fine projects, packages & languages:
 
@@ -48,7 +52,7 @@ BiB is based on these fine projects, packages & languages:
 
 * ng2-translate
 
-## Preparations
+### Preparations
 
 * Database
 
@@ -77,7 +81,7 @@ BiB is based on these fine projects, packages & languages:
 
     For setting up NodeJS under Windows 10 I'd recommend [this](https://blog.risingstack.com/node-js-windows-10-tutorial/) blog post.
 
-## Running
+### Running
 
 This application can either be run in a development mode directly from console or as a complete web application that
 resides in **document root** of some of the available web servers. 
@@ -109,7 +113,7 @@ please, check if you maybe have different versions of your globa/local packages.
 The server-side scripts run with HapiJS on port 10000. By default there are no additional security measures, like SSL, applied as this application is intended to run
 on a single machine without any internet connection. The only exception is the ISBN data-retrieval that needs a working internet connection.
 
-## APIs
+### APIs
 
 The server provides an API for managing the following: 
 
@@ -128,9 +132,9 @@ BibAPI is the client-side API and all future developments should follow its init
 
 The complete list of all available API calls is located [here](https://github.com/brakmic/BiB/blob/master/docs/Client-API.md).
 
-## User Management 
+### User Management 
 
-![user_management_picture](https://i.imgsafe.org/95a3d23a72.png)
+![user_management_picture](https://img5.picload.org/image/rcpwooow/user_management.png)
 
 **BiB** [supports](https://github.com/brakmic/BiB/blob/master/src/app/decorators/authorized.decorator.ts) user- and group-based Access Control Lists. Currenty, only group-based ACLs are active but the technical capability to enforce more fine-grained access control is 
 already available. Future versions will also include additional options for UI-based user rights management. Internally, **BiB** relies on Angular 2 Decorators to enforce restrictions on certain system tasks that can 
@@ -138,7 +142,13 @@ manipulate database and other vital data. The current implementation is rather s
 
 ![user_management](https://media.giphy.com/media/3oKIPC6b9myq6mjKbm/giphy.gif)
 
-## System Configuration 
+### State Management
+
+**BiB** utilizes **ngrx** for state management. Although the most important parts of the application state live in the [database](https://github.com/brakmic/BiB/blob/master/config/db-create.sql#L1) itself there are several [areas](https://github.com/brakmic/BiB/tree/master/src/app/states) that should be controlled by the UI. 
+
+All important parts like [actions](https://github.com/brakmic/BiB/tree/master/src/app/actions), [effects](https://github.com/brakmic/BiB/tree/master/src/app/effects) and [reducers](https://github.com/brakmic/BiB/tree/master/src/app/reducers) are available but it will take some time until everything becomes fully functional. 
+
+### System Configuration 
 
 Both the server and client use a file called [config.json](https://github.com/brakmic/BiB/blob/master/src/config.json) to (de)activate certain behaviors. This file is quite complex as it includes many different entries that deal with important aspects on both sides of the system.
 For easier management and future development of **BiB** there exists a corresponding IConfig.ts interface that maps to all available properties from config.js.
@@ -155,8 +165,10 @@ The most frequently used options are:
 | bib_logon_mask_logo | string  | b64-encoded image for login | string with prepended `data:image/TYPE;base64,` |
 | bib_use_fake_isbn_server | boolean | Fake WorldCat access | false |
 | bib_datetime_format | string | Date format | "DD.MM.YYYY" |
+| bib_googlebooks_api_key | string | Google Books API-Key | any string |
+| bib_isbndb_api_key | string | ISBN-DB API-Key | any string |
 
-## Internationalization
+### Internationalization
 
 **BiB** is i18n-capable via language files that are located in the **assets/i18n** folder.
 
@@ -178,7 +190,7 @@ Any help regarding new languages or extending the existing ones is greatly appre
 <img src="http://i.giphy.com/l0He8oZOpRFmgZUt2.gif">
 
 
-## License 
+### License 
 
 [MIT](https://github.com/brakmic/BiB/blob/master/LICENSE)
 
