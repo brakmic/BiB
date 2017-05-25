@@ -7,7 +7,7 @@ import { DbClient } from '../database';
 export default class UserGroupController {
     constructor(private dbClient: DbClient) {
     }
-    public getUserGroups(request: Hapi.Request, reply: Hapi.IReply) {
+    public getUserGroups(request: Hapi.Request, reply: Hapi.ReplyNoContinue) {
         if (!_.isNil(request.params['id'])){
             const id = Number(request.params['id']);
             this.dbClient.getUserGroupById(id).then(user => reply(user).code(200))
@@ -17,17 +17,17 @@ export default class UserGroupController {
                                          .catch(err => reply(err).code(404));
         }
     }
-    public insertUserGroup(request: Hapi.Request, reply: Hapi.IReply) {
+    public insertUserGroup(request: Hapi.Request, reply: Hapi.ReplyNoContinue) {
         const userGroup: IUserGroup = request.payload;
         this.dbClient.insertUserGroup(userGroup).then(msg => reply({ msg: msg.msg, code: msg.code }).code(200))
                                           .catch(err => reply({ msg: err.msg, err: err.err}).code(500));
     }
-    public deleteUserGroup(request: Hapi.Request, reply: Hapi.IReply) {
+    public deleteUserGroup(request: Hapi.Request, reply: Hapi.ReplyNoContinue) {
         const id = Number(request.params['id']);
         this.dbClient.deleteUserGroup(id).then(msg => reply({ msg: msg.msg, code: msg.code }).code(204))
                                       .catch(err => reply({ msg: err.msg, err: err.err}).code(500));
     }
-    public updateUserGroup(request: Hapi.Request, reply: Hapi.IReply) {
+    public updateUserGroup(request: Hapi.Request, reply: Hapi.ReplyNoContinue) {
         const userGroup: IUserGroup = request.payload;
         const id: number = Number(request.params['id']);
         this.dbClient.updateUserGroup(id, userGroup).then(msg => reply({ msg: msg.msg, code: msg.code}).code(200))

@@ -904,7 +904,7 @@ export default class DbClient {
         // return fetchApi.doFetch(`${bibApi.worldcatUrl}/${isbn}/${bibApi.worldcatQueryMethod}`);
         const queryUrl = _.replace(`${bibApi.googleBooksApiUrl}`, '[ISBN_VALUE]', isbn);
         // const queryUrl = _.replace(`${bibApi.isbndbBooksApiUrl}`, '[ISBN_VALUE]', isbn);
-        console.log(`querying ${queryUrl}`);
+        // console.log(`querying ${queryUrl}`);
         return fetchApi.doFetch(queryUrl);
     }
 

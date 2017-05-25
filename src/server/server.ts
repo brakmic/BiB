@@ -3,9 +3,9 @@ global['fetch'] = fetch;
 import { IConfig } from 'app/interfaces';
 const Path = require('path');
 import * as Hapi from 'hapi';
-import * as Inert from 'inert';
+const Inert = require('inert');
 import * as Api from './api';
-const corsHeaders = require('hapi-cors-headers')
+const corsHeaders = require('hapi-cors-headers');
 import * as _ from 'lodash';
 
 class Server {

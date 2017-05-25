@@ -30,6 +30,9 @@ import {
 import '@ngrx/core/add/operator/select';
 import { Store } from '@ngrx/store';
 import { STATS_CHANGED } from 'app/reducers';
+import { MediaActions } from 'app/actions';
+import { MediaEffects } from 'app/effects';
+import { getMedia } from 'app/stores';
 
 const domready = require('domready');
 
@@ -64,13 +67,25 @@ export class MediaComponent implements OnInit,
                 private el: ElementRef,
                 private store: Store<IAppState>,
                 private ngZone: NgZone,
-                private config: ConfigService) { }
+                private config: ConfigService,
+                private mediaActions: MediaActions,
+                private mediaEffects: MediaEffects) { }
 
     public ngOnInit() {
         this.config.getConfig().subscribe(cfg => this.appConfig = cfg).unsubscribe();
         this.route.data.forEach((data: { media: IMediumDisplay[] }) => {
             this.media = _.slice(data.media);
         });
+        this.mediaEffects.mediaInitialized$.subscribe(data => {
+            console.log(data.payload);
+        });
+        // getMedia(this.store).subscribe(media => {
+        //    let mapped = _.map(media, m => {
+        //         console.log(JSON.stringify(m));
+        //         return bibApi.prepareMediumForDisplay(m);
+        //    });
+        //    Promise.all(mapped).then(allMedia => this.media = _.slice(allMedia));
+        // }).unsubscribe();
         bibApi.getReaders().then((readers: IReader[]) => {
             this.readers = _.slice(readers);
         });

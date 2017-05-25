@@ -6,6 +6,7 @@ import { LogService, SessionService } from 'app/services';
 import { Observable } from 'rxjs/Observable';
 import { Observer } from 'rxjs/Observer';
 import { Subscription } from 'rxjs/Subscription';
+import { MediaActions } from 'app/actions';
 import * as _ from 'lodash';
 
 const domready = require('domready');
@@ -29,13 +30,14 @@ export class AppComponent {
    * @param {SessionService} private sessionService Session service
    */
   constructor(private router: Router,
-    private route: ActivatedRoute,
-    private logService: LogService,
-    private sessionService: SessionService) {
+              private route: ActivatedRoute,
+              private logService: LogService,
+              private sessionService: SessionService,
+              private mediaActions: MediaActions) {
   }
 
   public ngOnInit() {
-
+    // this.mediaActions.mediaInit();
   }
 
   public ngOnDestroy() {

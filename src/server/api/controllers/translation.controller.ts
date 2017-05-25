@@ -7,7 +7,7 @@ import { DbClient } from '../database';
 export default class TranslationController {
     constructor(private dbClient: DbClient) {
     }
-    public getTranslation(request: Hapi.Request, reply: Hapi.IReply) {
+    public getTranslation(request: Hapi.Request, reply: any) {
         if (!_.isNil(request.params['id'])) {
             const id = request.params['id'];
             reply.file(`assets/i18n/${id}.json`);

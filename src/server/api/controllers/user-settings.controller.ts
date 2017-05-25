@@ -7,7 +7,7 @@ import { DbClient } from '../database';
 export default class UserSettingsController {
     constructor(private dbClient: DbClient) {
     }
-    public getUserSettings(request: Hapi.Request, reply: Hapi.IReply) {
+    public getUserSettings(request: Hapi.Request, reply: Hapi.ReplyNoContinue) {
         if (!_.isNil(request.params['id'])){
             const id = Number(request.params['id']);
             this.dbClient.getUserById(id).then(userSettings => reply(userSettings).code(200))
@@ -17,17 +17,17 @@ export default class UserSettingsController {
                                          .catch(err => reply(err).code(404));
         }
     }
-    public insertUserSettings(request: Hapi.Request, reply: Hapi.IReply) {
+    public insertUserSettings(request: Hapi.Request, reply: Hapi.ReplyNoContinue) {
         const userSettings: IUserSettings = request.payload;
         this.dbClient.insertUserSettings(userSettings).then(msg => reply({ msg: msg.msg, code: msg.code }).code(200))
                                           .catch(err => reply({ msg: err.msg, err: err.err}).code(500));
     }
-    public deleteUserSettings(request: Hapi.Request, reply: Hapi.IReply) {
+    public deleteUserSettings(request: Hapi.Request, reply: Hapi.ReplyNoContinue) {
         const id = Number(request.params['id']);
         this.dbClient.deleteUserSettings(id).then(msg => reply({ msg: msg.msg, code: msg.code }).code(204))
                                       .catch(err => reply({ msg: err.msg, err: err.err}).code(500));
     }
-    public updateUserSettings(request: Hapi.Request, reply: Hapi.IReply) {
+    public updateUserSettings(request: Hapi.Request, reply: Hapi.ReplyNoContinue) {
         const userSettings: IUserSettings = request.payload;
         const id: number = Number(request.params['id']);
         this.dbClient.updateUserSettings(id, userSettings).then(msg => reply({ msg: msg.msg, code: msg.code}).code(200))

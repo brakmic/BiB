@@ -7,7 +7,7 @@ import { DbClient } from '../database';
 export default class StatsController {
     constructor(private dbClient: DbClient) {
     }
-    public getStats(request: Hapi.Request, reply: Hapi.IReply) {
+    public getStats(request: Hapi.Request, reply: Hapi.ReplyNoContinue) {
         this.dbClient.getStats().then(stats => reply(stats).code(200))
                                         .catch(err => reply(err).code(404));
     }

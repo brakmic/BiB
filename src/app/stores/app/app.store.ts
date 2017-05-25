@@ -14,7 +14,8 @@ import '@ngrx/core/add/operator/select';
  */
 import { appReducer, i18nReducer,
          sessionReducer, statsReducer,
-         aclReducer, routeReducer } from 'app/reducers';
+         aclReducer, routeReducer,
+         mediaReducer } from 'app/reducers';
 
 /**
  * The compose function is one of our most handy tools. In basic terms, you give
@@ -45,7 +46,7 @@ import { combineReducers } from '@ngrx/store';
 
 import * as fromBiB from 'app';
 
-import { IRouteState } from 'app/states';
+import { IRouteState, IMediaState } from 'app/states';
 
 /**
  * As mentioned, we treat each reducer like a table in a database. This means
@@ -65,7 +66,8 @@ const reducers = {
   session: sessionReducer,
   stats: statsReducer,
   acl: aclReducer,
-  route: routeReducer
+  route: routeReducer,
+  media: mediaReducer
 };
 
 const developmentReducer: ActionReducer<IAppState> = compose(storeFreeze, combineReducers)(reducers);
@@ -87,4 +89,9 @@ export function getRouteState(state$: Observable<IAppState>): Observable<IRouteS
   return state$.select((s) => s.route);
 }
 
+export function getMediaState(state$: Observable<IAppState>): Observable<IMediaState> {
+  return state$.select((s) => s.media);
+}
+
 export const getRoute: (obs: Observable<IAppState>) => Observable<fromBiB.IRoute> = compose(fromBiB.getRoute, getRouteState);
+export const getMedia: (obs: Observable<IAppState>) => Observable<fromBiB.IMedium[]> = compose(fromBiB.getMedia, getMediaState);

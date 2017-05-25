@@ -35,8 +35,8 @@ import { APP_ROUTES, PreloadSelectedModulesStrategy } from './routes';
 import { AUTH_PROVIDERS } from 'app/components/shared';
 
 
-import { RouteActions } from '../actions';
-import { RouteEffects } from '../effects';
+import { RouteActions, MediaActions } from '../actions';
+import { RouteEffects, MediaEffects } from '../effects';
 
 import {
   AppState, ConfigService,
@@ -122,11 +122,13 @@ const BIB_DIRECTIVES = [
 ];
 
 const BIB_ACTIONS = [
-  RouteActions
+  RouteActions,
+  MediaActions
 ];
 
 const BIB_EFFECTS = [
-  RouteEffects
+  RouteEffects,
+  MediaEffects
 ];
 
 

@@ -14,7 +14,9 @@ import { AppComponent } from './app.component';
 import { StoreModule } from '@ngrx/store';
 import { EffectsModule } from '@ngrx/effects';
 import { AppReducer } from '../../stores';
-import { RouteEffects } from '../../effects';
+import { RouteEffects, MediaEffects } from '../../effects';
+
+import { BibModule } from '../+main';
 
 import { ENV_MODULES,
          VENDOR_MODULES, APP_DECLARATIONS,
@@ -38,6 +40,7 @@ import { ENV_MODULES,
     VENDOR_MODULES,
     StoreModule.provideStore(AppReducer),
     EffectsModule.run(RouteEffects),
+    EffectsModule.run(MediaEffects),
   ],
   declarations: [     // load all available components & directives
     AppComponent

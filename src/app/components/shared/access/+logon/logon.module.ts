@@ -6,7 +6,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { TranslateModule } from 'ng2-translate/ng2-translate';
 import { AppPipesModule } from 'app/pipes';
 
-// WebpackAsyncRoute expects a route for this module to load  the Logon-Component
+// WebpackAsyncRoute expects a route for this module to load the Logon-Component
 const routes: Routes = [
   {
     path: '',

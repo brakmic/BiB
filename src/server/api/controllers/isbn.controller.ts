@@ -14,13 +14,13 @@ export default class IsbnController {
     constructor(private dbClient: DbClient) {
         this.useFakeServer = config.bib_use_fake_isbn_server;
     }
-    public queryIsbn(request: Hapi.Request, reply: Hapi.IReply) {
+    public queryIsbn(request: Hapi.Request, reply: Hapi.ReplyNoContinue) {
         const isbn = request.params['id'];
         console.log(`Querying ISBN: ${isbn}`);
         this.dbClient.queryIsbn(isbn).then(mediaData => reply(mediaData).code(200))
                                      .catch(err => reply(err).code(404));
     }
-    public queryIsbns(request: Hapi.Request, reply: Hapi.IReply) {
+    public queryIsbns(request: Hapi.Request, reply: Hapi.ReplyNoContinue) {
         let body = '';
                 request.payload.file.on('data', (data) => {
                     body += data;

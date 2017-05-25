@@ -47,6 +47,7 @@ import * as _ from 'lodash';
 // State Management with Redux
 import '@ngrx/core/add/operator/select';
 import { Store } from '@ngrx/store';
+
 import {
   LOGON_FAILED, LOGON_SUCCEEDED,
   LOGOUT_FAILED, SESSION_RESET,
