@@ -7,17 +7,17 @@ export function mediaReducer(
 ): IMediaState {
   switch (action.type) {
     case MediaActionTypes.INITIALIZED:
+    {
       return (<any>Object).assign({}, state, {
         media: [...(<any[]>action.payload)]
       });
+    }
     case MediaActionTypes.RETRIEVED:
+    {
       return (<any>Object).assign({}, state, {
         media: [...(<any[]>action.payload)]
       });
-    case MediaActionTypes.INSERTED:
-      return (<any>Object).assign({}, state, {
-        media: [...state.media, action.payload]
-      });
+    }
     case MediaActionTypes.REMOVED:
     {
       const filtered = state.media.filter(medium => medium.ID != (<any>action.payload).ID);

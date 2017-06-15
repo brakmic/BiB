@@ -93,5 +93,5 @@ export function getMediaState(state$: Observable<IAppState>): Observable<IMediaS
   return state$.select((s) => s.media);
 }
 
-export const getRoute: (obs: Observable<IAppState>) => Observable<fromBiB.IRoute> = compose(fromBiB.getRoute, getRouteState);
-export const getMedia: (obs: Observable<IAppState>) => Observable<fromBiB.IMedium[]> = compose(fromBiB.getMedia, getMediaState);
+export const extractRoute: (obs: Observable<IAppState>) => Observable<fromBiB.IRoute> = compose(fromBiB.getRoute, getRouteState);
+export const extractMedia: (obs: Observable<IAppState>) => Observable<fromBiB.IMedium[]> = compose(fromBiB.getMedia, getMediaState);

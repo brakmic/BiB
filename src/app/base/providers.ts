@@ -46,7 +46,8 @@ import {
   SessionService,
   StatsService,
   UploadService,
-  ToastService
+  ToastService,
+  MediaService
 } from 'app/services';
 
 import { TranslationProvider } from 'app/providers';
@@ -105,7 +106,8 @@ const BIB_SERVICES = [
   SessionService,
   StatsService,
   UploadService,
-  ToastService
+  ToastService,
+  MediaService
 ];
 
 // Application wide providers

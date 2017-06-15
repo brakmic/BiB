@@ -19,10 +19,24 @@ export class MediaEffects {
   @Effect() mediaInitialized$: Observable<Action> = this.actions$
     .ofType(MediaActionTypes.INIT)
     .switchMap(action => bibApi.getMedia())
-    .map((media: IMedium[]) => {
-            console.log(`Retrieved ${media.length} media entries.`);
-            return this.mediaActions.mediaInitialized(media);
-        });
+    .map((media: IMedium[]) => this.mediaActions.mediaInitialized(media));
+
+  @Effect() mediaUpdated$: Observable<Action> = this.actions$
+    .ofType(MediaActionTypes.UPDATED)
+    .map(action => this.mediaActions.mediaChanged());
+
+  @Effect() mediaInserted$: Observable<Action> = this.actions$
+    .ofType(MediaActionTypes.INSERTED)
+    .map(action => this.mediaActions.mediaUpdated(action.payload));
+
+  @Effect() mediaRemoved$: Observable<Action> = this.actions$
+    .ofType(MediaActionTypes.REMOVED)
+    .map(action => this.mediaActions.mediaChanged());
+
+  @Effect() mediaChanged$: Observable<Action> = this.actions$
+    .ofType(MediaActionTypes.CHANGED)
+    .switchMap(action => bibApi.getMedia())
+    .map((media: IMedium[]) => this.mediaActions.mediaRetrieved(media));
 
   constructor(private store: Store<IAppState>,
           private actions$: Actions,

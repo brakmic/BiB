@@ -26,17 +26,24 @@ import { Observable } from 'rxjs/Observable';
 import { Observer } from 'rxjs/Observer';
 import { Subscription } from 'rxjs/Subscription';
 import 'rxjs/add/operator/filter';
+// ngrx / state management
+import { STATS_CHANGED } from 'app/reducers';
+import { MediaActions } from 'app/actions';
+import { MediaEffects } from 'app/effects';
+import { extractMedia } from 'app/stores';
+
 // Interfaces
 import {
-  IMenuEntry, IAppState,
-  ISession, IWindowEx,
-  IStats
+  IMedium, IMediumDisplay, IComponentData,
+  IConfig, IMenuEntry, IAppState,
+  ISession, IWindowEx, IStats
 } from 'app/interfaces';
+
 // Services
 import {
   LogService, i18nService,
   ConfigService, SessionService,
-  ToastService
+  ToastService, MediaService
 } from 'app/services';
 // Decorator
 import { authorized } from 'app/decorators';
@@ -93,7 +100,9 @@ export class BibComponent {
               private config: ConfigService,
               private appRef: ApplicationRef,
               private ngZone: NgZone,
-              private toast: ToastService) {
+              private toast: ToastService,
+              private mediaActions: MediaActions,
+              private mediaService: MediaService) {
   }
 
   /**
@@ -129,6 +138,8 @@ export class BibComponent {
   }
 
   private initSubscriptions() {
+    this.store.dispatch(this.mediaActions.mediaInit());
+
     this.appState = this.store.select(store => store.app);
     this.appSubscription = this.appState.subscribe(info => {
     });

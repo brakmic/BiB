@@ -13,6 +13,7 @@ import { LogService, i18nService,
 import { ManageMediumComponent, BorrowMediaComponent } from 'app/components';
 import { ComponentType, ActionType } from 'app/enums';
 import { bibApi } from 'app/apis';
+import { MediaService } from 'app/services';
 import * as _ from 'lodash';
 import {
     IReader, IBorrow,
@@ -32,7 +33,7 @@ import { Store } from '@ngrx/store';
 import { STATS_CHANGED } from 'app/reducers';
 import { MediaActions } from 'app/actions';
 import { MediaEffects } from 'app/effects';
-import { getMedia } from 'app/stores';
+import { extractMedia } from 'app/stores';
 
 const domready = require('domready');
 
@@ -69,26 +70,13 @@ export class MediaComponent implements OnInit,
                 private ngZone: NgZone,
                 private config: ConfigService,
                 private mediaActions: MediaActions,
-                private mediaEffects: MediaEffects) { }
+                private mediaEffects: MediaEffects,
+                private mediaService: MediaService) { }
 
     public ngOnInit() {
         this.config.getConfig().subscribe(cfg => this.appConfig = cfg).unsubscribe();
-        this.route.data.forEach((data: { media: IMediumDisplay[] }) => {
-            this.media = _.slice(data.media);
-        });
-        this.mediaEffects.mediaInitialized$.subscribe(data => {
-            console.log(data.payload);
-        });
-        // getMedia(this.store).subscribe(media => {
-        //    let mapped = _.map(media, m => {
-        //         console.log(JSON.stringify(m));
-        //         return bibApi.prepareMediumForDisplay(m);
-        //    });
-        //    Promise.all(mapped).then(allMedia => this.media = _.slice(allMedia));
-        // }).unsubscribe();
-        bibApi.getReaders().then((readers: IReader[]) => {
-            this.readers = _.slice(readers);
-        });
+        this.mediaService.getMedia().then(media => this.media = _.slice(media));
+        bibApi.getReaders().then((readers: IReader[]) => this.readers = _.slice(readers));
         this.confirmDeletionText = this.translation.instant('ConfirmDeletionMedium');
     }
     public ngOnChanges(changes: SimpleChanges) {
@@ -407,7 +395,7 @@ export class MediaComponent implements OnInit,
                         action: ActionType.ModifyMedium,
                         plans: this.appConfig.bib_development_plans
                     },
-                    type: ComponentType.AddMedia
+                    type: ComponentType.ModifyMedia
                 };
                 this.ngZone.run(() => {
                     this.dynamicComponent = data;
@@ -430,6 +418,7 @@ export class MediaComponent implements OnInit,
         bibApi.getMediaForDisplay().then((media: IMediumDisplay[]) => {
             this.media = _.slice(media);
             this.updateTable();
+            this.store.dispatch(this.mediaActions.mediaChanged());
             this.store.dispatch({ type: STATS_CHANGED, payload: { data: `Media list has changed.` } });
         });
     }
@@ -437,6 +426,7 @@ export class MediaComponent implements OnInit,
         this.ngZone.runOutsideAngular(() => {
             bibApi.insertMedium(medium).then(result => {
                 this.ngZone.run(() => {
+                    this.store.dispatch(this.mediaActions.mediaInserted(medium));
                     this.refresh();
                 });
             });
@@ -446,6 +436,7 @@ export class MediaComponent implements OnInit,
         this.ngZone.runOutsideAngular(() => {
             bibApi.updateMedium(medium).then(result => {
                 this.ngZone.run(() => {
+                    this.store.dispatch(this.mediaActions.mediaUpdated(medium));
                     this.refresh();
                 });
             });
@@ -455,6 +446,7 @@ export class MediaComponent implements OnInit,
         this.ngZone.runOutsideAngular(() => {
             bibApi.removeMedium(mediumID).then(result => {
                 this.ngZone.run(() => {
+                    this.store.dispatch(this.mediaActions.mediaRemoved(result));
                     this.refresh();
                 });
             });

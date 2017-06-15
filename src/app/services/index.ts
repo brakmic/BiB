@@ -11,3 +11,4 @@ export * from './session';
 export * from './stats';
 export * from './upload';
 export * from './toast';
+export * from './media';
