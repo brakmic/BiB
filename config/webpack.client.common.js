@@ -22,6 +22,7 @@ const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const DashboardPlugin = require('webpack-dashboard/plugin');
 const resolveNgRoute = require('@angularclass/resolve-angular-routes');
 const ngcWebpack = require('ngc-webpack');
+const InlineManifestWebpackPlugin = require('inline-manifest-webpack-plugin');
 
 const AOT = helpers.hasNpmFlag('aot');
 const HMR = helpers.hasProcessFlag('hot');
@@ -251,11 +252,11 @@ module.exports = function(options) {
 
      new ExtractTextPlugin({ filename: 'initial.css', allChunks: true }),
 
-     new AssetsPlugin({
-        path: helpers.root('dist'),
-        filename: 'webpack-assets.json',
-        prettyPrint: true
-     }),
+    //  new AssetsPlugin({
+    //     path: helpers.root('dist'),
+    //     filename: 'webpack-assets.json',
+    //     prettyPrint: true
+    //  }),
 
      new DashboardPlugin(),
      /*
@@ -271,27 +272,30 @@ module.exports = function(options) {
         chunks: ['polyfills']
      }),
       // This enables tree shaking of the vendor modules
-     new CommonsChunkPlugin({
-       name: 'vendor',
-       chunks: ['main'],
-       minChunks: module => /node_modules/.test(module.resource)
-     }),
+    //  new CommonsChunkPlugin({
+    //    name: 'vendor',
+    //    chunks: ['main'],
+    //    minChunks: module => /node_modules/.test(module.resource)
+    //  }),
     
      // Specify the correct order the scripts will be injected in
      new CommonsChunkPlugin({
-        name: ['vendor','bib','polyfills']
+        name: ['main','bib','polyfills']
      }),
 
 
     new ContextReplacementPlugin(
-      // The (\\|\/) piece accounts for path separators in *nix and Windows
-      /angular(\\|\/)core(\\|\/)(esm(\\|\/)src|src)(\\|\/)linker/,
-      helpers.root('src'),
-      {
-        
-      }
-      // resolveNgRoute(helpers.root('src'))
-    ),
+         /**
+         * The (\\|\/) piece accounts for path separators in *nix and Windows
+         */
+        /angular(\\|\/)core(\\|\/)@angular/,
+        helpers.root('src'), // location of your src
+        {
+          /**
+           * Your Angular Async Route paths relative to this root directory
+           */
+        }
+      ),
 
     /*
      * Plugin: CopyWebpackPlugin
@@ -344,19 +348,22 @@ module.exports = function(options) {
       favicon: 'favicon.ico',
       chunksSortMode: 'dependency',
       metadata: METADATA,
-      inject: 'head'
+      inject: 'body'
     }),
 
     /*
-    * Plugin: ScriptExtHtmlWebpackPlugin
-    * Description: Enhances html-webpack-plugin functionality
-    * with different deployment options for your scripts including:
-    *
-    * See: https://github.com/numical/script-ext-html-webpack-plugin
-    */
-    new ScriptExtHtmlWebpackPlugin({
-      defaultAttribute: 'defer'
-    }),
+      * Plugin: ScriptExtHtmlWebpackPlugin
+      * Description: Enhances html-webpack-plugin functionality
+      * with different deployment options for your scripts including:
+      *
+      * See: https://github.com/numical/script-ext-html-webpack-plugin
+      */
+      new ScriptExtHtmlWebpackPlugin({
+        sync: /main|bib|polyfills/,
+        defaultAttribute: 'async',
+        preload: [/polyfills|bib|main/],
+        prefetch: [/chunk/]
+      }),
 
     /*
      * Plugin: HtmlHeadConfigPlugin
@@ -405,11 +412,48 @@ module.exports = function(options) {
       /facade(\\|\/)math/,
       helpers.root('node_modules/@angular/core/src/facade/math.js')
     ),
+
     new ngcWebpack.NgcWebpackPlugin({
-      disabled: !AOT,
-      tsConfig: helpers.root('tsconfig.webpack.json'),
-      resourceOverride: undefined//helpers.root('config/resource-override.js')
-    })
+        /**
+         * If false the plugin is a ghost, it will not perform any action.
+         * This property can be used to trigger AOT on/off depending on your build target (prod, staging etc...)
+         *
+         * The state can not change after initializing the plugin.
+         * @default true
+         */
+        disabled: !AOT,
+        tsConfig: helpers.root('tsconfig.webpack.json'),
+        /**
+         * A path to a file (resource) that will replace all resource referenced in @Components.
+         * For each `@Component` the AOT compiler compiles it creates new representation for the templates (html, styles)
+         * of that `@Components`. It means that there is no need for the source templates, they take a lot of
+         * space and they will be replaced by the content of this resource.
+         *
+         * To leave the template as is set to a falsy value (the default).
+         *
+         * TIP: Use an empty file as an overriding resource. It is recommended to use a ".js" file which
+         * usually has small amount of loaders hence less performance impact.
+         *
+         * > This feature is doing NormalModuleReplacementPlugin for AOT compiled resources.
+         *
+         * ### resourceOverride and assets
+         * If you reference assets in your styles/html that are not inlined and you expect a loader (e.g. url-loader)
+         * to copy them, don't use the `resourceOverride` feature as it does not support this feature at the moment.
+         * With `resourceOverride` the end result is that webpack will replace the asset with an href to the public
+         * assets folder but it will not copy the files. This happens because the replacement is done in the AOT compilation
+         * phase but in the bundling it won't happen (it's being replaced with and empty file...)
+         *
+         * @default undefined
+         */
+      }),
+
+       /**
+       * Plugin: InlineManifestWebpackPlugin
+       * Inline Webpack's manifest.js in index.html
+       *
+       * https://github.com/szrenwei/inline-manifest-webpack-plugin
+       */
+      new InlineManifestWebpackPlugin(),
   ],
 
   /*
