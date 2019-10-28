@@ -1,8 +1,5 @@
 # BiB
 
-<img src="https://img2.picload.org/image/drwcppoi/bib_logo.png" width="500" height="400">
-
-
 ## Library Management Application for Elementary Schools
 
 **BiB** is [OpenSource](https://github.com/brakmic/BiB/blob/master/LICENSE) and OS-independent because it runs completely in a browser. 
